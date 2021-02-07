@@ -91,7 +91,7 @@ public class HelloWorld extends InputAdapter implements ApplicationListener {
         if (playerVec.x == 4 && playerVec.y == 4) {
             System.out.println("You have won");
             JFrame f = new JFrame();
-            JOptionPane.showMessageDialog(f, "You won the game");
+            JOptionPane.showMessageDialog(f, "You won");
         }
     }
 
