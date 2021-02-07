@@ -87,31 +87,45 @@ public class HelloWorld extends InputAdapter implements ApplicationListener {
         rend.setView(cam);
     }
 
-    public void checkWinCondition() {
-        if (playerVec.x == 4 && playerVec.y == 4) {
-            System.out.println("You have won");
-            JFrame f = new JFrame();
-            JOptionPane.showMessageDialog(f, "You won");
+    public void checkOutOfBounds(){
+        if(playerVec.x > board.getWidth()-2){
+            playerVec.x = board.getWidth()-2;
+        }
+        else if(playerVec.y > board.getHeight()-2){
+            playerVec.y = board.getHeight()-2;
         }
     }
 
     @Override
     public boolean keyUp(int keycode) {
         if (keycode == Input.Keys.W) {
-            playerLayer.setCell((int) playerVec.x, (int) playerVec.y + 1, player);
-            playerLayer.setCell((int) playerVec.x, (int) playerVec.y, defaultCell);
-            playerVec.set(playerVec.x, playerVec.y + 1);
-            System.out.println("player moved");
-            return true;
+            if(playerVec.y >= board.getHeight()-1){
+                return true;
+            }
+            else {
+                playerLayer.setCell((int) playerVec.x, (int) playerVec.y + 1, player);
+                playerLayer.setCell((int) playerVec.x, (int) playerVec.y, defaultCell);
+                playerVec.set(playerVec.x, playerVec.y + 1);
+                System.out.println("player moved");
+                return true;
+            }
         }
         if (keycode == Input.Keys.S) {
-            playerLayer.setCell((int) playerVec.x, (int) playerVec.y-1, player);
-            playerLayer.setCell((int) playerVec.x, (int) playerVec.y, defaultCell);
-            playerVec.set(playerVec.x,playerVec.y-1);
-            System.out.println("player moved");
-            return true;
+            if(playerVec.y < 1){
+                return true;
+            }
+            else {
+                playerLayer.setCell((int) playerVec.x, (int) playerVec.y - 1, player);
+                playerLayer.setCell((int) playerVec.x, (int) playerVec.y, defaultCell);
+                playerVec.set(playerVec.x, playerVec.y - 1);
+                System.out.println("player moved");
+                return true;
+            }
         }
         if (keycode == Input.Keys.A) {
+            if (playerVec.x < 1){
+                return true;
+            }
             playerLayer.setCell((int) playerVec.x-1, (int) playerVec.y, player);
             playerLayer.setCell((int) playerVec.x, (int) playerVec.y, defaultCell);
             playerVec.set(playerVec.x-1,playerVec.y);
@@ -119,11 +133,16 @@ public class HelloWorld extends InputAdapter implements ApplicationListener {
             return true;
         }
         if (keycode == Input.Keys.D) {
-            playerLayer.setCell((int) playerVec.x+1, (int) playerVec.y, player);
-            playerLayer.setCell((int) playerVec.x, (int) playerVec.y, defaultCell);
-            playerVec.set(playerVec.x+1,playerVec.y);
-            System.out.println("player moved");
-            return true;
+            if (playerVec.x >= board.getWidth()-1){
+                return true;
+            }
+            else {
+                playerLayer.setCell((int) playerVec.x + 1, (int) playerVec.y, player);
+                playerLayer.setCell((int) playerVec.x, (int) playerVec.y, defaultCell);
+                playerVec.set(playerVec.x + 1, playerVec.y);
+                System.out.println("player moved");
+                return true;
+            }
         }
         else
             return false;
@@ -139,6 +158,15 @@ public class HelloWorld extends InputAdapter implements ApplicationListener {
     public void render() {
         Gdx.gl.glClearColor(1, 1, 1, 1);
         Gdx.gl.glClear(GL30.GL_COLOR_BUFFER_BIT);
+
+        if(flag.getCell((int) playerVec.x,(int) playerVec.y) != null) {
+            playerLayer.setCell((int) playerVec.x,(int) playerVec.y, wonCell);
+            System.out.println("you win");
+        }
+        if(hole.getCell((int) playerVec.x, (int) playerVec.y) != null){
+            playerLayer.setCell((int) playerVec.x, (int) playerVec.y, dieCell);
+            System.out.println("you died");
+        }
         rend.render();
 
     }
