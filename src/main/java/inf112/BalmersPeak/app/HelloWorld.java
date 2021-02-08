@@ -1,4 +1,4 @@
-package inf112.skeleton.app;
+package inf112.BalmersPeak.app;
 
 import com.badlogic.gdx.ApplicationListener;
 import com.badlogic.gdx.Gdx;
