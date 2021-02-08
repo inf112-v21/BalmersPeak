@@ -1,3 +1,5 @@
+[![Build Status](https://travis-ci.com/inf112-v21/BalmersPeak.svg?branch=development)](https://travis-ci.com/inf112-v21/BalmersPeak)
+
 ## RoboRally by BalmersPeak
 
 GRUPPEINFORMASJON
