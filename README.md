@@ -11,7 +11,8 @@
 
 <img src="assets/logo.jpg"  width="500">
 
-Group name: BallmersPeak
+Group name: BallmersPeak 
+
 Utviklere:
  - Magnus Matre
  - Simen Forland
