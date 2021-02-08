@@ -7,11 +7,11 @@
 
 
 
-## RoboRally by BalmersPeak
+## Robo Rally by BallmersPeak
 
-<img src="assets/logo.jpg"  width="600">
+<img src="assets/logo.jpg"  width="500">
 
-Gruppenavn: BalmersPeak
+Group name: BallmersPeak
 Utviklere:
  - Magnus Matre
  - Simen Forland
@@ -26,11 +26,14 @@ Utviklere:
 
 This repository is a Java implementation of the board game "RoboRally", built with the libGDX library. 
 
-<img src="assets/roborally.png"  width="600">
+<img src="assets/roborally.png"  width="300">
 
 
 
-
+### Technologies
+ - JDK 9 or higher
+ - JUnit 5
+ - libGDX 1.9
 
 ### How to run
 
