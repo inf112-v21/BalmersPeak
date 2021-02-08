@@ -1,6 +1,10 @@
 [![Build Status](https://travis-ci.com/inf112-v21/BalmersPeak.svg?branch=development)](https://travis-ci.com/inf112-v21/BalmersPeak)
 [![Build Status](https://travis-ci.com/inf112-v21/BalmersPeak.svg?branch=master)](https://travis-ci.com/inf112-v21/BalmersPeak)
 
+[![Generic badge](https://img.shields.io/travis/com/inf112-v21/BalmersPeak/master?label=master&style=flat-square
+)](https://shields.io/)
+
+
 
 
 ## RoboRally by BalmersPeak
