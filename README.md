@@ -1,3 +1,12 @@
+[![Generic badge](https://img.shields.io/travis/com/inf112-v21/BalmersPeak/development?label=development&style=flat-square
+)](https://shields.io/)
+
+[![Generic badge](https://img.shields.io/travis/com/inf112-v21/BalmersPeak/master?label=master&style=flat-square
+)](https://shields.io/)
+
+
+
+
 ## RoboRally by BalmersPeak
 
 GRUPPEINFORMASJON
