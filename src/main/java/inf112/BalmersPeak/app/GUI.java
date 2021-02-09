@@ -25,7 +25,7 @@ import org.lwjgl.system.CallbackI;
 import javax.swing.*;
 import java.awt.*;
 
-public class HelloWorld extends InputAdapter implements ApplicationListener {
+public class GUI implements ApplicationListener {
 
     private SpriteBatch batch;
     private BitmapFont font;
@@ -42,12 +42,13 @@ public class HelloWorld extends InputAdapter implements ApplicationListener {
     private TiledMapTileLayer.Cell defaultCell;
     private Vector2 playerVec;
 
-
+    private InputHandler input;
 
 
     @Override
     public void create() {
-        Gdx.input.setInputProcessor(this);
+        input = new InputHandler();
+        Gdx.input.setInputProcessor(input);
         batch = new SpriteBatch();
         font = new BitmapFont();
         font.setColor(Color.RED);
@@ -58,11 +59,11 @@ public class HelloWorld extends InputAdapter implements ApplicationListener {
         hole = (TiledMapTileLayer) map.getLayers().get("Hole");
         flag = (TiledMapTileLayer) map.getLayers().get("Flag");
 
-        Texture playerTexture = new Texture("player.png");
-        TextureRegion[][] texRegion = TextureRegion.split(playerTexture,300,300);
+        Texture playerTexture = new Texture("assets/player.png");
+        TextureRegion[][] texRegion = TextureRegion.split(playerTexture, 300, 300);
 
-        Texture boardTexture = new Texture("standard-300dpi.png");
-        TextureRegion[][] boardRegion = TextureRegion.split(boardTexture,300,300);
+        Texture boardTexture = new Texture("assets/standard-300dpi.png");
+        TextureRegion[][] boardRegion = TextureRegion.split(boardTexture, 300, 300);
 
         StaticTiledMapTile defaultTileTexture = new StaticTiledMapTile(boardRegion[12][1]);
         StaticTiledMapTile normalPlayerTexture = new StaticTiledMapTile(texRegion[0][0]);
@@ -72,81 +73,29 @@ public class HelloWorld extends InputAdapter implements ApplicationListener {
         wonCell = new TiledMapTileLayer.Cell().setTile(playerWonTexture);
         dieCell = new TiledMapTileLayer.Cell().setTile(playerDiedTexture);
         defaultCell = new TiledMapTileLayer.Cell().setTile(defaultTileTexture);
-        playerVec = new Vector2(0,0);
+        playerVec = new Vector2(0, 0);
 
         cam = new OrthographicCamera();
-        rend = new OrthogonalTiledMapRenderer(map, (float) 1/300);
+        rend = new OrthogonalTiledMapRenderer(map, (float) 1 / 300);
 
-        cam.setToOrtho(false, 5,5);
-        cam.position.set(cam.viewportWidth/2, cam.viewportHeight/2, 0);
+        cam.setToOrtho(false, 5, 5);
+        cam.position.set(cam.viewportWidth / 2, cam.viewportHeight / 2, 0);
         cam.update();
 
-        playerLayer.setCell(0,0, player);
+        playerLayer.setCell(0, 0, player);
 
 
         rend.setView(cam);
     }
 
-    public void checkOutOfBounds(){
-        if(playerVec.x > board.getWidth()-2){
-            playerVec.x = board.getWidth()-2;
-        }
-        else if(playerVec.y > board.getHeight()-2){
-            playerVec.y = board.getHeight()-2;
+    public void checkOutOfBounds() {
+        if (playerVec.x > board.getWidth() - 2) {
+            playerVec.x = board.getWidth() - 2;
+        } else if (playerVec.y > board.getHeight() - 2) {
+            playerVec.y = board.getHeight() - 2;
         }
     }
 
-    @Override
-    public boolean keyUp(int keycode) {
-        if (keycode == Input.Keys.W) {
-            if(playerVec.y >= board.getHeight()-1){
-                return true;
-            }
-            else {
-                playerLayer.setCell((int) playerVec.x, (int) playerVec.y + 1, player);
-                playerLayer.setCell((int) playerVec.x, (int) playerVec.y, defaultCell);
-                playerVec.set(playerVec.x, playerVec.y + 1);
-                System.out.println("player moved");
-                return true;
-            }
-        }
-        if (keycode == Input.Keys.S) {
-            if(playerVec.y < 1){
-                return true;
-            }
-            else {
-                playerLayer.setCell((int) playerVec.x, (int) playerVec.y - 1, player);
-                playerLayer.setCell((int) playerVec.x, (int) playerVec.y, defaultCell);
-                playerVec.set(playerVec.x, playerVec.y - 1);
-                System.out.println("player moved");
-                return true;
-            }
-        }
-        if (keycode == Input.Keys.A) {
-            if (playerVec.x < 1){
-                return true;
-            }
-            playerLayer.setCell((int) playerVec.x-1, (int) playerVec.y, player);
-            playerLayer.setCell((int) playerVec.x, (int) playerVec.y, defaultCell);
-            playerVec.set(playerVec.x-1,playerVec.y);
-            System.out.println("player moved");
-            return true;
-        }
-        if (keycode == Input.Keys.D) {
-            if (playerVec.x >= board.getWidth()-1){
-                return true;
-            }
-            else {
-                playerLayer.setCell((int) playerVec.x + 1, (int) playerVec.y, player);
-                playerLayer.setCell((int) playerVec.x, (int) playerVec.y, defaultCell);
-                playerVec.set(playerVec.x + 1, playerVec.y);
-                System.out.println("player moved");
-                return true;
-            }
-        }
-        else
-            return false;
-    }
 
     @Override
     public void dispose() {
@@ -154,8 +103,34 @@ public class HelloWorld extends InputAdapter implements ApplicationListener {
         font.dispose();
     }
 
+    public void checkInput() {
+        int dx = 0;
+        int dy = 0;
+
+        if (input.wPressed) {
+            dy += 1;
+        } else if (input.aPressed) {
+            dx -= 1;
+        } else if(input.sPressed) {
+            dy -=1;
+        } else if (input.dPressed) {
+            dx += 1;
+        }
+        if (dx != 0 || dy != 0) {
+            // TODO: Fix float issue here
+            playerLayer.setCell((int) playerVec.x + dx, (int) playerVec.y + dy, player);
+            playerLayer.setCell((int) playerVec.x, (int) playerVec.y, defaultCell);
+            playerVec.set(playerVec.x + dx, playerVec.y + dy);
+        }
+        // Temporary fix, render method is faster than InputHandler is able to set bools
+        input.clear();
+    }
+
     @Override
     public void render() {
+        // Check input and move character
+        checkInput();
+
         Gdx.gl.glClearColor(1, 1, 1, 1);
         Gdx.gl.glClear(GL30.GL_COLOR_BUFFER_BIT);
 
