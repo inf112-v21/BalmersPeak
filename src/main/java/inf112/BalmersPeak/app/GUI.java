@@ -21,17 +21,32 @@ public class GUI implements ApplicationListener {
 
     private SpriteBatch batch;
     private BitmapFont font;
-    private TiledMap map;
-    private TiledMapTileLayer board;
-    private TiledMapTileLayer hole;
-    private TiledMapTileLayer flag;
-    private TiledMapTileLayer playerLayer;
     private OrthogonalTiledMapRenderer rend;
     private OrthographicCamera cam;
+
+
+
+    private TiledMap map;
+
+    private TiledMapTileLayer laserPath;
+    private TiledMapTileLayer wrench;
+    private TiledMapTileLayer hole;
+    private TiledMapTileLayer gear;
+    private TiledMapTileLayer start;
+    private TiledMapTileLayer laser;
+    private TiledMapTileLayer wall;
+    private TiledMapTileLayer conveyor;
+    private TiledMapTileLayer playerLayer;
+    private TiledMapTileLayer flag;
+    private TiledMapTileLayer board;
+
+
     private TiledMapTileLayer.Cell player;
     private TiledMapTileLayer.Cell wonCell;
     private TiledMapTileLayer.Cell dieCell;
     private TiledMapTileLayer.Cell defaultCell;
+
+
     private Vector2 playerVec;
 
     private InputHandler input;
@@ -45,19 +60,29 @@ public class GUI implements ApplicationListener {
         font = new BitmapFont();
         font.setColor(Color.RED);
 
-        map = new TmxMapLoader().load("assets/example.tmx");
+
+        map = new TmxMapLoader().load("assets/map.tmx");
         playerLayer = (TiledMapTileLayer) map.getLayers().get("Player");
-        board = (TiledMapTileLayer) map.getLayers().get("Board");
+        laserPath = (TiledMapTileLayer) map.getLayers().get("LaserPath");
+        wrench = (TiledMapTileLayer) map.getLayers().get("Wrench");
         hole = (TiledMapTileLayer) map.getLayers().get("Hole");
+        gear = (TiledMapTileLayer) map.getLayers().get("Gear");
+        start = (TiledMapTileLayer) map.getLayers().get("Start");
+        laser = (TiledMapTileLayer) map.getLayers().get("Laser");
+        wall = (TiledMapTileLayer) map.getLayers().get("Wall");
+        conveyor = (TiledMapTileLayer) map.getLayers().get("Conveyor");
         flag = (TiledMapTileLayer) map.getLayers().get("Flag");
+        board = (TiledMapTileLayer) map.getLayers().get("Board");
+
+
 
         Texture playerTexture = new Texture("assets/player.png");
         TextureRegion[][] texRegion = TextureRegion.split(playerTexture, 300, 300);
 
-        Texture boardTexture = new Texture("assets/standard-300dpi.png");
+        Texture boardTexture = new Texture("assets/tiles.png");
         TextureRegion[][] boardRegion = TextureRegion.split(boardTexture, 300, 300);
 
-        StaticTiledMapTile defaultTileTexture = new StaticTiledMapTile(boardRegion[12][1]);
+        StaticTiledMapTile defaultTileTexture = new StaticTiledMapTile(boardRegion[0][4]);
         StaticTiledMapTile normalPlayerTexture = new StaticTiledMapTile(texRegion[0][0]);
         StaticTiledMapTile playerDiedTexture = new StaticTiledMapTile(texRegion[0][1]);
         StaticTiledMapTile playerWonTexture = new StaticTiledMapTile(texRegion[0][2]);
@@ -65,12 +90,16 @@ public class GUI implements ApplicationListener {
         wonCell = new TiledMapTileLayer.Cell().setTile(playerWonTexture);
         dieCell = new TiledMapTileLayer.Cell().setTile(playerDiedTexture);
         defaultCell = new TiledMapTileLayer.Cell().setTile(defaultTileTexture);
+
+
+
+
         playerVec = new Vector2(0, 0);
 
         cam = new OrthographicCamera();
         rend = new OrthogonalTiledMapRenderer(map, (float) 1 / 300);
 
-        cam.setToOrtho(false, 5, 5);
+        cam.setToOrtho(false, 16, 12);
         cam.position.set(cam.viewportWidth / 2, cam.viewportHeight / 2, 0);
         cam.update();
 
@@ -87,7 +116,8 @@ public class GUI implements ApplicationListener {
 
         // These return true if the resulting playerVec are out of bounds
         boolean outsideX = playerVec.x + dx > board.getWidth()-1 || playerVec.x + dx < 0;
-        boolean outsideY = playerVec.y + dy > board.getWidth()-1 || playerVec.y + dy < 0;
+        boolean outsideY = playerVec.y + dy > board.getHeight()-1 || playerVec.y + dy < 0;
+        System.out.println("player y: " + playerVec.y + ". Board height: " + board.getHeight());
 
         return !(outsideX || outsideY);
     }
@@ -110,8 +140,10 @@ public class GUI implements ApplicationListener {
         // Only update if the player is allowed to move
         if (shouldMove(dx, dy)) {
             // TODO: Fix float issue here
+            // Set new cell to the player texture
             playerLayer.setCell((int) playerVec.x + dx, (int) playerVec.y + dy, player);
-            playerLayer.setCell((int) playerVec.x, (int) playerVec.y, defaultCell);
+            // Set remove previous cell texture
+            playerLayer.setCell((int) playerVec.x, (int) playerVec.y, null);
             playerVec.set(playerVec.x + dx, playerVec.y + dy);
         }
         // TODO: Temporary fix, render method is called 4-5 times before InputHandler is able to change the keypress bools
