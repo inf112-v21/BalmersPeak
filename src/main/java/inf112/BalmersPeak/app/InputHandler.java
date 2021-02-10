@@ -10,10 +10,6 @@ public class InputHandler extends InputAdapter {
 
     public InputHandler() {
         Gdx.input.setInputProcessor(this);
-        wPressed = false;
-        aPressed = false;
-        sPressed = false;
-        dPressed = false;
     }
 
     @Override
@@ -43,7 +39,6 @@ public class InputHandler extends InputAdapter {
         // Key was released, set corresponding bool to false
         switch(keycode) {
             case Input.Keys.W:
-
                 wPressed = false;
                 break;
             case Input.Keys.A:

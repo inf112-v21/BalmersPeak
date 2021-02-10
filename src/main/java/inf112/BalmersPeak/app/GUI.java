@@ -88,12 +88,42 @@ public class GUI implements ApplicationListener {
         rend.setView(cam);
     }
 
-    public void checkOutOfBounds() {
-        if (playerVec.x > board.getWidth() - 2) {
-            playerVec.x = board.getWidth() - 2;
-        } else if (playerVec.y > board.getHeight() - 2) {
-            playerVec.y = board.getHeight() - 2;
+    public boolean shouldMove(int dx, int dy) {
+        // Return false if dx and dy are zero
+        if (dx == 0 && dy == 0)
+            return false;
+
+        // These return true if the resulting playerVec are out of bounds
+        boolean outsideX = playerVec.x + dx > board.getWidth()-1 || playerVec.x + dx < 0;
+        boolean outsideY = playerVec.y + dy > board.getWidth()-1 || playerVec.y + dy < 0;
+
+        return !(outsideX || outsideY);
+    }
+
+    public void checkInput() {
+        // Changes in the x coordinate
+        int dx = 0;
+        // Changes in the y coordinate
+        int dy = 0;
+
+        if (input.wPressed)
+            dy += 1;
+        else if (input.aPressed)
+            dx -= 1;
+        else if(input.sPressed)
+            dy -=1;
+        else if (input.dPressed)
+            dx += 1;
+
+        // Only update if the player is allowed to move
+        if (shouldMove(dx, dy)) {
+            // TODO: Fix float issue here
+            playerLayer.setCell((int) playerVec.x + dx, (int) playerVec.y + dy, player);
+            playerLayer.setCell((int) playerVec.x, (int) playerVec.y, defaultCell);
+            playerVec.set(playerVec.x + dx, playerVec.y + dy);
         }
+        // TODO: Temporary fix, render method is called 4-5 times before InputHandler is able to change the keypress bools
+        input.clear();
     }
 
 
@@ -101,29 +131,6 @@ public class GUI implements ApplicationListener {
     public void dispose() {
         batch.dispose();
         font.dispose();
-    }
-
-    public void checkInput() {
-        int dx = 0;
-        int dy = 0;
-
-        if (input.wPressed) {
-            dy += 1;
-        } else if (input.aPressed) {
-            dx -= 1;
-        } else if(input.sPressed) {
-            dy -=1;
-        } else if (input.dPressed) {
-            dx += 1;
-        }
-        if (dx != 0 || dy != 0) {
-            // TODO: Fix float issue here
-            playerLayer.setCell((int) playerVec.x + dx, (int) playerVec.y + dy, player);
-            playerLayer.setCell((int) playerVec.x, (int) playerVec.y, defaultCell);
-            playerVec.set(playerVec.x + dx, playerVec.y + dy);
-        }
-        // Temporary fix, render method is faster than InputHandler is able to set bools
-        input.clear();
     }
 
     @Override
