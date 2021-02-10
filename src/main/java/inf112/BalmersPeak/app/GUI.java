@@ -44,7 +44,6 @@ public class GUI implements ApplicationListener {
     private TiledMapTileLayer.Cell player;
     private TiledMapTileLayer.Cell wonCell;
     private TiledMapTileLayer.Cell dieCell;
-    private TiledMapTileLayer.Cell defaultCell;
 
 
     private Vector2 playerVec;
@@ -82,14 +81,12 @@ public class GUI implements ApplicationListener {
         Texture boardTexture = new Texture("assets/tiles.png");
         TextureRegion[][] boardRegion = TextureRegion.split(boardTexture, 300, 300);
 
-        StaticTiledMapTile defaultTileTexture = new StaticTiledMapTile(boardRegion[0][4]);
         StaticTiledMapTile normalPlayerTexture = new StaticTiledMapTile(texRegion[0][0]);
         StaticTiledMapTile playerDiedTexture = new StaticTiledMapTile(texRegion[0][1]);
         StaticTiledMapTile playerWonTexture = new StaticTiledMapTile(texRegion[0][2]);
         player = new TiledMapTileLayer.Cell().setTile(normalPlayerTexture);
         wonCell = new TiledMapTileLayer.Cell().setTile(playerWonTexture);
         dieCell = new TiledMapTileLayer.Cell().setTile(playerDiedTexture);
-        defaultCell = new TiledMapTileLayer.Cell().setTile(defaultTileTexture);
 
 
 
@@ -117,7 +114,6 @@ public class GUI implements ApplicationListener {
         // These return true if the resulting playerVec are out of bounds
         boolean outsideX = playerVec.x + dx > board.getWidth()-1 || playerVec.x + dx < 0;
         boolean outsideY = playerVec.y + dy > board.getHeight()-1 || playerVec.y + dy < 0;
-        System.out.println("player y: " + playerVec.y + ". Board height: " + board.getHeight());
 
         return !(outsideX || outsideY);
     }
@@ -146,7 +142,7 @@ public class GUI implements ApplicationListener {
             playerLayer.setCell((int) playerVec.x, (int) playerVec.y, null);
             playerVec.set(playerVec.x + dx, playerVec.y + dy);
         }
-        // TODO: Temporary fix, render method is called 4-5 times before InputHandler is able to change the keypress bools
+        // TODO: Temporary fix below, render method is called 4-5 times before InputHandler is able to change the keypress bools
         input.clear();
     }
 
