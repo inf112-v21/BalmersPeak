@@ -130,6 +130,7 @@ public class GUI implements ApplicationListener {
         // Check input and move character
         checkInput();
 
+        // Clear screen
         Gdx.gl.glClearColor(1, 1, 1, 1);
         Gdx.gl.glClear(GL30.GL_COLOR_BUFFER_BIT);
 
@@ -142,18 +143,14 @@ public class GUI implements ApplicationListener {
             System.out.println("you died");
         }
         rend.render();
-
     }
 
     @Override
-    public void resize(int width, int height) {
-    }
+    public void resize(int width, int height) {}
 
     @Override
-    public void pause() {
-    }
+    public void pause() {}
 
     @Override
-    public void resume() {
-    }
+    public void resume() {}
 }
