@@ -16,7 +16,6 @@ Vi blir å bruke project board på github siden vi vil holde oss nærmest mulig 
 
 Se Github for project board.
 
-
 ##Deloppgave 2: Velg og tilpass en prosess for laget
 
 PROSJEKTMETODIKK - SCRUM
@@ -45,8 +44,6 @@ Kommunikasjon utenom møtene vil foregå på Discord. Møtene vil også foregå 
 
 Deling og oppbevaring av dokumenter via Github og Google Docs.
 
-
-
 ##Deloppgave 3: Få oversikt over forventet produkt
 
 En kort beskrivelse av det overordnede målet for applikasjonen:
@@ -55,14 +52,11 @@ Målet for applikasjonen er å kunne spille RoboRally digitalt, da i hvert fall 
 I løpet av runde skal hver spiller få utdelt kort alt etter hvor mye skade han har tatt, legge fem av kortene som fungerer som “kommandoer” til hvordan roboten skal bevege seg og til slutt kjøre disse “kommandoene”.
 Når det kommer til spillebrettet vil vi i hovedsak starte med å bare designe et fullt funksjonelt spillbrett. Det vil si at vi vil ha med conveyor belts, lasere, reparering, oppgraderinger, skade, at roboter blir ødelagte og at en spiller vinner. Vi tenker at det er viktigere å ha et fullstendig brett, enn mange ufullstendige brett. Dersom alt fungerer som det skal, og tiden strekker til er det mulighet for å implementere flere baner, men det er ikke en prioritet.
 
-
 En liste over brukerhistorier til systemet basert på MVP-kravene:
 Se deloppgave 4 for brukerhistorier.
 For hver brukerhistorie, skal dere ha akseptansekriterier og arbeidsoppgaver, samt beskrivelse av hvilke krav brukerhistorien oppfyller (dette lager dere kun for historier dere er ferdige med, holder på med, eller skal til å begynne med)
 En prioritert liste over hvilke brukerhistorier dere vil ha med i første iterasjon (altså frem til levering av denne oppgaven, se deloppgave 4 for forslag).
 (Frivillig) Krav til MVP er gitt i neste deloppgave. Dersom dere ønsker å utvide den
-
-
 
 ##Deloppgave 4: Kode
 
@@ -140,4 +134,3 @@ Møtene kunne sikkert blitt bedre dersom vi hadde hatt mulighet til å møte fys
 
 Nye aktiviteter/verktøy til neste oblig:
 Skrive og legge ut punkter for hva vi har tenkt til å gå gjennom på møtene på forhånd (møteplan) slik at alle kan gjøre seg tanker om det.
-
