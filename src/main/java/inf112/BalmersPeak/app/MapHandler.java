@@ -92,7 +92,7 @@ public class MapHandler {
         // Set new cell to the player texture
         this.playerLayer.setCell(xCoord + dx, yCoord + dy, this.player);
         // Set remove previous cell texture
-       this.playerLayer.setCell(xCoord, yCoord, null);
+        this.playerLayer.setCell(xCoord, yCoord, null);
     }
 
     public boolean checkWin(int xCoord, int yCoord) {
@@ -104,6 +104,7 @@ public class MapHandler {
     }
 
     public void changePlayerTextureWin(int xCoord, int yCoord) {
+
         this.playerLayer.setCell(xCoord, yCoord, wonCell);
     }
 
