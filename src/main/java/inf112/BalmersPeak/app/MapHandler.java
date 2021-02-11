@@ -65,10 +65,24 @@ public class MapHandler {
     public TiledMap getMap() {
         return this.map;
     }
-    
+
     public TiledMapTileLayer getBoard() {
         return this.board;
     }
+
+    public TiledMapTileLayer getLaserPathLayer() { return this.laserPath; }
+
+    public TiledMapTileLayer getWrenchLayer() { return this.wrench; }
+
+    public TiledMapTileLayer getGearLayer() { return this.gear; }
+
+    public TiledMapTileLayer getStartPadsLayer() { return this.start; }
+
+    public TiledMapTileLayer getLaserLayer() { return this.laser; }
+
+    public TiledMapTileLayer getWallLayer() { return this.wall; }
+
+    public TiledMapTileLayer getConveyorLayer() { return this.conveyor; }
 
     public TiledMapTileLayer getPlayerLayer() {
         return this.playerLayer;
