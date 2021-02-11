@@ -135,17 +135,23 @@ public class GUI implements ApplicationListener {
      * @param height - the new height in pixels
      */
     @Override
-    public void resize(int width, int height) {}
+    public void resize(int width, int height) {
+        // The resize method.
+    }
 
     /**
      * Called when the Application is paused, usually when it's not active or visible on-screen. Always paused before it's destroyed
      */
     @Override
-    public void pause() {}
+    public void pause() {
+        // The pause method.
+    }
 
     /**
      * Called when the Application is resumed from a paused state, usually when it regains focus
      */
     @Override
-    public void resume() {}
+    public void resume() {
+        // The resume method.
+    }
 }
