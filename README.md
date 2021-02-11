@@ -27,9 +27,9 @@ This repository is a Java implementation of the board game "RoboRally", built wi
 <img src="assets/roborally.png"  width="300">
 
 ### Technologies
-- JDK 9 or higher
-- JUnit 5
-- libGDX 1.9
+-   JDK 9 or higher
+-   JUnit 5
+-   libGDX 1.9
 
 ### How to run
 
