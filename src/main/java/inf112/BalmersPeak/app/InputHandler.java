@@ -6,7 +6,10 @@ import com.badlogic.gdx.InputAdapter;
 
 public class InputHandler extends InputAdapter {
 
-    public boolean wPressed, aPressed, sPressed, dPressed;
+    public boolean wPressed;
+    public boolean aPressed;
+    public boolean sPressed;
+    public boolean dPressed;
 
     public InputHandler() {
         Gdx.input.setInputProcessor(this);

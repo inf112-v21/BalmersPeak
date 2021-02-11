@@ -131,12 +131,15 @@ public class GUI implements ApplicationListener {
         rend.render();
     }
 
+    // Called when the Application is resized. Can happen at any point during non-paused state, but never during create()
     @Override
     public void resize(int width, int height) {}
 
+    // Called when the Application is paused, usually when it's not active or visible on-screen. Always paused before it's destroyed
     @Override
     public void pause() {}
 
+    // Called when the Application is resumed from a paused state, usually when it regains focus
     @Override
     public void resume() {}
 }
