@@ -65,7 +65,7 @@ public class MapHandler {
     public TiledMap getMap() {
         return this.map;
     }
-
+    
     public TiledMapTileLayer getBoard() {
         return this.board;
     }
