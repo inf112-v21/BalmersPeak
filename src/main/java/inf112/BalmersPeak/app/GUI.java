@@ -16,7 +16,6 @@ public class GUI implements ApplicationListener {
     private SpriteBatch batch;
     private BitmapFont font;
     private OrthogonalTiledMapRenderer rend;
-    private OrthographicCamera cam;
 
     private Vector2 playerVec;
 
@@ -38,17 +37,14 @@ public class GUI implements ApplicationListener {
         font.setColor(Color.RED);
 
 
-
         playerVec = new Vector2(0, 0);
 
-        cam = new OrthographicCamera();
+        OrthographicCamera cam = new OrthographicCamera();
         rend = new OrthogonalTiledMapRenderer(mapHandler.getMap(), (float) 1 / 300);
 
         cam.setToOrtho(false, 16, 12);
         cam.position.set(cam.viewportWidth / 2, cam.viewportHeight / 2, 0);
         cam.update();
-
-
 
 
         rend.setView(cam);
@@ -131,15 +127,25 @@ public class GUI implements ApplicationListener {
         rend.render();
     }
 
-    // Called when the Application is resized. Can happen at any point during non-paused state, but never during create()
+
+
+    /**
+     * Called when the Application is resized. Can happen at any point during non-paused state, but never during create()
+     * @param width - the new width in pixels
+     * @param height - the new height in pixels
+     */
     @Override
     public void resize(int width, int height) {}
 
-    // Called when the Application is paused, usually when it's not active or visible on-screen. Always paused before it's destroyed
+    /**
+     * Called when the Application is paused, usually when it's not active or visible on-screen. Always paused before it's destroyed
+     */
     @Override
     public void pause() {}
 
-    // Called when the Application is resumed from a paused state, usually when it regains focus
+    /**
+     * Called when the Application is resumed from a paused state, usually when it regains focus
+     */
     @Override
     public void resume() {}
 }
