@@ -65,6 +65,4 @@ public class InputHandler extends InputAdapter {
         sPressed = false;
         dPressed = false;
     }
-
-
 }

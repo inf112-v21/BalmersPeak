@@ -1,5 +1,6 @@
 package inf112.balmerspeak.app;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.maps.tiled.TiledMap;
@@ -30,9 +31,11 @@ public class MapHandler {
     public TiledMapTileLayer.Cell wonCell;
     public TiledMapTileLayer.Cell dieCell;
 
+
     public MapHandler() {
         // Instantiate map
         map = new TmxMapLoader().load("assets/map.tmx");
+        System.out.println(Gdx.files.internal("map.tmx").file().getAbsolutePath());
 
         // Instantiate layers
         playerLayer = (TiledMapTileLayer) map.getLayers().get("Player");
@@ -104,7 +107,6 @@ public class MapHandler {
     }
 
     public void changePlayerTextureWin(int xCoord, int yCoord) {
-
         this.playerLayer.setCell(xCoord, yCoord, wonCell);
     }
 
