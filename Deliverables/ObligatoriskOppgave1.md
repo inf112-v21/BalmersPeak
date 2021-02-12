@@ -1,6 +1,6 @@
-#Oblig 1 - Ballmer’s Peak
+# Oblig 1 - Ballmer’s Peak
 
-##Deloppgave 1: Organiser teamet
+## Deloppgave 1: Organiser teamet
 
 GRUPPEINFORMASJON
 Gruppenavn: BalmersPeak
@@ -16,7 +16,7 @@ Vi blir å bruke project board på github siden vi vil holde oss nærmest mulig 
 
 Se Github for project board.
 
-##Deloppgave 2: Velg og tilpass en prosess for laget
+## Deloppgave 2: Velg og tilpass en prosess for laget
 
 PROSJEKTMETODIKK - SCRUM
 Hva er egentlig scrum?
@@ -44,7 +44,7 @@ Kommunikasjon utenom møtene vil foregå på Discord. Møtene vil også foregå 
 
 Deling og oppbevaring av dokumenter via Github og Google Docs.
 
-##Deloppgave 3: Få oversikt over forventet produkt
+## Deloppgave 3: Få oversikt over forventet produkt
 
 En kort beskrivelse av det overordnede målet for applikasjonen:
 
@@ -58,7 +58,7 @@ For hver brukerhistorie, skal dere ha akseptansekriterier og arbeidsoppgaver, sa
 En prioritert liste over hvilke brukerhistorier dere vil ha med i første iterasjon (altså frem til levering av denne oppgaven, se deloppgave 4 for forslag).
 (Frivillig) Krav til MVP er gitt i neste deloppgave. Dersom dere ønsker å utvide den
 
-##Deloppgave 4: Kode
+## Deloppgave 4: Kode
 
 Se Github repository for kode.
 Se deloppgave 2 for prosjektmetodikk.
@@ -120,7 +120,7 @@ Møtet startet 12.10
 Vi startet møtet med å få en liten oversikt over endringene som var gjort i koden, og på brukerhistoriene.
 Deretter skrev vi oppsummeringen for obligen, siden vi var så godt som ferdig med alle deloppgavene. Her oppsummerte vi det som gikk bra, det som gikk dårlig og diskuterte nye verktøy vi kunne ta i bruk til neste oblig.
 
-Oppsummering:
+## Oppsummering:
 
 Hva gikk bra:
 Samarbeidet bra, kommunikasjonen god.
