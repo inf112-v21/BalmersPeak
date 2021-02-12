@@ -14,7 +14,7 @@ import static org.junit.Assert.assertTrue;
 public class MapHandlerTest {
 
     private MapHandler mapHandler;
-    
+
     @Test
     public void getMapShouldReturnMap(){
         Lwjgl3ApplicationConfiguration cfg = new Lwjgl3ApplicationConfiguration();
