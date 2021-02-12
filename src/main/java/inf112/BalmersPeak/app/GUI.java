@@ -62,7 +62,7 @@ public class GUI implements ApplicationListener {
         return !(outsideX || outsideY);
     }
 
-    public void checkInput(int playerX, int playerY) {
+    public void handleMove() {
         // Changes in the x coordinate
         int dx = 0;
         // Changes in the y coordinate
@@ -77,15 +77,31 @@ public class GUI implements ApplicationListener {
         else if (input.dPressed)
             dx += 1;
 
+        // Player x and y coordinates
+        int playerX = (int) playerVec.x;
+        int playerY = (int) playerVec.y;
+
+
         // Only update if the player is allowed to move
         if (shouldMove(dx, dy)) {
             // Move player textures
             mapHandler.movePlayer(playerX, playerY, dx, dy);
-
-            // Update player coordinates
-            playerVec.set(playerX + dx, playerY + dy);
         }
-        // TODO: Temporary fix below, render method is called 4-5 times before InputHandler is able to change the keypress bools
+
+        // Check if player won
+        if (mapHandler.checkWin(playerX, playerY)) {
+            System.out.println("You won!");
+            mapHandler.changePlayerTextureWin(playerX + dx, playerY + dy);
+        }
+
+        // Check if player died
+        if (mapHandler.checkDeath(playerX, playerY)) {
+            System.out.println("You died :(");
+            mapHandler.changePlayerTextureDeath(playerX + dx, playerY + dy);
+        }
+
+        // Update player coordinates
+        playerVec.set(playerX + dx, playerY + dy);
         input.clear();
     }
 
@@ -99,31 +115,13 @@ public class GUI implements ApplicationListener {
     @Override
     public void render() {
 
-        // Get player coordinates as ints
-        int playerX = (int) playerVec.x;
-        int playerY = (int) playerVec.y;
-
-
         // Check input and move character
-        checkInput(playerX, playerY);
+        handleMove();
 
         // Clear screen
         Gdx.gl.glClearColor(1, 1, 1, 1);
         Gdx.gl.glClear(GL30.GL_COLOR_BUFFER_BIT);
 
-
-        // Check if player has won
-        if (mapHandler.checkWin(playerX, playerY)) {
-            System.out.println("You won!");
-            //mapHandler.changePlayerTextureWin(playerX, playerY);
-            mapHandler.getPlayerLayer().setCell(playerX, playerY, mapHandler.wonCell);
-        }
-
-        // Check if player died
-        if (mapHandler.checkDeath(playerX, playerY)) {
-            System.out.println("You died :(");
-            mapHandler.changePlayerTextureDeath(playerX, playerY);
-        }
         rend.render();
     }
 
