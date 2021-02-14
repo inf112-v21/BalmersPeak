@@ -3,17 +3,17 @@ package inf112.balmerspeak.app;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
 
 public class MenuScreen implements Screen {
     private GUI game;
     private SpriteBatch batch;
     private Texture img;
-    private TextureRegion mainBackground;
 
+    BitmapFont font;
 
-    private float f = 0;
 
     public MenuScreen(GUI game) {
         this.game = game;
@@ -22,25 +22,28 @@ public class MenuScreen implements Screen {
     @Override
     public void show() {
         img = new Texture("menubackground.jpg");
-        mainBackground = new TextureRegion(img, 0, 0, 2000, 2000);
         batch = new SpriteBatch();
+
+        // Load font
+        FreeTypeFontGenerator generator = new FreeTypeFontGenerator(Gdx.files.internal("pdark.ttf"));
+        FreeTypeFontGenerator.FreeTypeFontParameter parameter = new FreeTypeFontGenerator.FreeTypeFontParameter();
+        parameter.size = 12; // font size
+        font = generator.generateFont(parameter);
+        generator.dispose(); // avoid memory leaks, important
     }
 
     @Override
     public void render(float v) {
         batch.begin();
-        batch.draw(mainBackground, 0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+        // Draw background image
+        batch.draw(img, 0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+        // Draw title
+        font.draw(batch, "Hello, World!", Gdx.graphics.getWidth() / 2, Gdx.graphics.getHeight() / 2 + 350);
         batch.end();
-//        f += v;
-//        // Change after 10 seconds
-//        if (f > 10) {
-//            game.changeScreen(new GameScreen(game));
-//        }
     }
 
     @Override
-    public void resize(int i, int i1) {
-
+    public void resize(int width, int height) {
     }
 
     @Override
