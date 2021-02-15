@@ -35,7 +35,6 @@ public class MapHandler {
     public MapHandler() {
         // Instantiate map
         map = new TmxMapLoader().load("assets/map.tmx");
-        System.out.println(Gdx.files.internal("map.tmx").file().getAbsolutePath());
 
         // Instantiate layers
         playerLayer = (TiledMapTileLayer) map.getLayers().get("Player");
