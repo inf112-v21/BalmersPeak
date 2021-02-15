@@ -21,9 +21,9 @@ com.badlogic.gdx.graphics.Color: {
 		a: 1
 	}
 	color: {
-		r: 0.98611116
-		g: 0
-		b: 1
+		r: 0.2
+		g: 0.356862745
+		b: 0.921568627
 		a: 1
 	}
 	pressed: {

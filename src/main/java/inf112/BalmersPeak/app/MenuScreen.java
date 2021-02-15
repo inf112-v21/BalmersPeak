@@ -9,9 +9,12 @@ import com.badlogic.gdx.graphics.g2d.GlyphLayout;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
+import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
+import com.badlogic.gdx.utils.Align;
+import com.badlogic.gdx.utils.viewport.ScreenViewport;
 
 public class MenuScreen implements Screen {
     private GUI game;
@@ -20,16 +23,19 @@ public class MenuScreen implements Screen {
 
     // Play button
     TextButton playButton;
-    TextButton.TextButtonStyle playButtonStyle;
+    // Options button
+    TextButton optionsButton;
+    // Quit button
+    TextButton quitButton;
 
     BitmapFont font;
     private GlyphLayout layout;
 
-    Table table;
+    Table root;
 
     Skin skin;
-    TextureAtlas buttonAtlas;
 
+    Stage stage;
 
     public MenuScreen(GUI game) {
         this.game = game;
@@ -37,8 +43,35 @@ public class MenuScreen implements Screen {
 
     @Override
     public void show() {
-        img = new Texture("menubackground.jpg");
+        // Init stage
+        stage = new Stage(new ScreenViewport());
+        // Init batch
         batch = new SpriteBatch();
+
+        // Load background image
+        img = new Texture("menubackground.jpg");
+
+        // Init skin
+        skin = new Skin(Gdx.files.internal("quantum/skin/quantum-horizon-ui.json"));
+
+        // Init root table
+        root = new Table();
+        root.setFillParent(true);
+
+        // Init buttons
+        playButton = new TextButton("Play!", skin);
+        optionsButton = new TextButton("Options", skin);
+        quitButton = new TextButton("Quit", skin);
+
+        // Add title and buttons to table
+        root.add(playButton);
+        root.row();
+        root.add(optionsButton);
+        root.row();
+        root.add(quitButton);
+
+        // Center table
+
 
         // Load title font
         FreeTypeFontGenerator generator = new FreeTypeFontGenerator(Gdx.files.internal("pdark.ttf"));
@@ -49,45 +82,24 @@ public class MenuScreen implements Screen {
         font = generator.generateFont(parameter);
         generator.dispose(); // avoid memory leaks, important
 
-
-        // Init skin
-        skin = new Skin();
-        buttonAtlas = new TextureAtlas(Gdx.files.internal("quantum/skin/quantum-horizon-ui.atlas"));
-        skin.addRegions(buttonAtlas);
-        playButtonStyle = new TextButton.TextButtonStyle();
-        playButtonStyle.font = font;
-        playButtonStyle.up = skin.getDrawable("button");
-        playButtonStyle.down = skin.getDrawable("button-pressed");
-        playButton = new TextButton("Play!", playButtonStyle);
-
-
-
-
+        // Add everything to stage
+        stage.addActor(root);
     }
 
     @Override
     public void render(float v) {
-        batch.begin();
-        // Draw background image
-        batch.draw(img, 0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
-
-        // Draw title
-        layout = new GlyphLayout();
-        String title = "Robo Rally";
-        layout.setText(font, title);
-        float width = layout.width;
-        font.draw(batch, layout, (Gdx.graphics.getWidth() - width)/2, Gdx.graphics.getHeight() - 250);
-
-        // Draw table
-        playButton.draw(batch, 1.0F);
-
-
-        
-        batch.end();
+        stage.act(Gdx.graphics.getDeltaTime());
+        stage.getBatch().begin();
+        // Set color for the background
+        stage.getBatch().setColor(skin.getColor("pressed"));
+        stage.getBatch().draw(img, 0, 0, stage.getWidth(), stage.getHeight());
+        stage.getBatch().end();
+        stage.draw();
     }
 
     @Override
     public void resize(int width, int height) {
+        stage.getViewport().update(width, height, true);
     }
 
     @Override
