@@ -1,15 +1,12 @@
 package inf112.balmerspeak.app;
 
-import com.badlogic.gdx.Audio;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
-import com.badlogic.gdx.graphics.g2d.GlyphLayout;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
@@ -24,8 +21,10 @@ import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 
 public class MenuScreen implements Screen {
+    // Game object
     private GUI game;
-    private SpriteBatch batch;
+
+    // Background image
     private Texture img;
 
     // Title label
@@ -46,14 +45,15 @@ public class MenuScreen implements Screen {
     BitmapFont titleFont;
     BitmapFont buttonFont;
 
+    // Table containing buttons and the title
     Table root;
 
+    // The skin loaded from assets
     Skin skin;
 
+    // The basis to add table and other actors
     Stage stage;
 
-    Sound btnHoverSound;
-    Boolean hoverPlayed = false;
 
     public MenuScreen(GUI game) {
         this.game = game;
@@ -81,8 +81,6 @@ public class MenuScreen implements Screen {
         // Set stage as InputProcessor
         Gdx.input.setInputProcessor(stage);
 
-        // Init batch
-        batch = new SpriteBatch();
 
         // Load background image
         img = new Texture("menubackground.jpg");
@@ -118,11 +116,8 @@ public class MenuScreen implements Screen {
         quitButton.setLabel(new Label("Quit", buttonStyle));
         quitButton.getLabel().setAlignment(Align.center);
 
-        // Add listeners to play button and change screen
-        addButtonListener(playButton);
-        addButtonListener(optionsButton);
-        addButtonListener(quitButton);
-
+        // Add hover and click listeners to buttons
+        addListeners();
 
         // Add title and buttons to table
         root.add(title).padBottom(250.0f);
@@ -138,10 +133,12 @@ public class MenuScreen implements Screen {
         stage.addActor(root);
     }
 
-    private void addButtonListener(TextButton button) {
-        button.addListener(new InputListener() {
+    private void addListeners() {
+        // Add play button listeners
+        playButton.addListener(new ClickListener() {
             boolean playing = false;
 
+            // Play sound on hover
             @Override
             public void enter(InputEvent event, float x, float y, int pointer, Actor fromActor) {
                 super.enter(event, x, y, pointer, fromActor);
@@ -152,14 +149,83 @@ public class MenuScreen implements Screen {
                 }
             }
 
+            // Stop sound on exit
             @Override
             public void exit(InputEvent event, float x, float y, int pointer, Actor toActor) {
                 super.exit(event, x, y, pointer, toActor);
                 if (toActor == null || toActor instanceof TextButton)
                     playing = false;
             }
+
+            // Go to game screen when clicked
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                super.clicked(event, x, y);
+                game.changeScreen(new GameScreen(game));
+            }
         });
 
+        // Add options button listeners
+        optionsButton.addListener(new ClickListener() {
+            boolean playing = false;
+
+            // Play sound on hover
+            @Override
+            public void enter(InputEvent event, float x, float y, int pointer, Actor fromActor) {
+                super.enter(event, x, y, pointer, fromActor);
+                if (!playing && (fromActor == null || fromActor instanceof TextButton)) {
+                    Sound sound = Gdx.audio.newSound(Gdx.files.internal("btn_hover.ogg"));
+                    sound.play(1F);
+                    playing = true;
+                }
+            }
+
+            // Stop sound on exit
+            @Override
+            public void exit(InputEvent event, float x, float y, int pointer, Actor toActor) {
+                super.exit(event, x, y, pointer, toActor);
+                if (toActor == null || toActor instanceof TextButton)
+                    playing = false;
+            }
+
+            // Go to game screen when clicked
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                super.clicked(event, x, y);
+                game.changeScreen(new GameScreen(game)); //TODO: refactor and change to optionsScreen
+            }
+        });
+
+        // Add listeners to quit button
+        quitButton.addListener(new ClickListener() {
+            boolean playing = false;
+
+            // Play sound on hover
+            @Override
+            public void enter(InputEvent event, float x, float y, int pointer, Actor fromActor) {
+                super.enter(event, x, y, pointer, fromActor);
+                if (!playing && (fromActor == null || fromActor instanceof TextButton)) {
+                    Sound sound = Gdx.audio.newSound(Gdx.files.internal("btn_hover.ogg"));
+                    sound.play(1F);
+                    playing = true;
+                }
+            }
+
+            // Stop sound on exit
+            @Override
+            public void exit(InputEvent event, float x, float y, int pointer, Actor toActor) {
+                super.exit(event, x, y, pointer, toActor);
+                if (toActor == null || toActor instanceof TextButton)
+                    playing = false;
+            }
+
+            // Go to game screen when clicked
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                super.clicked(event, x, y);
+                System.exit(0);
+            }
+        });
     }
 
     @Override
@@ -198,6 +264,4 @@ public class MenuScreen implements Screen {
         stage.dispose();
         skin.dispose();
     }
-
-
 }
