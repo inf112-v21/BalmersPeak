@@ -6,11 +6,9 @@ import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
-import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
@@ -84,9 +82,6 @@ public class MenuScreen implements Screen {
 
         // Load background image
         img = new Texture("images/menubackground.jpg");
-
-        // Load sound for button hover
-        //btnHoverSound = Gdx.audio.newSound(Gdx.files.internal("btn_hover.ogg"));
 
         // Init skin
         skin = new Skin(Gdx.files.internal("quantum/skin/quantum-horizon-ui.json"));
@@ -192,7 +187,7 @@ public class MenuScreen implements Screen {
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 super.clicked(event, x, y);
-                game.changeScreen(new GameScreen(game)); //TODO: refactor and change to optionsScreen
+                game.changeScreen(new OptionsScreen(game)); //TODO: refactor and change to optionsScreen
             }
         });
 

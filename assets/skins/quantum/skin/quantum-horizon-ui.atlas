@@ -88,7 +88,7 @@ list
   offset: 0, 0
   index: -1
 minus
-  rotate: false
+  rotate: true
   xy: 243, 387
   size: 17, 17
   orig: 17, 17

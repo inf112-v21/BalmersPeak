@@ -209,7 +209,7 @@ com.badlogic.gdx.scenes.scene2d.ui.Skin$TintedDrawable: {
 	}
 	progress-bar-horizontal-c-back: {
 		name: progress-bar-horizontal
-		color: pressed
+		color: white
 	}
 	progress-bar-vertical-back: {
 		name: progress-bar-vertical
