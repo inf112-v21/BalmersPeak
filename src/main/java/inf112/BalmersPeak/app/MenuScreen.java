@@ -63,7 +63,7 @@ public class MenuScreen implements Screen {
     public void show() {
 
         // Load title font
-        FreeTypeFontGenerator generator = new FreeTypeFontGenerator(Gdx.files.internal("pdark.ttf"));
+        FreeTypeFontGenerator generator = new FreeTypeFontGenerator(Gdx.files.internal("fonts/pdark.ttf"));
         FreeTypeFontGenerator.FreeTypeFontParameter parameter = new FreeTypeFontGenerator.FreeTypeFontParameter();
         parameter.size = 69; // font size
         parameter.borderColor = Color.BLACK;
@@ -83,7 +83,7 @@ public class MenuScreen implements Screen {
 
 
         // Load background image
-        img = new Texture("menubackground.jpg");
+        img = new Texture("images/menubackground.jpg");
 
         // Load sound for button hover
         //btnHoverSound = Gdx.audio.newSound(Gdx.files.internal("btn_hover.ogg"));
@@ -143,7 +143,7 @@ public class MenuScreen implements Screen {
             public void enter(InputEvent event, float x, float y, int pointer, Actor fromActor) {
                 super.enter(event, x, y, pointer, fromActor);
                 if (!playing && (fromActor == null || fromActor instanceof TextButton)) {
-                    Sound sound = Gdx.audio.newSound(Gdx.files.internal("btn_hover.ogg"));
+                    Sound sound = Gdx.audio.newSound(Gdx.files.internal("sounds/btn_hover.ogg"));
                     sound.play(1F);
                     playing = true;
                 }
@@ -174,7 +174,7 @@ public class MenuScreen implements Screen {
             public void enter(InputEvent event, float x, float y, int pointer, Actor fromActor) {
                 super.enter(event, x, y, pointer, fromActor);
                 if (!playing && (fromActor == null || fromActor instanceof TextButton)) {
-                    Sound sound = Gdx.audio.newSound(Gdx.files.internal("btn_hover.ogg"));
+                    Sound sound = Gdx.audio.newSound(Gdx.files.internal("sounds/btn_hover.ogg"));
                     sound.play(1F);
                     playing = true;
                 }
@@ -205,7 +205,7 @@ public class MenuScreen implements Screen {
             public void enter(InputEvent event, float x, float y, int pointer, Actor fromActor) {
                 super.enter(event, x, y, pointer, fromActor);
                 if (!playing && (fromActor == null || fromActor instanceof TextButton)) {
-                    Sound sound = Gdx.audio.newSound(Gdx.files.internal("btn_hover.ogg"));
+                    Sound sound = Gdx.audio.newSound(Gdx.files.internal("sounds/btn_hover.ogg"));
                     sound.play(1F);
                     playing = true;
                 }
