@@ -30,8 +30,6 @@ public class GameScreen implements Screen {
         mapHandler = new MapHandler();
 
 
-
-
         OrthographicCamera cam = new OrthographicCamera();
         rend = new OrthogonalTiledMapRenderer(mapHandler.getMap(), (float) 1 / 300);
 

@@ -8,6 +8,8 @@ import com.badlogic.gdx.graphics.GL30;
 
 public class GUI extends Game {
 
+    public Volume volume;
+
     public void changeScreen(Screen newScreen) {
         Screen oldScreen = getScreen();
         setScreen(newScreen);
@@ -20,6 +22,7 @@ public class GUI extends Game {
 
     @Override
     public void create() {
+        volume = new Volume();
         changeScreen(new MenuScreen(this));
     }
 
