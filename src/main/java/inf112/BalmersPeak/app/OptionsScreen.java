@@ -13,6 +13,7 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
+import com.badlogic.gdx.Graphics.DisplayMode;
 
 public class OptionsScreen implements Screen {
 
@@ -38,6 +39,7 @@ public class OptionsScreen implements Screen {
     ProgressBar volumeBar;
 
     TextButton toggleFullscreen;
+    TextButton backToMenu;
 
     // Title and button font
     BitmapFont titleFont;
@@ -113,10 +115,10 @@ public class OptionsScreen implements Screen {
         volumeBar.setValue(5);
 
         // Add fullscreen button
-       toggleFullscreen = new TextButton("Toggle Fullscreen", quantumSkin);
+        toggleFullscreen = new TextButton("Toggle Fullscreen", quantumSkin);
 
-       // Add back to menu button
-        TextButton backToMenu = new TextButton("Back", quantumSkin);
+        // Add back to menu button
+        backToMenu = new TextButton("Back", quantumSkin);
 
 
         // Add game title
@@ -139,6 +141,9 @@ public class OptionsScreen implements Screen {
         root.row();
         root.add(backToMenu).colspan(3).center();
 
+        // Add listeners
+        addButtonListeners();
+
 
         stage.addActor(root);
     }
@@ -146,10 +151,77 @@ public class OptionsScreen implements Screen {
     public void addVolumeListeners() {
         // Add listener to minus button
 
+
     }
 
     public void addButtonListeners() {
-//
+        toggleFullscreen.addListener(new ClickListener() {
+            boolean playing = false;
+            boolean fullscreen = false;
+
+            // Play sound on hover
+            @Override
+            public void enter(InputEvent event, float x, float y, int pointer, Actor fromActor) {
+                super.enter(event, x, y, pointer, fromActor);
+                if (!playing && (fromActor == null || fromActor instanceof TextButton)) {
+                    Sound sound = Gdx.audio.newSound(Gdx.files.internal("sounds/btn_hover.ogg"));
+                    sound.play(1F);
+                    playing = true;
+                }
+            }
+
+            // Stop sound on exit
+            @Override
+            public void exit(InputEvent event, float x, float y, int pointer, Actor toActor) {
+                super.exit(event, x, y, pointer, toActor);
+                if (toActor == null || toActor instanceof TextButton)
+                    playing = false;
+            }
+
+            // Go fullscreen when clicked
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                super.clicked(event, x, y);
+                System.out.println("clicked");
+                if (fullscreen) {
+                    System.out.println("triggered");
+                    Gdx.graphics.setWindowedMode(1920,1080);
+                } else {
+                    Gdx.graphics.setFullscreenMode(Gdx.graphics.getDisplayMode());
+                    fullscreen = true;
+                }
+            }
+        });
+
+        backToMenu.addListener(new ClickListener() {
+            boolean playing = false;
+
+            // Play sound on hover
+            @Override
+            public void enter(InputEvent event, float x, float y, int pointer, Actor fromActor) {
+                super.enter(event, x, y, pointer, fromActor);
+                if (!playing && (fromActor == null || fromActor instanceof TextButton)) {
+                    Sound sound = Gdx.audio.newSound(Gdx.files.internal("sounds/btn_hover.ogg"));
+                    sound.play(1F);
+                    playing = true;
+                }
+            }
+
+            // Stop sound on exit
+            @Override
+            public void exit(InputEvent event, float x, float y, int pointer, Actor toActor) {
+                super.exit(event, x, y, pointer, toActor);
+                if (toActor == null || toActor instanceof TextButton)
+                    playing = false;
+            }
+
+            // Go fullscreen when clicked
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                super.clicked(event, x, y);
+                game.changeScreen(new MenuScreen(game));
+            }
+        });
     }
 
     @Override
