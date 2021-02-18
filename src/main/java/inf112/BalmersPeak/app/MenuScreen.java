@@ -84,7 +84,7 @@ public class MenuScreen implements Screen {
         img = new Texture("images/menubackground.jpg");
 
         // Init skin
-        skin = new Skin(Gdx.files.internal("quantum/skin/quantum-horizon-ui.json"));
+        skin = new Skin(Gdx.files.internal("skins/quantum/skin/quantum-horizon-ui.json"));
 
         // Init root table
         root = new Table();
@@ -92,12 +92,14 @@ public class MenuScreen implements Screen {
 
         // Init title
         titleStyle = new Label.LabelStyle();
-        titleStyle.font = titleFont;
+        titleStyle.font = skin.getFont("title");
+        titleStyle.font.getData().setScale(1.3f, 1.3f);
         title = new Label("Robo Rally", titleStyle);
 
         // Init button font style
         buttonStyle = new Label.LabelStyle();
-        buttonStyle.font = buttonFont;
+        buttonStyle.font = skin.getFont("font");
+        buttonStyle.font.getData().setScale(1.3f, 1.3f);
 
 
         // Init buttons
