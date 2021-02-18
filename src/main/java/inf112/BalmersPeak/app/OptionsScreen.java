@@ -61,18 +61,7 @@ public class OptionsScreen implements Screen {
     @Override
     public void show() {
 
-        // Load title font
-        FreeTypeFontGenerator generator = new FreeTypeFontGenerator(Gdx.files.internal("fonts/pdark.ttf"));
-        FreeTypeFontGenerator.FreeTypeFontParameter parameter = new FreeTypeFontGenerator.FreeTypeFontParameter();
-        parameter.size = 69; // font size
-        parameter.borderColor = Color.BLACK;
-        parameter.borderWidth = 3;
-        titleFont = generator.generateFont(parameter);
-        parameter.size = 29;
-        parameter.borderColor = null;
-        parameter.borderWidth = 0;
-        buttonFont = generator.generateFont(parameter);
-        generator.dispose(); // avoid memory leaks, important
+
 
 
         // Init stage
