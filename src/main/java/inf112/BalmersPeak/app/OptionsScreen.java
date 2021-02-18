@@ -1,6 +1,7 @@
 package inf112.balmerspeak.app;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Color;
@@ -97,7 +98,6 @@ public class OptionsScreen implements Screen {
         // Add volume buttons and progress bar
         plusButton = new Button(quantumSkin.getDrawable("plus"));
         minusButton = new Button(quantumSkin.getDrawable("minus"));
-        minusButton.setRotation(-90);
 
         // Add volume progress bar
         volumeBar = new ProgressBar(0, 10, 1, false, quantumSkin);
@@ -132,15 +132,36 @@ public class OptionsScreen implements Screen {
 
         // Add listeners
         addButtonListeners();
+        addVolumeListeners();
 
-
+        //stage.setDebugAll(true);
         stage.addActor(root);
     }
 
     public void addVolumeListeners() {
         // Add listener to minus button
+        minusButton.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                super.clicked(event, x, y);
+                // Decrease volume
+                game.volume.decreaseVolume();
+                // Decrement volume bar
+                volumeBar.setValue(volumeBar.getValue() - 1);
+            }
+        });
 
-
+        // Add listener to plus button
+        plusButton.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                super.clicked(event, x, y);
+                // Increase volume
+                game.volume.increaseVolume();
+                // Increment volume bar
+                volumeBar.setValue(volumeBar.getValue() + 1);
+            }
+        });
     }
 
     public void addButtonListeners() {
@@ -173,7 +194,6 @@ public class OptionsScreen implements Screen {
                 super.clicked(event, x, y);
                 System.out.println("clicked");
                 if (fullscreen) {
-                    System.out.println("triggered");
                     Gdx.graphics.setWindowedMode(1920,1080);
                 } else {
                     Gdx.graphics.setFullscreenMode(Gdx.graphics.getDisplayMode());
