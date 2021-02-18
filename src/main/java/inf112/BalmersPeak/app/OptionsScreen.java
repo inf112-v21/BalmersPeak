@@ -1,20 +1,16 @@
 package inf112.balmerspeak.app;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.audio.Sound;
-import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
-import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
-import com.badlogic.gdx.Graphics.DisplayMode;
 
 public class OptionsScreen implements Screen {
 
@@ -50,9 +46,8 @@ public class OptionsScreen implements Screen {
     Table root;
 
     // The quantum skin
-    Skin quantumSkin;
-    // The orange skin (just for the checkbox)
-    Skin orangeSkin;
+    Skin skin;
+
 
     // Stage to add all components
     Stage stage;
@@ -61,8 +56,6 @@ public class OptionsScreen implements Screen {
 
     @Override
     public void show() {
-
-
 
 
         // Init stage
@@ -75,8 +68,8 @@ public class OptionsScreen implements Screen {
         img = new Texture("images/menubackground.jpg");
 
         // Init skin
-        quantumSkin = new Skin(Gdx.files.internal("skins/quantum/skin/quantum-horizon-ui.json"));
-        orangeSkin = new Skin(Gdx.files.internal("skins/orange/skin/uiskin.json"));
+        skin = new Skin(Gdx.files.internal("skins/quantum/skin/quantum-horizon-ui.json"));
+
 
         // Init root table
         root = new Table();
@@ -84,30 +77,30 @@ public class OptionsScreen implements Screen {
 
         // Init title
         titleStyle = new Label.LabelStyle();
-        titleStyle.font = quantumSkin.getFont("title");
+        titleStyle.font = skin.getFont("title");
         titleStyle.font.getData().setScale(1.3f, 1.3f);
         title = new Label("Robo Rally", titleStyle);
 
         // Init button font style
         buttonStyle = new Label.LabelStyle();
-        buttonStyle.font = quantumSkin.getFont("title");
+        buttonStyle.font = skin.getFont("title");
 
         // Volume title
         volumeTitle = new Label("Volume", buttonStyle);
 
         // Add volume buttons and progress bar
-        plusButton = new Button(quantumSkin.getDrawable("plus"));
-        minusButton = new Button(quantumSkin.getDrawable("minus"));
+        plusButton = new Button(skin.getDrawable("plus"));
+        minusButton = new Button(skin.getDrawable("minus"));
 
         // Add volume progress bar
-        volumeBar = new ProgressBar(0, 10, 1, false, quantumSkin);
+        volumeBar = new ProgressBar(0, 10, 1, false, skin);
         volumeBar.setValue(5);
 
         // Add fullscreen button
-        toggleFullscreen = new TextButton("Toggle Fullscreen", quantumSkin);
+        toggleFullscreen = new TextButton("Toggle Fullscreen", skin);
 
         // Add back to menu button
-        backToMenu = new TextButton("Back", quantumSkin);
+        backToMenu = new TextButton("Back", skin);
 
 
         // Add game title
@@ -175,7 +168,7 @@ public class OptionsScreen implements Screen {
                 super.enter(event, x, y, pointer, fromActor);
                 if (!playing && (fromActor == null || fromActor instanceof TextButton)) {
                     Sound sound = Gdx.audio.newSound(Gdx.files.internal("sounds/btn_hover.ogg"));
-                    sound.play(1F);
+                    sound.play(game.volume.getValue());
                     playing = true;
                 }
             }
@@ -211,7 +204,7 @@ public class OptionsScreen implements Screen {
                 super.enter(event, x, y, pointer, fromActor);
                 if (!playing && (fromActor == null || fromActor instanceof TextButton)) {
                     Sound sound = Gdx.audio.newSound(Gdx.files.internal("sounds/btn_hover.ogg"));
-                    sound.play(1F);
+                    sound.play(game.volume.getValue());
                     playing = true;
                 }
             }
@@ -238,7 +231,7 @@ public class OptionsScreen implements Screen {
         stage.act(Gdx.graphics.getDeltaTime());
         stage.getBatch().begin();
         // Set color for the background
-        stage.getBatch().setColor(quantumSkin.getColor("pressed"));
+        stage.getBatch().setColor(skin.getColor("pressed"));
         stage.getBatch().draw(img, 0, 0, stage.getWidth(), stage.getHeight());
         stage.getBatch().end();
         stage.draw();
@@ -267,6 +260,6 @@ public class OptionsScreen implements Screen {
     @Override
     public void dispose() {
         stage.dispose();
-        quantumSkin.dispose();
+        skin.dispose();
     }
 }
