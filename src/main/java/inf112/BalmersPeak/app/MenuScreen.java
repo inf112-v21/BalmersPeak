@@ -3,34 +3,19 @@ package inf112.balmerspeak.app;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.audio.Sound;
-import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.BitmapFont;
-import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
-import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.Align;
-import com.badlogic.gdx.utils.viewport.ScreenViewport;
 
-public class MenuScreen implements Screen {
+
+public class MenuScreen extends MainScreen implements Screen {
     // Game object
     private GUI game;
-
-    // Background image
-    private Texture img;
-
-    // Title label
-    Label.LabelStyle titleStyle;
-    Label title;
-
-    // Button label
-    Label.LabelStyle buttonStyle;
 
     // Play button
     TextButton playButton;
@@ -42,72 +27,40 @@ public class MenuScreen implements Screen {
     TextButton rulesButton;
 
 
-    // Table containing buttons and the title
-    Table root;
-
-    // The skin loaded from assets
-    Skin skin;
-
-    // The basis to add table and other actors
-    Stage stage;
-
-
     public MenuScreen(GUI game) {
         this.game = game;
     }
 
     @Override
     public void show() {
+        super.show();
 
+        // Get stage and root table
+        Skin skin = super.getSkin();
+        Table root = super.getRoot();
 
-        // Init stage
-        stage = new Stage(new ScreenViewport());
-        // Set stage as InputProcessor
-        Gdx.input.setInputProcessor(stage);
+        // Get buttons labels
+        Label playLabel = super.getBtnLabel("Play");
+        Label optionsLabel = super.getBtnLabel("Options");
+        Label rulesLabel = super.getBtnLabel("Rules");
+        Label quitLabel = super.getBtnLabel("Quit");
 
-
-        // Load background image
-        img = new Texture("images/menubackground.jpg");
-
-        // Init skin
-        skin = new Skin(Gdx.files.internal("skins/quantum/skin/quantum-horizon-ui.json"));
-
-        // Init root table
-        root = new Table();
-        root.setFillParent(true);
-
-        // Init title
-        titleStyle = new Label.LabelStyle();
-        titleStyle.font = skin.getFont("title");
-        titleStyle.font.getData().setScale(1.3f, 1.3f);
-        title = new Label("Robo Rally", titleStyle);
-
-        // Init button font style
-        buttonStyle = new Label.LabelStyle();
-        buttonStyle.font = skin.getFont("font");
-        buttonStyle.font.getData().setScale(1.3f, 1.3f);
-
-
+        
         // Init buttons
         playButton = new TextButton("Play", skin);
-        playButton.setLabel(new Label("Play", buttonStyle));
-        playButton.getLabel().setAlignment(Align.center);
+        playButton.setLabel(playLabel);
+
         optionsButton = new TextButton("Options", skin);
-        optionsButton.setLabel(new Label("Options", buttonStyle));
-        optionsButton.getLabel().setAlignment(Align.center);
+        optionsButton.setLabel(optionsLabel);
+
         rulesButton = new TextButton("Rules", skin);
-        rulesButton.setLabel(new Label("Rules", buttonStyle));
-        rulesButton.getLabel().setAlignment(Align.center);
+        rulesButton.setLabel(rulesLabel);
+
         quitButton = new TextButton("Quit", skin);
-        quitButton.setLabel(new Label("Quit", buttonStyle));
-        quitButton.getLabel().setAlignment(Align.center);
+        quitButton.setLabel(quitLabel);
 
-        // Add hover and click listeners to buttons
-        addListeners();
 
-        // Add title and buttons to table
-        root.add(title).padBottom(250.0f);
-        root.row();
+        // Add title and buttons to root table
         root.add(playButton).prefWidth(200.0f).prefHeight(100.0f);
         root.row();
         root.add(optionsButton).prefWidth(200.0f).prefHeight(100.0f);
@@ -115,10 +68,6 @@ public class MenuScreen implements Screen {
         root.add(rulesButton).prefWidth(200.0f).prefHeight(100.0f);
         root.row();
         root.add(quitButton).prefWidth(200.0f).prefHeight(100.0f);
-
-
-        // Add everything to stage
-        stage.addActor(root);
     }
 
     private void addListeners() {
@@ -249,18 +198,12 @@ public class MenuScreen implements Screen {
 
     @Override
     public void render(float v) {
-        stage.act(Gdx.graphics.getDeltaTime());
-        stage.getBatch().begin();
-        // Set color for the background
-        stage.getBatch().setColor(skin.getColor("pressed"));
-        stage.getBatch().draw(img, 0, 0, stage.getWidth(), stage.getHeight());
-        stage.getBatch().end();
-        stage.draw();
+        super.render(v);
     }
 
     @Override
     public void resize(int width, int height) {
-        stage.getViewport().update(width, height, true);
+        super.resize(width, height);
     }
 
     @Override
@@ -280,7 +223,6 @@ public class MenuScreen implements Screen {
 
     @Override
     public void dispose() {
-        stage.dispose();
-        skin.dispose();
+        super.dispose();
     }
 }
