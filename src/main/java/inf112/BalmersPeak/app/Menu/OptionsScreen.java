@@ -27,7 +27,6 @@ public class OptionsScreen extends MainScreen implements Screen {
 
 
     public OptionsScreen(GUI game) {
-        super(game);
         this.game = game;
     }
 
@@ -130,7 +129,6 @@ public class OptionsScreen extends MainScreen implements Screen {
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 super.clicked(event, x, y);
-                System.out.println("clicked");
                 if (fullscreen) {
                     Gdx.graphics.setWindowedMode(1920,1080);
                 } else {

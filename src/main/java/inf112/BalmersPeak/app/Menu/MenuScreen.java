@@ -19,7 +19,6 @@ public class MenuScreen extends MainScreen implements Screen {
 
 
     public MenuScreen(GUI game) {
-        super(game);
         this.game = game;
     }
 

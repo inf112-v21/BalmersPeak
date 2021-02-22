@@ -40,7 +40,7 @@ public class MainScreen implements Screen {
 
 
     // Constructor
-    public MainScreen(GUI game) { // Game object
+    public MainScreen() {
     }
 
     // Get skin

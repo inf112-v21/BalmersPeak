@@ -16,7 +16,6 @@ public class RulesScreen extends MainScreen implements Screen {
 
     // Constructor
     public RulesScreen(GUI game) {
-        super(game);
         this.game = game;
     }
 

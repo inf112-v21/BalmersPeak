@@ -30,6 +30,7 @@ public class GUI extends Game {
 
     @Override
     public void dispose() {
+        // Called when this screen should release all resources.
     }
 
     @Override

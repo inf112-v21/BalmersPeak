@@ -11,7 +11,6 @@ import inf112.balmerspeak.app.MapHandler;
 
 public class GameScreen implements Screen {
 
-    private GUI game;
     private OrthogonalTiledMapRenderer rend;
 
 
@@ -21,7 +20,6 @@ public class GameScreen implements Screen {
     private Vector2 playerVec;
 
     public GameScreen(GUI game) {
-        this.game = game;
         playerVec = new Vector2(0, 0);
 
         // Create input handler
