@@ -19,9 +19,6 @@ import inf112.balmerspeak.app.GUI;
 
 public class MainScreen implements Screen {
 
-    // Game object
-    private GUI game;
-
     // The skin
     private Skin skin;
 
@@ -43,7 +40,8 @@ public class MainScreen implements Screen {
 
 
     // Constructor
-    public MainScreen(GUI game) { this.game = game; }
+    public MainScreen(GUI game) { // Game object
+    }
 
     // Get skin
     public Skin getSkin() {

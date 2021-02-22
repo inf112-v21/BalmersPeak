@@ -101,7 +101,7 @@ public class GameScreen implements Screen {
 
     @Override
     public void show() {
-
+        // Called when this screen becomes the current screen for the Game.
     }
 
     @Override
@@ -113,26 +113,26 @@ public class GameScreen implements Screen {
 
     @Override
     public void resize(int i, int i1) {
-
+        // Called when the window resizes.
     }
 
     @Override
     public void pause() {
-
+        // Called when this screen is not focus.
     }
 
     @Override
     public void resume() {
-
+        // Called when game resumes, and this screen is focus.
     }
 
     @Override
     public void hide() {
-
+        // Called when this screen is no longer the current screen for the Game.
     }
 
     @Override
     public void dispose() {
-
+        // Called when this screen should release all resources.
     }
 }

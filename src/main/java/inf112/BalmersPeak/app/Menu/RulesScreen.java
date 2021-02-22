@@ -14,9 +14,6 @@ public class RulesScreen extends MainScreen implements Screen {
     // Game object
     private GUI game;
 
-    // Back to menu button
-    TextButton backToMenu;
-
     // Constructor
     public RulesScreen(GUI game) {
         super(game);
@@ -40,7 +37,8 @@ public class RulesScreen extends MainScreen implements Screen {
         Image rulesImage = new Image(new Texture("images/floor_guide.png"));
 
         // Init back to menu button
-        backToMenu = new TextButton("Back", skin);
+        // Back to menu button
+        TextButton backToMenu = new TextButton("Back", skin);
         backToMenu.setLabel(backbtnLabel);
         addNavigationButtonListeners(backToMenu, game, Screens.MENU);
 
