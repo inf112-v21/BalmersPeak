@@ -113,4 +113,6 @@ public class MapHandler {
     public void changePlayerTextureDeath(int xCoord, int yCoord) {
         this.playerLayer.setCell(xCoord, yCoord, dieCell);
     }
+
+    
 }

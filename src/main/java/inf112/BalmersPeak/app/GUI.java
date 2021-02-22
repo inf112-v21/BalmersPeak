@@ -86,22 +86,25 @@ public class GUI implements ApplicationListener {
         if (shouldMove(dx, dy)) {
             // Move player textures
             mapHandler.movePlayer(playerX, playerY, dx, dy);
+            playerVec.set(playerX + dx, playerY + dy);
         }
 
         // Check if player won
-        if (mapHandler.checkWin(playerX, playerY)) {
+        if (mapHandler.checkWin(playerX + dx, playerY + dy)) {
             System.out.println("You won!");
             mapHandler.changePlayerTextureWin(playerX + dx, playerY + dy);
+            playerVec.set(playerX + dx, playerY + dy);
         }
 
         // Check if player died
-        if (mapHandler.checkDeath(playerX, playerY)) {
+        if (mapHandler.checkDeath(playerX + dx, playerY + dy)) {
             System.out.println("You died :(");
             mapHandler.changePlayerTextureDeath(playerX + dx, playerY + dy);
+            playerVec.set(playerX + dx, playerY + dy);
         }
 
+
         // Update player coordinates
-        playerVec.set(playerX + dx, playerY + dy);
         input.clear();
     }
 
