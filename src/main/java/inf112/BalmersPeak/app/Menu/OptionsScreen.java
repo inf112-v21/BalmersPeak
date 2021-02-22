@@ -1,4 +1,4 @@
-package inf112.balmerspeak.app.Menu;
+package inf112.balmerspeak.app.menu;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
