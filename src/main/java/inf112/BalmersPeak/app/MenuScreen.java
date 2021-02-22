@@ -38,10 +38,9 @@ public class MenuScreen implements Screen {
     TextButton optionsButton;
     // Quit button
     TextButton quitButton;
+    // Rules button
+    TextButton rulesButton;
 
-    // Fonts for title and buttons
-    BitmapFont titleFont;
-    BitmapFont buttonFont;
 
     // Table containing buttons and the title
     Table root;
@@ -96,6 +95,9 @@ public class MenuScreen implements Screen {
         optionsButton = new TextButton("Options", skin);
         optionsButton.setLabel(new Label("Options", buttonStyle));
         optionsButton.getLabel().setAlignment(Align.center);
+        rulesButton = new TextButton("Rules", skin);
+        rulesButton.setLabel(new Label("Rules", buttonStyle));
+        rulesButton.getLabel().setAlignment(Align.center);
         quitButton = new TextButton("Quit", skin);
         quitButton.setLabel(new Label("Quit", buttonStyle));
         quitButton.getLabel().setAlignment(Align.center);
@@ -109,6 +111,8 @@ public class MenuScreen implements Screen {
         root.add(playButton).prefWidth(200.0f).prefHeight(100.0f);
         root.row();
         root.add(optionsButton).prefWidth(200.0f).prefHeight(100.0f);
+        root.row();
+        root.add(rulesButton).prefWidth(200.0f).prefHeight(100.0f);
         root.row();
         root.add(quitButton).prefWidth(200.0f).prefHeight(100.0f);
 
@@ -176,7 +180,38 @@ public class MenuScreen implements Screen {
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 super.clicked(event, x, y);
-                game.changeScreen(new OptionsScreen(game)); //TODO: refactor and change to optionsScreen
+                game.changeScreen(new OptionsScreen(game));
+            }
+        });
+
+        // Add options button listeners
+        rulesButton.addListener(new ClickListener() {
+            boolean playing = false;
+
+            // Play sound on hover
+            @Override
+            public void enter(InputEvent event, float x, float y, int pointer, Actor fromActor) {
+                super.enter(event, x, y, pointer, fromActor);
+                if (!playing && (fromActor == null || fromActor instanceof TextButton)) {
+                    Sound sound = Gdx.audio.newSound(Gdx.files.internal("sounds/btn_hover.ogg"));
+                    sound.play(1F);
+                    playing = true;
+                }
+            }
+
+            // Stop sound on exit
+            @Override
+            public void exit(InputEvent event, float x, float y, int pointer, Actor toActor) {
+                super.exit(event, x, y, pointer, toActor);
+                if (toActor == null || toActor instanceof TextButton)
+                    playing = false;
+            }
+
+            // Go to game screen when clicked
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                super.clicked(event, x, y);
+                game.changeScreen(new RulesScreen(game));
             }
         });
 

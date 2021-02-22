@@ -4,7 +4,6 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
@@ -37,10 +36,6 @@ public class OptionsScreen implements Screen {
 
     TextButton toggleFullscreen;
     TextButton backToMenu;
-
-    // Title and button font
-    BitmapFont titleFont;
-    BitmapFont buttonFont;
 
     // Table containing title and buttons
     Table root;
