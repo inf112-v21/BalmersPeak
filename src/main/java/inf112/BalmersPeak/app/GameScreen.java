@@ -7,7 +7,7 @@ import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.math.Vector2;
 
-public class GameScreen implements Screen {
+public class GameScreen extends MainScreen implements Screen {
 
     private GUI game;
     private OrthogonalTiledMapRenderer rend;

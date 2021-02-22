@@ -10,7 +10,6 @@ import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
-import com.badlogic.gdx.utils.Align;
 
 
 public class MenuScreen extends MainScreen implements Screen {
@@ -45,22 +44,28 @@ public class MenuScreen extends MainScreen implements Screen {
         Label rulesLabel = super.getBtnLabel("Rules");
         Label quitLabel = super.getBtnLabel("Quit");
 
-        
-        // Init buttons
+
+        // Init buttons and listeners
         playButton = new TextButton("Play", skin);
         playButton.setLabel(playLabel);
+        addNavigationButtonListeners(playButton, game, Screens.GAME);
 
         optionsButton = new TextButton("Options", skin);
         optionsButton.setLabel(optionsLabel);
+        addNavigationButtonListeners(optionsButton, game, Screens.OPTIONS);
 
         rulesButton = new TextButton("Rules", skin);
         rulesButton.setLabel(rulesLabel);
+        addNavigationButtonListeners(rulesButton, game, Screens.RULES);
 
         quitButton = new TextButton("Quit", skin);
         quitButton.setLabel(quitLabel);
+        // Custom function as quit button is not a navigation button
+        addQuitListener();
 
 
         // Add title and buttons to root table
+        super.addTitle(250.0f);
         root.add(playButton).prefWidth(200.0f).prefHeight(100.0f);
         root.row();
         root.add(optionsButton).prefWidth(200.0f).prefHeight(100.0f);
@@ -70,100 +75,7 @@ public class MenuScreen extends MainScreen implements Screen {
         root.add(quitButton).prefWidth(200.0f).prefHeight(100.0f);
     }
 
-    private void addListeners() {
-        // Add play button listeners
-        playButton.addListener(new ClickListener() {
-            boolean playing = false;
-
-            // Play sound on hover
-            @Override
-            public void enter(InputEvent event, float x, float y, int pointer, Actor fromActor) {
-                super.enter(event, x, y, pointer, fromActor);
-                if (!playing && (fromActor == null || fromActor instanceof TextButton)) {
-                    Sound sound = Gdx.audio.newSound(Gdx.files.internal("sounds/btn_hover.ogg"));
-                    sound.play(1F);
-                    playing = true;
-                }
-            }
-
-            // Stop sound on exit
-            @Override
-            public void exit(InputEvent event, float x, float y, int pointer, Actor toActor) {
-                super.exit(event, x, y, pointer, toActor);
-                if (toActor == null || toActor instanceof TextButton)
-                    playing = false;
-            }
-
-            // Go to game screen when clicked
-            @Override
-            public void clicked(InputEvent event, float x, float y) {
-                super.clicked(event, x, y);
-                game.changeScreen(new GameScreen(game));
-            }
-        });
-
-        // Add options button listeners
-        optionsButton.addListener(new ClickListener() {
-            boolean playing = false;
-
-            // Play sound on hover
-            @Override
-            public void enter(InputEvent event, float x, float y, int pointer, Actor fromActor) {
-                super.enter(event, x, y, pointer, fromActor);
-                if (!playing && (fromActor == null || fromActor instanceof TextButton)) {
-                    Sound sound = Gdx.audio.newSound(Gdx.files.internal("sounds/btn_hover.ogg"));
-                    sound.play(1F);
-                    playing = true;
-                }
-            }
-
-            // Stop sound on exit
-            @Override
-            public void exit(InputEvent event, float x, float y, int pointer, Actor toActor) {
-                super.exit(event, x, y, pointer, toActor);
-                if (toActor == null || toActor instanceof TextButton)
-                    playing = false;
-            }
-
-            // Go to game screen when clicked
-            @Override
-            public void clicked(InputEvent event, float x, float y) {
-                super.clicked(event, x, y);
-                game.changeScreen(new OptionsScreen(game));
-            }
-        });
-
-        // Add options button listeners
-        rulesButton.addListener(new ClickListener() {
-            boolean playing = false;
-
-            // Play sound on hover
-            @Override
-            public void enter(InputEvent event, float x, float y, int pointer, Actor fromActor) {
-                super.enter(event, x, y, pointer, fromActor);
-                if (!playing && (fromActor == null || fromActor instanceof TextButton)) {
-                    Sound sound = Gdx.audio.newSound(Gdx.files.internal("sounds/btn_hover.ogg"));
-                    sound.play(1F);
-                    playing = true;
-                }
-            }
-
-            // Stop sound on exit
-            @Override
-            public void exit(InputEvent event, float x, float y, int pointer, Actor toActor) {
-                super.exit(event, x, y, pointer, toActor);
-                if (toActor == null || toActor instanceof TextButton)
-                    playing = false;
-            }
-
-            // Go to game screen when clicked
-            @Override
-            public void clicked(InputEvent event, float x, float y) {
-                super.clicked(event, x, y);
-                game.changeScreen(new RulesScreen(game));
-            }
-        });
-
+    private void addQuitListener() {
         // Add listeners to quit button
         quitButton.addListener(new ClickListener() {
             boolean playing = false;
@@ -207,19 +119,13 @@ public class MenuScreen extends MainScreen implements Screen {
     }
 
     @Override
-    public void pause() {
-
-    }
+    public void pause() {}
 
     @Override
-    public void resume() {
-
-    }
+    public void resume() {}
 
     @Override
-    public void hide() {
-
-    }
+    public void hide() {}
 
     @Override
     public void dispose() {

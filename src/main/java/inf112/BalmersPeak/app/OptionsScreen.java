@@ -11,7 +11,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 
-public class OptionsScreen implements Screen {
+public class OptionsScreen extends MainScreen implements Screen {
 
     // Game object
     private GUI game;
