@@ -39,10 +39,6 @@ public class MainScreen implements Screen {
     private Label.LabelStyle buttonStyle;
 
 
-    // Constructor
-    public MainScreen() {
-    }
-
     // Get skin
     public Skin getSkin() {
         return this.skin;
@@ -69,7 +65,7 @@ public class MainScreen implements Screen {
         switch(screen) {
             case OPTIONS: return new OptionsScreen(game);
             case RULES: return new RulesScreen(game);
-            case GAME: return new GameScreen(game);
+            case GAME: return new GameScreen();
             default: return new MenuScreen(game);
         }
     }

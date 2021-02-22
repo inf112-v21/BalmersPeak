@@ -19,7 +19,7 @@ public class GameScreen implements Screen {
 
     private Vector2 playerVec;
 
-    public GameScreen(GUI game) {
+    public GameScreen() {
         playerVec = new Vector2(0, 0);
 
         // Create input handler
