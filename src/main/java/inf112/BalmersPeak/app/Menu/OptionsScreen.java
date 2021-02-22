@@ -1,13 +1,11 @@
-package inf112.balmerspeak.app;
+package inf112.balmerspeak.app.Menu;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
-import com.badlogic.gdx.audio.Sound;
-import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
-
+import inf112.balmerspeak.app.GUI;
 
 public class OptionsScreen extends MainScreen implements Screen {
 
@@ -43,8 +41,11 @@ public class OptionsScreen extends MainScreen implements Screen {
         Label backBtnLabel = super.getBtnLabel("Back");
         Label fullscreenBtnLabel = super.getBtnLabel("Toggle Fullscreen");
 
+        // Get title
+        Label title = super.getTitleLabel("Robo Rally");
+
         // Volume title
-        volumeTitle = new Label("Volume", buttonStyle);
+        volumeTitle = super.getTitleLabel("Volume");
 
         // Add volume buttons and progress bar
         plusButton = new Button(skin.getDrawable("plus"));

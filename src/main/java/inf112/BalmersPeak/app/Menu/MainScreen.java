@@ -1,4 +1,4 @@
-package inf112.balmerspeak.app;
+package inf112.balmerspeak.app.Menu;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
@@ -14,29 +14,31 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
+import inf112.balmerspeak.app.*;
 
 public class MainScreen implements Screen {
+
     // Game object
     private GUI game;
 
     // The skin
-    protected Skin skin;
+    private Skin skin;
 
     // Stage
-    protected Stage stage;
+    private Stage stage;
 
     // Table to hold actors
-    protected Table root;
+    private Table root;
 
     // Background image
     private Texture backgroundImage;
 
     // Title style and label
-    protected Label.LabelStyle titleStyle;
-    protected Label title;
+    private Label.LabelStyle titleStyle;
+    private Label title;
 
     // Button label style
-    protected Label.LabelStyle buttonStyle;
+    private Label.LabelStyle buttonStyle;
 
 
     // Constructor
@@ -54,11 +56,16 @@ public class MainScreen implements Screen {
         return this.root;
     }
 
-    // Get btn label
+    // Get button label
     public Label getBtnLabel(String text) {
         Label lbl = new Label(text, buttonStyle);
         lbl.setAlignment(Align.center);
         return lbl;
+    }
+
+    // Get title label
+    public Label getTitleLabel(String text) {
+        return new Label(text, titleStyle);
     }
 
     public MainScreen getScreen(Screens screen, GUI game) {
