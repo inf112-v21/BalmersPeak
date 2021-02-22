@@ -62,6 +62,7 @@ public class MenuScreen extends MainScreen implements Screen {
         quitButton.setLabel(quitLabel);
         // Custom function as quit button is not a navigation button
         addQuitListener();
+        addHoverListeners(quitButton, game);
 
 
         // Add title and buttons to root table
@@ -76,29 +77,8 @@ public class MenuScreen extends MainScreen implements Screen {
     }
 
     private void addQuitListener() {
-        // Add listeners to quit button
+        // Add click listener to quit button
         quitButton.addListener(new ClickListener() {
-            boolean playing = false;
-
-            // Play sound on hover
-            @Override
-            public void enter(InputEvent event, float x, float y, int pointer, Actor fromActor) {
-                super.enter(event, x, y, pointer, fromActor);
-                if (!playing && (fromActor == null || fromActor instanceof TextButton)) {
-                    Sound sound = Gdx.audio.newSound(Gdx.files.internal("sounds/btn_hover.ogg"));
-                    sound.play(1F);
-                    playing = true;
-                }
-            }
-
-            // Stop sound on exit
-            @Override
-            public void exit(InputEvent event, float x, float y, int pointer, Actor toActor) {
-                super.exit(event, x, y, pointer, toActor);
-                if (toActor == null || toActor instanceof TextButton)
-                    playing = false;
-            }
-
             // Go to game screen when clicked
             @Override
             public void clicked(InputEvent event, float x, float y) {

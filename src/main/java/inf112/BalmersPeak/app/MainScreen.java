@@ -71,7 +71,25 @@ public class MainScreen implements Screen {
         }
     }
 
+    public void addTitle(float padding) {
+        root.add(title).padBottom(padding);
+        root.row();
+    }
+
     public void addNavigationButtonListeners(TextButton btn, GUI game, Screens screen) {
+        addHoverListeners(btn, game);
+        btn.addListener(new ClickListener() {
+
+            // Go to chosen screen when clicked
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                super.clicked(event, x, y);
+                game.changeScreen(getScreen(screen, game));
+            }
+        });
+    }
+
+    public void addHoverListeners(TextButton btn, GUI game) {
         btn.addListener(new ClickListener() {
             boolean playing = false;
 
@@ -94,19 +112,7 @@ public class MainScreen implements Screen {
                 if (toActor == null || toActor instanceof TextButton)
                     playing = false;
             }
-
-            // Go to game screen when clicked
-            @Override
-            public void clicked(InputEvent event, float x, float y) {
-                super.clicked(event, x, y);
-                game.changeScreen(getScreen(screen, game));
-            }
         });
-    }
-
-    public void addTitle(float padding) {
-        root.add(title).padBottom(padding);
-        root.row();
     }
 
 
@@ -137,12 +143,6 @@ public class MainScreen implements Screen {
         buttonStyle = new Label.LabelStyle();
         buttonStyle.font = skin.getFont("font");
         buttonStyle.font.getData().setScale(1.3f, 1.3f);
-
-
-        // Add title to the root table
-
-//        root.add(title).padBottom(250.0f);
-//        root.row();
 
         // Add table to the stage
         stage.addActor(root);
