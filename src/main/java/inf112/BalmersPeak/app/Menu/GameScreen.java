@@ -1,4 +1,4 @@
-package inf112.balmerspeak.app.Menu;
+package inf112.balmerspeak.app.menu;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
@@ -9,7 +9,7 @@ import inf112.balmerspeak.app.GUI;
 import inf112.balmerspeak.app.InputHandler;
 import inf112.balmerspeak.app.MapHandler;
 
-public class GameScreen extends MainScreen implements Screen {
+public class GameScreen implements Screen {
 
     private GUI game;
     private OrthogonalTiledMapRenderer rend;

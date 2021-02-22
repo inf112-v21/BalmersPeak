@@ -1,4 +1,4 @@
-package inf112.balmerspeak.app.Menu;
+package inf112.balmerspeak.app.menu;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
@@ -14,7 +14,8 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
-import inf112.balmerspeak.app.*;
+import inf112.balmerspeak.app.GUI;
+
 
 public class MainScreen implements Screen {
 
@@ -42,9 +43,7 @@ public class MainScreen implements Screen {
 
 
     // Constructor
-    public void MainScreen(GUI game) {
-        this.game = game;
-    }
+    public MainScreen(GUI game) { this.game = game; }
 
     // Get skin
     public Skin getSkin() {
@@ -68,9 +67,8 @@ public class MainScreen implements Screen {
         return new Label(text, titleStyle);
     }
 
-    public MainScreen getScreen(Screens screen, GUI game) {
+    public Screen getScreen(Screens screen, GUI game) {
         switch(screen) {
-            case MENU: return new MenuScreen(game);
             case OPTIONS: return new OptionsScreen(game);
             case RULES: return new RulesScreen(game);
             case GAME: return new GameScreen(game);
@@ -173,17 +171,17 @@ public class MainScreen implements Screen {
 
     @Override
     public void pause() {
-
+        // Called when this screen is not focus.
     }
 
     @Override
     public void resume() {
-
+        // Called when game resumes, and this screen is focus.
     }
 
     @Override
     public void hide() {
-
+        // Called when this screen is no longer the current screen for the Game.
     }
 
     @Override

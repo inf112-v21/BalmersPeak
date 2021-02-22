@@ -1,4 +1,4 @@
-package inf112.balmerspeak.app.Menu;
+package inf112.balmerspeak.app.menu;
 
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
@@ -13,17 +13,12 @@ public class MenuScreen extends MainScreen implements Screen {
     // Game object
     private GUI game;
 
-    // Play button
-    TextButton playButton;
-    // Options button
-    TextButton optionsButton;
     // Quit button
-    TextButton quitButton;
-    // Rules button
-    TextButton rulesButton;
+    private TextButton quitButton;
 
 
     public MenuScreen(GUI game) {
+        super(game);
         this.game = game;
     }
 
@@ -43,15 +38,18 @@ public class MenuScreen extends MainScreen implements Screen {
 
 
         // Init buttons and listeners
-        playButton = new TextButton("Play", skin);
+        // Play button
+        TextButton playButton = new TextButton("Play", skin);
         playButton.setLabel(playLabel);
         addNavigationButtonListeners(playButton, game, Screens.GAME);
 
-        optionsButton = new TextButton("Options", skin);
+        // Options button
+        TextButton optionsButton = new TextButton("Options", skin);
         optionsButton.setLabel(optionsLabel);
         addNavigationButtonListeners(optionsButton, game, Screens.OPTIONS);
 
-        rulesButton = new TextButton("Rules", skin);
+        // Rules button
+        TextButton rulesButton = new TextButton("Rules", skin);
         rulesButton.setLabel(rulesLabel);
         addNavigationButtonListeners(rulesButton, game, Screens.RULES);
 
@@ -96,13 +94,19 @@ public class MenuScreen extends MainScreen implements Screen {
     }
 
     @Override
-    public void pause() {}
+    public void pause() {
+        // Called when this screen is not focus.
+    }
 
     @Override
-    public void resume() {}
+    public void resume() {
+        // Called when game resumes, and this screen is focus.
+    }
 
     @Override
-    public void hide() {}
+    public void hide() {
+        // Called when this screen is no longer the current screen for the Game.
+    }
 
     @Override
     public void dispose() {
