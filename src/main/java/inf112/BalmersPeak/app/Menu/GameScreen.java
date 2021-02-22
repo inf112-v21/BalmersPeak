@@ -5,7 +5,6 @@ import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.math.Vector2;
-import inf112.balmerspeak.app.GUI;
 import inf112.balmerspeak.app.InputHandler;
 import inf112.balmerspeak.app.MapHandler;
 
