@@ -1,135 +1,46 @@
 package inf112.balmerspeak.app;
 
-import com.badlogic.gdx.ApplicationListener;
+import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL30;
-import com.badlogic.gdx.graphics.OrthographicCamera;
-import com.badlogic.gdx.graphics.g2d.BitmapFont;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
-import com.badlogic.gdx.math.Vector2;
-import inf112.balmerspeak.app.Robot.Direction;
-import inf112.balmerspeak.app.Robot.Robot;
+import inf112.balmerspeak.app.menu.MenuScreen;
+
+public class GUI extends Game {
+
+    public Volume volume;
 
 
-public class GUI implements ApplicationListener {
-
-    private SpriteBatch batch;
-    private BitmapFont font;
-    private OrthogonalTiledMapRenderer rend;
-
-    //private Vector2 playerVec;
-
-    private Robot robot;
-
-    private InputHandler input;
-    private MapHandler mapHandler;
+    public void changeScreen(Screen newScreen) {
+        Screen oldScreen = getScreen();
+        setScreen(newScreen);
+        // Dispose the old screen to release resources
+        if (oldScreen != null) {
+            oldScreen.dispose();
+        }
+    }
 
 
     @Override
     public void create() {
-        // Create input handler
-        input = new InputHandler();
-        Gdx.input.setInputProcessor(input);
-
-        // Create map handler
-        mapHandler = new MapHandler();
-
-        batch = new SpriteBatch();
-        font = new BitmapFont();
-        font.setColor(Color.RED);
-
-
-        robot = new Robot(0,0, Direction.NORTH);
-
-        OrthographicCamera cam = new OrthographicCamera();
-        rend = new OrthogonalTiledMapRenderer(mapHandler.getMap(), (float) 1 / 300);
-
-        cam.setToOrtho(false, 16, 12);
-        cam.position.set(cam.viewportWidth / 2, cam.viewportHeight / 2, 0);
-        cam.update();
-
-
-        rend.setView(cam);
-    }
-
-    public boolean shouldMove(int dx, int dy) {
-        // Return false if dx and dy are zero
-        if (dx == 0 && dy == 0)
-            return false;
-
-        // These return true if the resulting playerVec are out of bounds
-        boolean outsideX = robot.getX() + dx > mapHandler.getBoard().getWidth()-1 || robot.getY() + dx < 0;
-        boolean outsideY = robot.getY() + dy > mapHandler.getBoard().getHeight()-1 || robot.getY() + dy < 0;
-
-        return !(outsideX || outsideY);
-    }
-
-    public void handleMove() {
-        // Changes in the x coordinate
-        int dx = 0;
-        // Changes in the y coordinate
-        int dy = 0;
-
-        if (input.wPressed)
-            dy += 1;
-        else if (input.aPressed)
-            dx -= 1;
-        else if(input.sPressed)
-            dy -=1;
-        else if (input.dPressed)
-            dx += 1;
-
-        // Player x and y coordinates
-        int playerX = robot.getX();
-        int playerY = robot.getY();
-
-
-        // Only update if the player is allowed to move
-        if (shouldMove(dx, dy)) {
-            // Move player textures
-            mapHandler.movePlayer(playerX, playerY, dx, dy);
-            robot.set(playerX + dx, playerY + dy);
-        }
-
-        // Check if player won
-        if (mapHandler.checkWin(playerX + dx, playerY + dy)) {
-            System.out.println("You won!");
-            mapHandler.changePlayerTextureWin(playerX + dx, playerY + dy);
-            robot.set(playerX + dx, playerY + dy);
-        }
-
-        // Check if player died
-        if (mapHandler.checkDeath(playerX + dx, playerY + dy)) {
-            System.out.println("You died :(");
-            mapHandler.changePlayerTextureDeath(playerX + dx, playerY + dy);
-            robot.set(playerX + dx, playerY + dy);
-        }
-
-
-        // Update player coordinates
-        input.clear();
+        volume = new Volume();
+        changeScreen(new MenuScreen(this));
     }
 
 
     @Override
     public void dispose() {
-        batch.dispose();
-        font.dispose();
+        // Called when this screen should release all resources.
     }
 
     @Override
     public void render() {
-
-        // Check input and move character
-        handleMove();
-
         // Clear screen
         Gdx.gl.glClearColor(1, 1, 1, 1);
         Gdx.gl.glClear(GL30.GL_COLOR_BUFFER_BIT);
 
-        rend.render();
+        //Render the current screen
+        super.render();
     }
 
 
