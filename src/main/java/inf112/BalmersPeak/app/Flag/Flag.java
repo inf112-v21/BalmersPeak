@@ -1,4 +1,4 @@
-package inf112.balmerspeak.app.Flag;
+package inf112.balmerspeak.app.flag;
 
 public class Flag {
 

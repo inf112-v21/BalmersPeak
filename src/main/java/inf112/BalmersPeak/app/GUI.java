@@ -8,9 +8,8 @@ import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
-import com.badlogic.gdx.math.Vector2;
-import inf112.balmerspeak.app.Robot.Direction;
-import inf112.balmerspeak.app.Robot.Robot;
+import inf112.balmerspeak.app.robot.Direction;
+import inf112.balmerspeak.app.robot.Robot;
 
 
 public class GUI implements ApplicationListener {

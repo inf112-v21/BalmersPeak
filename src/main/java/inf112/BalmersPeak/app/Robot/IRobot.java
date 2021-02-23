@@ -1,4 +1,4 @@
-package inf112.balmerspeak.app.Robot;
+package inf112.balmerspeak.app.robot;
 
 public interface IRobot {
 

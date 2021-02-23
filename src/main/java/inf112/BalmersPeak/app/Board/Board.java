@@ -1,11 +1,11 @@
-package inf112.balmerspeak.app.Board;
+package inf112.balmerspeak.app.board;
 
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
-import inf112.balmerspeak.app.Flag.Flag;
-import inf112.balmerspeak.app.Robot.Direction;
-import inf112.balmerspeak.app.Robot.Robot;
+import inf112.balmerspeak.app.flag.Flag;
+import inf112.balmerspeak.app.robot.Direction;
+import inf112.balmerspeak.app.robot.Robot;
 
 public class Board {
 
@@ -48,5 +48,9 @@ public class Board {
 
     public Robot getRobot(int x, int y){
         return robots[y][x];
+    }
+
+    public Flag getFlag(int x, int y){
+        return flag[y][x];
     }
 }
