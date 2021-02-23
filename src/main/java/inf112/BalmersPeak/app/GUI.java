@@ -9,6 +9,8 @@ import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.math.Vector2;
+import inf112.balmerspeak.app.Robot.Direction;
+import inf112.balmerspeak.app.Robot.Robot;
 
 
 public class GUI implements ApplicationListener {
@@ -17,7 +19,9 @@ public class GUI implements ApplicationListener {
     private BitmapFont font;
     private OrthogonalTiledMapRenderer rend;
 
-    private Vector2 playerVec;
+    //private Vector2 playerVec;
+
+    private Robot robot;
 
     private InputHandler input;
     private MapHandler mapHandler;
@@ -37,7 +41,7 @@ public class GUI implements ApplicationListener {
         font.setColor(Color.RED);
 
 
-        playerVec = new Vector2(0, 0);
+        robot = new Robot(0,0, Direction.NORTH);
 
         OrthographicCamera cam = new OrthographicCamera();
         rend = new OrthogonalTiledMapRenderer(mapHandler.getMap(), (float) 1 / 300);
@@ -56,8 +60,8 @@ public class GUI implements ApplicationListener {
             return false;
 
         // These return true if the resulting playerVec are out of bounds
-        boolean outsideX = playerVec.x + dx > mapHandler.getBoard().getWidth()-1 || playerVec.x + dx < 0;
-        boolean outsideY = playerVec.y + dy > mapHandler.getBoard().getHeight()-1 || playerVec.y + dy < 0;
+        boolean outsideX = robot.getX() + dx > mapHandler.getBoard().getWidth()-1 || robot.getY() + dx < 0;
+        boolean outsideY = robot.getY() + dy > mapHandler.getBoard().getHeight()-1 || robot.getY() + dy < 0;
 
         return !(outsideX || outsideY);
     }
@@ -78,29 +82,29 @@ public class GUI implements ApplicationListener {
             dx += 1;
 
         // Player x and y coordinates
-        int playerX = (int) playerVec.x;
-        int playerY = (int) playerVec.y;
+        int playerX = robot.getX();
+        int playerY = robot.getY();
 
 
         // Only update if the player is allowed to move
         if (shouldMove(dx, dy)) {
             // Move player textures
             mapHandler.movePlayer(playerX, playerY, dx, dy);
-            playerVec.set(playerX + dx, playerY + dy);
+            robot.set(playerX + dx, playerY + dy);
         }
 
         // Check if player won
         if (mapHandler.checkWin(playerX + dx, playerY + dy)) {
             System.out.println("You won!");
             mapHandler.changePlayerTextureWin(playerX + dx, playerY + dy);
-            playerVec.set(playerX + dx, playerY + dy);
+            robot.set(playerX + dx, playerY + dy);
         }
 
         // Check if player died
         if (mapHandler.checkDeath(playerX + dx, playerY + dy)) {
             System.out.println("You died :(");
             mapHandler.changePlayerTextureDeath(playerX + dx, playerY + dy);
-            playerVec.set(playerX + dx, playerY + dy);
+            robot.set(playerX + dx, playerY + dy);
         }
 
 
