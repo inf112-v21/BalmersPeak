@@ -1,4 +1,4 @@
-package inf112.balmerspeak.app;
+package inf112.balmerspeak.app.cards;
 
 public interface ICards {
 
@@ -9,8 +9,8 @@ public interface ICards {
     int getPriority();
 
     /**
-     * Gets the action value for the card
+     * Gets the name for the card
      * @return
      */
-    int getAction();
+    String getName();
 }
