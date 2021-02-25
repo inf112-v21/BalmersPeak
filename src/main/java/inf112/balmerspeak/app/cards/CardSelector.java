@@ -8,13 +8,10 @@ import java.util.ArrayList;
 
 public class CardSelector extends JFrame implements ActionListener {
 
-    JComboBox comboBox;
-
     private ArrayList<ProgramCard> differentCards;
     private ArrayList<ProgramCard> activeDeck;
 
     public CardSelector() {
-
 
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         this.setLayout(new FlowLayout());
@@ -41,8 +38,6 @@ public class CardSelector extends JFrame implements ActionListener {
 
     @Override
     public void actionPerformed(ActionEvent e) {
-        if(e.getSource()==comboBox) {
-            System.out.println(comboBox.getSelectedItem());
-        }
+
     }
 }

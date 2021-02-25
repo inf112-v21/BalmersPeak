@@ -120,7 +120,7 @@ Møtet startet 12.10
 Vi startet møtet med å få en liten oversikt over endringene som var gjort i koden, og på brukerhistoriene.
 Deretter skrev vi oppsummeringen for obligen, siden vi var så godt som ferdig med alle deloppgavene. Her oppsummerte vi det som gikk bra, det som gikk dårlig og diskuterte nye verktøy vi kunne ta i bruk til neste oblig.
 
-## Oppsummering:
+## Oppsummering
 
 Hva gikk bra:
 Samarbeidet bra, kommunikasjonen god.

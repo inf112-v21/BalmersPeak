@@ -12,7 +12,7 @@ public class Deck {
 
     //Lage deck med å bruke: public Deck deck = new Deck();
 
-    public Deck(List<ProgramCard> cards) {
+    public Deck() {
         createDeck();
         //this.deckInUse = new ArrayList<>();
         //this.deckInUse.addAll(cards);
@@ -21,8 +21,8 @@ public class Deck {
     public void createDeck() {
         for (int i = 0; i < 18; i++) {
             deckInUse.add(new MovementCard(1,1,"Move one"));
-            deckInUse.add(new RotationCard(2,Rotation.right,false,"Rotate right"));
-            deckInUse.add(new RotationCard(2,Rotation.left, false,"Rotate left"));
+            deckInUse.add(new RotationCard(2,Rotation.right,"Rotate right"));
+            deckInUse.add(new RotationCard(2,Rotation.left,"Rotate left"));
         }
         for (int i = 0; i < 12; i++) {
             deckInUse.add(new MovementCard(1,2,"Move two"));
@@ -30,7 +30,7 @@ public class Deck {
         for (int i = 0; i < 6; i++) {
             deckInUse.add(new MovementCard(1,3,"Move three"));
             deckInUse.add(new MovementCard(2,-1,"Back up"));
-            deckInUse.add(new RotationCard(2,Rotation.uturn, false,"U-turn"));
+            deckInUse.add(new RotationCard(2,Rotation.uturn,"U-turn"));
         }
     }
 

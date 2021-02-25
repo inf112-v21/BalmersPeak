@@ -6,7 +6,7 @@ public class RotationCard extends ProgramCard {
     public int rotate;
     public boolean uturn;
 
-    public RotationCard(int priority, Rotation rotation, boolean uturn, String name) {
+    public RotationCard(int priority, Rotation rotation, String name) {
         super(MovementType.rotation, priority, name);
         this.rotation = rotation;
 
