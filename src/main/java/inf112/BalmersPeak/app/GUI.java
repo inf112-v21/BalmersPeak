@@ -4,11 +4,13 @@ import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL30;
+import inf112.balmerspeak.app.menu.MenuScreen;
 
 
 public class GUI extends Game {
 
     public Volume volume;
+
 
     public void changeScreen(Screen newScreen) {
         Screen oldScreen = getScreen();
@@ -29,6 +31,7 @@ public class GUI extends Game {
 
     @Override
     public void dispose() {
+        // Called when this screen should release all resources.
     }
 
     @Override

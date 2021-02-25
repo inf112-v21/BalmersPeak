@@ -6,7 +6,7 @@
 
 ## Robo Rally by BallmersPeak
 
-<img src="assets/logo.jpg"  width="500">
+<img src="assets/images/logo.jpg"  width="500">
 
 Group name: BallmersPeak 
 
@@ -24,7 +24,7 @@ Utviklere:
 
 This repository is a Java implementation of the board game "RoboRally", built with the libGDX library. 
 
-<img src="assets/roborally.png"  width="300">
+<img src="assets/images/roborally.png"  width="300">
 
 ### Technologies
 -   JDK 9 or higher
