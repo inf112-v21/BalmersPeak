@@ -3,18 +3,30 @@ package inf112.balmerspeak.app.menu;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.Skin;
+import com.badlogic.gdx.scenes.scene2d.ui.Table;
+import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
+import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import inf112.balmerspeak.app.InputHandler;
 import inf112.balmerspeak.app.MapHandler;
 
 public class GameScreen implements Screen {
+
+    Stage stage;
+    Skin skin;
+    // Background image
+    private Texture backgroundImage;
 
     private OrthogonalTiledMapRenderer rend;
 
 
     private InputHandler input;
     private MapHandler mapHandler;
+    OrthographicCamera cam;
 
     private Vector2 playerVec;
 
@@ -28,13 +40,14 @@ public class GameScreen implements Screen {
         // Create map handler
         mapHandler = new MapHandler();
 
-
-        OrthographicCamera cam = new OrthographicCamera();
+        cam = new OrthographicCamera();
         rend = new OrthogonalTiledMapRenderer(mapHandler.getMap(), (float) 1 / 300);
 
-        cam.setToOrtho(false, 16, 12);
-        cam.position.set(cam.viewportWidth / 2, cam.viewportHeight / 2, 0);
+        cam.setToOrtho(false, 16, 16);
+        cam.position.set((cam.viewportWidth / 2), (cam.viewportHeight / 2) - 4, 0);
         cam.update();
+
+
 
 
         rend.setView(cam);
@@ -101,13 +114,23 @@ public class GameScreen implements Screen {
     @Override
     public void show() {
         // Called when this screen becomes the current screen for the Game.
+        stage = new Stage(new ScreenViewport());
+        Table register = new Table();
+        register.setHeight(270);
+        register.setWidth(Gdx.graphics.getWidth());
+        register.bottom().debug();
+        stage.addActor(register);
     }
 
     @Override
     public void render(float v) {
-        // Check input and move character
-        handleMove();
         rend.render();
+
+        // Check input and move character
+        stage.act(Gdx.graphics.getDeltaTime());
+        stage.draw();
+        handleMove();
+
     }
 
     @Override
