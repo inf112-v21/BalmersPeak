@@ -6,20 +6,13 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
 
-public class CardSelector extends JFrame implements ActionListener {
+public class CardSelector {
 
     private ArrayList<ProgramCard> differentCards;
     private ArrayList<ProgramCard> activeDeck;
 
     public CardSelector() {
 
-        this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        this.setLayout(new FlowLayout());
-
-        //JComboBox comboBox = new JComboBox(getCards());
-
-        this.pack();
-        this.setVisible(true);
     }
 
     public ArrayList<ProgramCard> getCards(int amount) {
@@ -34,10 +27,5 @@ public class CardSelector extends JFrame implements ActionListener {
         ProgramCard card = differentCards.remove(0);
         activeDeck.add(card);
         return card;
-    }
-
-    @Override
-    public void actionPerformed(ActionEvent e) {
-
     }
 }

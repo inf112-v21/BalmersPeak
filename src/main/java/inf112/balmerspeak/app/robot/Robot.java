@@ -1,5 +1,9 @@
 package inf112.balmerspeak.app.robot;
 
+import inf112.balmerspeak.app.cards.ProgramCard;
+
+import java.util.ArrayList;
+
 public class Robot implements IRobot{
 
     private int x;
@@ -7,6 +11,8 @@ public class Robot implements IRobot{
     private int hp = 8;
     private int ll = 3;
     private Direction direction;
+    private ArrayList<ArrayList<ProgramCard>> hand = new ArrayList<>();
+    private int hand_size = 9;
 
     public Robot(int xCoord, int yCoord, Direction dir){
         x = xCoord;
@@ -14,6 +20,9 @@ public class Robot implements IRobot{
         direction = dir;
     }
 
+    public ArrayList<ArrayList<ProgramCard>> getHand() {
+        return hand;
+    }
 
     @Override
     public int getX() {
@@ -60,4 +69,9 @@ public class Robot implements IRobot{
     public boolean isAlive() {
         return (getHealth() == 0 || getLives() == 0);
     }
+
+    public void giveCard(ArrayList<ProgramCard> card) {
+        hand.add(card);
+    }
+
 }
