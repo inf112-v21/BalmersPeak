@@ -1,8 +1,8 @@
-package inf112.BalmersPeak.app;
+package inf112.balmerspeak.app;
 
-import inf112.BalmersPeak.app.board.Wrench;
-import inf112.BalmersPeak.app.robot.Direction;
-import inf112.BalmersPeak.app.robot.Robot;
+import inf112.balmerspeak.app.board.Wrench;
+import inf112.balmerspeak.app.robot.Direction;
+import inf112.balmerspeak.app.robot.Robot;
 import org.junit.Test;
 
 import static org.junit.Assert.assertTrue;
