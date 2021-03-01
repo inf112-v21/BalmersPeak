@@ -1,10 +1,10 @@
-package inf112.balmerspeak.app;
+package inf112.BalmersPeak.app;
 
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL30;
-import inf112.balmerspeak.app.menu.MenuScreen;
+import inf112.BalmersPeak.app.menu.MenuScreen;
 
 
 public class GUI extends Game {

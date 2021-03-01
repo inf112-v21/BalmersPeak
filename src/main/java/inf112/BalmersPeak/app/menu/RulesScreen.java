@@ -1,4 +1,4 @@
-package inf112.balmerspeak.app.menu;
+package inf112.BalmersPeak.app.menu;
 
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Texture;
@@ -7,7 +7,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
-import inf112.balmerspeak.app.GUI;
+import inf112.BalmersPeak.app.GUI;
 
 public class RulesScreen extends MainScreen implements Screen {
 

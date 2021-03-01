@@ -1,4 +1,4 @@
-package inf112.balmerspeak.app;
+package inf112.BalmersPeak.app;
 
 public class Volume {
     private float value;

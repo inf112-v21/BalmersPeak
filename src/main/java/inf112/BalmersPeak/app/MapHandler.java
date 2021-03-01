@@ -1,4 +1,4 @@
-package inf112.balmerspeak.app;
+package inf112.BalmersPeak.app;
 
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
@@ -102,6 +102,10 @@ public class MapHandler {
 
     public boolean checkDeath(int xCoord, int yCoord) {
         return this.hole.getCell(xCoord, yCoord) != null;
+    }
+
+    public boolean checkWrench(int xCoord, int yCoord) {
+        return this.wrench.getCell(xCoord, yCoord) != null;
     }
 
     public void changePlayerTextureWin(int xCoord, int yCoord) {

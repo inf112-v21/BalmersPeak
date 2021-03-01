@@ -1,11 +1,11 @@
-package inf112.balmerspeak.app.board;
+package inf112.BalmersPeak.app.board;
 
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
-import inf112.balmerspeak.app.flag.Flag;
-import inf112.balmerspeak.app.robot.Direction;
-import inf112.balmerspeak.app.robot.Robot;
+import inf112.BalmersPeak.app.flag.Flag;
+import inf112.BalmersPeak.app.robot.Direction;
+import inf112.BalmersPeak.app.robot.Robot;
 
 public class Board {
 

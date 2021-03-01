@@ -1,12 +1,12 @@
-package inf112.balmerspeak.app.menu;
+package inf112.BalmersPeak.app.menu;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.math.Vector2;
-import inf112.balmerspeak.app.InputHandler;
-import inf112.balmerspeak.app.MapHandler;
+import inf112.BalmersPeak.app.InputHandler;
+import inf112.BalmersPeak.app.MapHandler;
 
 public class GameScreen implements Screen {
 

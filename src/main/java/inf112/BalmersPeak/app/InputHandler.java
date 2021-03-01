@@ -1,4 +1,4 @@
-package inf112.balmerspeak.app;
+package inf112.BalmersPeak.app;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
