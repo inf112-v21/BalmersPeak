@@ -3,7 +3,7 @@ package inf112.balmerspeak.app.board;
 import inf112.balmerspeak.app.robot.Robot;
 
 public class Wrench {
-    private int numberOfWrenches;
+    public int numberOfWrenches;
     public Wrench(int numberOfWrenches) {
         this.numberOfWrenches = numberOfWrenches;
     }
