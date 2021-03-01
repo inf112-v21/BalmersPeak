@@ -2,7 +2,6 @@ package inf112.balmerspeak.app;
 
 import com.badlogic.gdx.backends.lwjgl3.Lwjgl3Application;
 import com.badlogic.gdx.backends.lwjgl3.Lwjgl3ApplicationConfiguration;
-import com.esotericsoftware.kryonet.Server;
 import inf112.balmerspeak.app.cards.Deck;
 import inf112.balmerspeak.app.cards.GeneralCard;
 import inf112.balmerspeak.app.robot.Direction;
@@ -24,6 +23,6 @@ public class Main {
         move.programRobot();
         System.out.println(robot.getHand());
 
-        //new Lwjgl3Application(new GUI(), cfg);
+        new Lwjgl3Application(new GUI(), cfg);
     }
 }
