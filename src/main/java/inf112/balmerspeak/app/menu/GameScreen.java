@@ -13,6 +13,12 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import inf112.balmerspeak.app.InputHandler;
 import inf112.balmerspeak.app.MapHandler;
+import inf112.balmerspeak.app.cards.MovementCard;
+import inf112.balmerspeak.app.robot.Direction;
+import inf112.balmerspeak.app.robot.Move;
+import inf112.balmerspeak.app.robot.Robot;
+
+import java.util.Scanner;
 
 public class GameScreen implements Screen {
 
@@ -30,8 +36,11 @@ public class GameScreen implements Screen {
 
     private Vector2 playerVec;
 
+    private Robot robot;
+
     public GameScreen() {
         playerVec = new Vector2(0, 0);
+        robot = new Robot(0,0, Direction.NORTH);
 
         // Create input handler
         input = new InputHandler();
@@ -51,6 +60,9 @@ public class GameScreen implements Screen {
 
 
         rend.setView(cam);
+        MovementCard card = new MovementCard(1,2,"move 1");
+        handleMoveCard(card);
+
     }
 
     public boolean shouldMove(int dx, int dy) {
@@ -59,8 +71,8 @@ public class GameScreen implements Screen {
             return false;
 
         // These return true if the resulting playerVec are out of bounds
-        boolean outsideX = playerVec.x + dx > mapHandler.getBoard().getWidth()-1 || playerVec.x + dx < 0;
-        boolean outsideY = playerVec.y + dy > mapHandler.getBoard().getHeight()-1 || playerVec.y + dy < 0;
+        boolean outsideX = robot.getX() + dx > mapHandler.getBoard().getWidth()-1 || robot.getX() + dx < 0;
+        boolean outsideY = robot.getY() + dy > mapHandler.getBoard().getHeight()-1 || robot.getY() + dy < 0;
 
         return !(outsideX || outsideY);
     }
@@ -81,33 +93,57 @@ public class GameScreen implements Screen {
             dx += 1;
 
         // Player x and y coordinates
-        int playerX = (int) playerVec.x;
-        int playerY = (int) playerVec.y;
+        int playerX = robot.getX();
+        int playerY = robot.getY();
 
 
         // Only update if the player is allowed to move
         if (shouldMove(dx, dy)) {
             // Move player textures
             mapHandler.movePlayer(playerX, playerY, dx, dy);
-            playerVec.set(playerX + dx, playerY + dy);
+            robot.set(playerX + dx, playerY + dy);
         }
 
         // Check if player won
         if (mapHandler.checkWin(playerX + dx, playerY + dy)) {
             System.out.println("You won!");
             mapHandler.changePlayerTextureWin(playerX + dx, playerY + dy);
-            playerVec.set(playerX + dx, playerY + dy);
+            robot.set(playerX + dx, playerY + dy);
         }
 
         // Check if player died
         if (mapHandler.checkDeath(playerX + dx, playerY + dy)) {
             System.out.println("You died :(");
             mapHandler.changePlayerTextureDeath(playerX + dx, playerY + dy);
-            playerVec.set(playerX + dx, playerY + dy);
+            robot.set(playerX + dx, playerY + dy);
         }
 
         // Update player coordinates
         input.clear();
+    }
+
+    public void handleMoveCard(MovementCard card){
+        int dx = 0;
+        int dy = 0;
+
+
+        if (robot.getDirection().equals(Direction.NORTH))
+            dx += card.getDistance();
+        else if (robot.getDirection().equals(Direction.SOUTH))
+            dx -= card.getDistance();
+        else if (robot.getDirection().equals(Direction.EAST))
+            dy -= card.getDistance();
+        else if (robot.getDirection().equals(Direction.WEST))
+            dy += card.getDistance();
+
+        int playerX = robot.getX();
+        int playerY = robot.getY();
+
+        if (shouldMove(dx, dy)){
+            mapHandler.movePlayer(playerX, playerY, dx, dy);
+            robot.set(playerX + dx, playerY + dy);
+        }
+
     }
 
 
