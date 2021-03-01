@@ -7,18 +7,20 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import inf112.balmerspeak.app.InputHandler;
 import inf112.balmerspeak.app.MapHandler;
+import inf112.balmerspeak.app.cards.CardGetter;
 import inf112.balmerspeak.app.cards.MovementCard;
+import inf112.balmerspeak.app.cards.ProgramCard;
 import inf112.balmerspeak.app.robot.Direction;
-import inf112.balmerspeak.app.robot.Move;
 import inf112.balmerspeak.app.robot.Robot;
 
-import java.util.Scanner;
+import java.util.ArrayList;
 
 public class GameScreen implements Screen {
 
@@ -29,6 +31,9 @@ public class GameScreen implements Screen {
 
     private OrthogonalTiledMapRenderer rend;
 
+    private static CardGetter getter = new CardGetter();
+    private ArrayList<ArrayList<ProgramCard>> hand = new ArrayList<>();
+    private UserInterface ui;
 
     private InputHandler input;
     private MapHandler mapHandler;
@@ -156,6 +161,16 @@ public class GameScreen implements Screen {
         register.setWidth(Gdx.graphics.getWidth());
         register.bottom().debug();
         stage.addActor(register);
+
+        hand = getter.getCardList();
+
+        //this.ui = new UserInterface(this, stage);
+
+
+    }
+
+    private void updateCardTable() {
+
     }
 
     @Override
