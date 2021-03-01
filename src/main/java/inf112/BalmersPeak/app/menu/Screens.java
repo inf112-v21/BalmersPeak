@@ -1,4 +1,4 @@
-package inf112.BalmersPeak.app.menu;
+package inf112.balmerspeak.app.menu;
 
 enum Screens {
     MENU,

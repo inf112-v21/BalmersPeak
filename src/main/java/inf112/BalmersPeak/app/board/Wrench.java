@@ -1,6 +1,6 @@
-package inf112.BalmersPeak.app.board;
+package inf112.balmerspeak.app.board;
 
-import inf112.BalmersPeak.app.robot.Robot;
+import inf112.balmerspeak.app.robot.Robot;
 
 public class Wrench {
     boolean isEmpty;

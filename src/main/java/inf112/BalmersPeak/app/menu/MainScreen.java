@@ -1,4 +1,4 @@
-package inf112.BalmersPeak.app.menu;
+package inf112.balmerspeak.app.menu;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
@@ -14,7 +14,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
-import inf112.BalmersPeak.app.GUI;
+import inf112.balmerspeak.app.GUI;
 
 
 public class MainScreen implements Screen {

@@ -1,4 +1,4 @@
-package inf112.BalmersPeak.app;
+package inf112.balmerspeak.app;
 
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
