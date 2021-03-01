@@ -3,8 +3,10 @@ package inf112.balmerspeak.app.board;
 import inf112.balmerspeak.app.robot.Robot;
 
 public class Wrench {
-    boolean isEmpty;
-    public Wrench(){ }
+    int numberOfWrenches;
+    public Wrench(int numberOfWrenches) {
+        this.numberOfWrenches = numberOfWrenches;
+    }
     public void fixDmg(Robot robot){
         if (robot.getHealth()<10) {
             robot.setHealth(robot.getHealth() + 1);

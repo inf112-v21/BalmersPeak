@@ -8,8 +8,8 @@ import org.junit.Test;
 import static org.junit.Assert.assertTrue;
 
 public class WrenchTest {
-    Robot player = new Robot(0, 0, Direction.NORTH);
-    Wrench wrench = new Wrench();
+    private Robot player = new Robot(0, 0, Direction.NORTH);
+    private Wrench wrench = new Wrench(1);
     @Test
     public void testHealingAmount(){
         player.setHealth(1);
