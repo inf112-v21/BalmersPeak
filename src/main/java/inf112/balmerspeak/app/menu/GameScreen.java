@@ -15,6 +15,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.Align;
+import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import inf112.balmerspeak.app.InputHandler;
 import inf112.balmerspeak.app.MapHandler;
@@ -213,8 +214,10 @@ public class GameScreen implements Screen {
         dialog.setPosition(0,10);
 
         SelectBox<ProgramCard> selectBox = new SelectBox<>(skin1);
-        System.out.println(hand.size());
-        selectBox.setItems(hand.get(0), hand.get(1), hand.get(2), hand.get(3), hand.get(4));
+        Array<ProgramCard> a = new Array<>();
+        for (ProgramCard card : hand)
+            a.add(card);
+        selectBox.setItems(a);
         TextButton button = new TextButton("Button", skin1);
         button.setPosition(Gdx.graphics.getWidth()-200,200);
         button.addListener(new ChangeListener() {
@@ -231,13 +234,13 @@ public class GameScreen implements Screen {
             }
         });
 
-
-
         selectBox.addListener(new ChangeListener() {
         @Override
         public void changed(ChangeEvent changeEvent, Actor actor) {
+            if (queueList.size() < 5) {
                 queueList.add(selectBox.getSelected());
             }
+        }
         });
         dialog.getContentTable().defaults().pad(10);
         dialog.getContentTable().add(selectBox);
