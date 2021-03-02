@@ -209,17 +209,16 @@ public class GameScreen implements Screen {
         register.setWidth(Gdx.graphics.getWidth());
         register.bottom().debug();
 
-        Dialog dialog = new Dialog("Setting", skin1);
-        dialog.setSize(Gdx.graphics.getWidth()/2, 260);
-        dialog.setPosition(0,10);
+        Dialog dialog = new Dialog("Card menu", skin1);
+        dialog.setSize(Gdx.graphics.getWidth()/2, 160);
+        dialog.setPosition(0,100);
 
         SelectBox<ProgramCard> selectBox = new SelectBox<>(skin1);
         Array<ProgramCard> a = new Array<>();
         for (ProgramCard card : hand)
             a.add(card);
         selectBox.setItems(a);
-        TextButton button = new TextButton("Button", skin1);
-        button.setPosition(Gdx.graphics.getWidth()-200,200);
+        TextButton button = new TextButton("Start round", skin1);
         button.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent changeEvent, Actor actor) {
