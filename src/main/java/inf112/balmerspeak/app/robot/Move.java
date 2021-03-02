@@ -1,6 +1,7 @@
 package inf112.balmerspeak.app.robot;
 
 import inf112.balmerspeak.app.cards.Deck;
+import inf112.balmerspeak.app.cards.ProgramCard;
 
 public class Move {
 
@@ -13,8 +14,8 @@ public class Move {
     }
 
     public void programRobot() {
-
-        robot.giveCard(deck.getCards(5));
+        for (ProgramCard cards : deck.getCards(5))
+        robot.giveCard(cards);
 
 
     }

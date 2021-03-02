@@ -12,7 +12,7 @@ public class CardGetter {
     private static Robot robot = new Robot(0,0, Direction.NORTH);
     private static Deck deck = new Deck();
 
-    public ArrayList<ArrayList<ProgramCard>> getCardList() {
+    public ArrayList<ProgramCard> getCardList() {
         move = new Move(robot, deck);
         move.programRobot();
         System.out.println(robot.getHand());

@@ -12,7 +12,7 @@ public class Robot implements IRobot{
     private int hp = 8;
     private int ll = 3;
     private Direction direction;
-    private ArrayList<ArrayList<ProgramCard>> hand = new ArrayList<>();
+    private ArrayList<ProgramCard> hand = new ArrayList<>();
     private int hand_size = 9;
 
     public Robot(int xCoord, int yCoord, Direction dir){
@@ -21,7 +21,7 @@ public class Robot implements IRobot{
         direction = dir;
     }
 
-    public ArrayList<ArrayList<ProgramCard>> getHand() {
+    public ArrayList<ProgramCard> getHand() {
         return hand;
     }
 
@@ -71,8 +71,12 @@ public class Robot implements IRobot{
         return (getHealth() == 0 || getLives() == 0);
     }
 
-    public void giveCard(ArrayList<ProgramCard> card) {
+    public void giveCard(ProgramCard card) {
         hand.add(card);
+    }
+
+    public void setDirection(Direction dir){
+        this.direction = dir;
     }
 
 

@@ -20,10 +20,10 @@ public class HandGetter {
     }
 
     public void createCardButtons() {
-        ArrayList<ArrayList<ProgramCard>> cards = programmingCards.getCardList();
+        ArrayList<ProgramCard> cards = programmingCards.getCardList();
 
         for (int i = 0; i < cards.size(); i++) {
-            ArrayList<ProgramCard> card = cards.get(i);
+            ProgramCard card = cards.get(i);
         }
     }
 

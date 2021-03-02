@@ -2,25 +2,35 @@ package inf112.balmerspeak.app.menu;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.scenes.scene2d.Actor;
+import com.badlogic.gdx.scenes.scene2d.Event;
+import com.badlogic.gdx.scenes.scene2d.EventListener;
 import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
-import com.badlogic.gdx.scenes.scene2d.ui.Skin;
-import com.badlogic.gdx.scenes.scene2d.ui.Table;
-import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
+import com.badlogic.gdx.scenes.scene2d.ui.*;
+import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
+import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
+import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import inf112.balmerspeak.app.InputHandler;
 import inf112.balmerspeak.app.MapHandler;
-import inf112.balmerspeak.app.cards.CardGetter;
-import inf112.balmerspeak.app.cards.MovementCard;
-import inf112.balmerspeak.app.cards.ProgramCard;
+import inf112.balmerspeak.app.cards.*;
 import inf112.balmerspeak.app.robot.Direction;
 import inf112.balmerspeak.app.robot.Robot;
+import org.lwjgl.system.CallbackI;
 
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.MouseListener;
+import java.awt.event.TextEvent;
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
+import java.util.Scanner;
 
 public class GameScreen implements Screen {
 
@@ -32,19 +42,24 @@ public class GameScreen implements Screen {
     private OrthogonalTiledMapRenderer rend;
 
     private static CardGetter getter = new CardGetter();
-    private ArrayList<ArrayList<ProgramCard>> hand = new ArrayList<>();
+    private ArrayList<ProgramCard> hand = new ArrayList<>();
     private UserInterface ui;
 
     private InputHandler input;
     private MapHandler mapHandler;
     OrthographicCamera cam;
 
+    ArrayList<ProgramCard> queueList = new ArrayList<>();
+
     private Vector2 playerVec;
 
     private Robot robot;
 
+    Skin skin1 = new Skin(Gdx.files.internal("assets/default/skin/uiskin.json"));
+
     public GameScreen() {
-        playerVec = new Vector2(0, 0);
+
+
         robot = new Robot(0,0, Direction.NORTH);
 
         // Create input handler
@@ -133,13 +148,13 @@ public class GameScreen implements Screen {
 
 
         if (robot.getDirection().equals(Direction.NORTH))
-            dx += card.getDistance();
-        else if (robot.getDirection().equals(Direction.SOUTH))
-            dx -= card.getDistance();
-        else if (robot.getDirection().equals(Direction.EAST))
-            dy -= card.getDistance();
-        else if (robot.getDirection().equals(Direction.WEST))
             dy += card.getDistance();
+        else if (robot.getDirection().equals(Direction.SOUTH))
+            dy -= card.getDistance();
+        else if (robot.getDirection().equals(Direction.EAST))
+            dx += card.getDistance();
+        else if (robot.getDirection().equals(Direction.WEST))
+            dx -= card.getDistance();
 
         int playerX = robot.getX();
         int playerY = robot.getY();
@@ -150,19 +165,87 @@ public class GameScreen implements Screen {
         }
 
     }
+    public void handleRotation(RotationCard card){
+        if (card.getRotation().equals(Rotation.left))
+            robot.setDirection(turn(Rotation.left, robot.getDirection()));
+        if (card.getRotation().equals(Rotation.right))
+            robot.setDirection(turn(Rotation.right, robot.getDirection()));
+        if (card.getRotation().equals(Rotation.uturn))
+            robot.setDirection(turn(Rotation.uturn, robot.getDirection()));
+
+    }
+    public Direction turn(Rotation rotation, Direction direction) {
+        switch (direction) {
+            case NORTH:
+                if (rotation.equals(Rotation.right)) return Direction.EAST;
+                else if (rotation.equals(Rotation.uturn)) return Direction.SOUTH;
+                else return Direction.WEST;
+            case SOUTH:
+                if (rotation.equals(Rotation.right)) return Direction.WEST;
+                else if (rotation.equals(Rotation.uturn)) return Direction.NORTH;
+                else return Direction.EAST;
+            case WEST:
+                if (rotation.equals(Rotation.right)) return Direction.NORTH;
+                else if (rotation.equals(Rotation.uturn)) return Direction.EAST;
+                else return Direction.SOUTH;
+            case EAST:
+                if (rotation.equals(Rotation.right)) return Direction.SOUTH;
+                else if (rotation.equals(Rotation.uturn)) return Direction.WEST;
+                else return Direction.NORTH;
+            default:
+                return null;
+        }
+    }
 
 
     @Override
     public void show() {
         // Called when this screen becomes the current screen for the Game.
+        hand = getter.getCardList();
         stage = new Stage(new ScreenViewport());
         Table register = new Table();
         register.setHeight(270);
         register.setWidth(Gdx.graphics.getWidth());
         register.bottom().debug();
-        stage.addActor(register);
 
-        hand = getter.getCardList();
+        Dialog dialog = new Dialog("Setting", skin1);
+        dialog.setSize(Gdx.graphics.getWidth()/2, 260);
+        dialog.setPosition(0,10);
+
+        SelectBox<ProgramCard> selectBox = new SelectBox<>(skin1);
+        System.out.println(hand.size());
+        selectBox.setItems(hand.get(0), hand.get(1), hand.get(2), hand.get(3), hand.get(4));
+        TextButton button = new TextButton("Button", skin1);
+        button.setPosition(Gdx.graphics.getWidth()-200,200);
+        button.addListener(new ChangeListener() {
+            @Override
+            public void changed(ChangeEvent changeEvent, Actor actor) {
+                for (ProgramCard card : queueList){
+                    if (card.getType().equals(MovementType.movement)) {
+                        handleMoveCard((MovementCard) card);
+                    }
+                    else {
+                        handleRotation((RotationCard) card);
+                    }
+                }
+            }
+        });
+
+
+
+        selectBox.addListener(new ChangeListener() {
+        @Override
+        public void changed(ChangeEvent changeEvent, Actor actor) {
+                queueList.add(selectBox.getSelected());
+            }
+        });
+        dialog.getContentTable().defaults().pad(10);
+        dialog.getContentTable().add(selectBox);
+        dialog.add(button);
+
+        stage.addActor(dialog);
+        stage.addActor(register);
+        Gdx.input.setInputProcessor(stage);
 
         //this.ui = new UserInterface(this, stage);
 
@@ -173,13 +256,17 @@ public class GameScreen implements Screen {
 
     }
 
+
     @Override
     public void render(float v) {
         rend.render();
 
         // Check input and move character
+        Label label = new Label("Queue: " + queueList, skin1);
+        label.setPosition(Gdx.graphics.getWidth()/2+10, 200);
+        stage.addActor(label);
         stage.act(Gdx.graphics.getDeltaTime());
-        stage.draw();
+        stage.draw();;
         handleMove();
 
     }
