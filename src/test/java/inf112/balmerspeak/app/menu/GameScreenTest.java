@@ -1,7 +1,5 @@
 package inf112.balmerspeak.app.menu;
 
-import com.badlogic.gdx.ApplicationListener;
-import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.backends.lwjgl3.Lwjgl3Application;
 import com.badlogic.gdx.backends.lwjgl3.Lwjgl3ApplicationConfiguration;
@@ -11,10 +9,8 @@ import inf112.balmerspeak.app.cards.Rotation;
 import inf112.balmerspeak.app.cards.RotationCard;
 import inf112.balmerspeak.app.robot.Direction;
 import inf112.balmerspeak.app.robot.Robot;
-import org.junit.Before;
 import org.junit.Test;
 import org.junit.jupiter.api.BeforeAll;
-import org.lwjgl.system.CallbackI;
 
 import static org.junit.Assert.*;
 
@@ -23,7 +19,6 @@ public class GameScreenTest {
 
 
     private static GameScreen g;
-    private static Robot robot;
 
     @BeforeAll
     public static void setup(){
