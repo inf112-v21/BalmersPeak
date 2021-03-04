@@ -5,16 +5,16 @@ import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.TextureAtlas;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Actor;
-import com.badlogic.gdx.scenes.scene2d.Event;
-import com.badlogic.gdx.scenes.scene2d.EventListener;
+import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
-import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import inf112.balmerspeak.app.InputHandler;
@@ -36,9 +36,6 @@ import java.util.Scanner;
 public class GameScreen implements Screen {
 
     Stage stage;
-    Skin skin;
-    // Background image
-    private Texture backgroundImage;
 
     private OrthogonalTiledMapRenderer rend;
 
@@ -209,7 +206,6 @@ public class GameScreen implements Screen {
         }
     }
 
-
     @Override
     public void show() {
         // Called when this screen becomes the current screen for the Game.
@@ -251,6 +247,7 @@ public class GameScreen implements Screen {
         });
 
         selectBox.addListener(new ChangeListener() {
+
         @Override
         public void changed(ChangeEvent changeEvent, Actor actor) {
             if (queueList.size() < 5) {
@@ -268,10 +265,6 @@ public class GameScreen implements Screen {
         
     }
 
-    private void updateCardTable() {
-
-    }
-
 
     @Override
     public void render(float v) {
@@ -280,7 +273,7 @@ public class GameScreen implements Screen {
         label.setPosition(Gdx.graphics.getWidth()/2+10, 200);
         stage.addActor(label);
         stage.act(Gdx.graphics.getDeltaTime());
-        stage.draw();;
+        stage.draw();
         //handleMove();
 
     }

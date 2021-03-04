@@ -10,8 +10,6 @@ public class Deck {
 
     public ArrayList<ProgramCard> deckInUse = new ArrayList<>();
 
-    //Lage deck med å bruke: public Deck deck = new Deck();
-
     public Deck() {
         createDeck();
         shuffleDeck();
@@ -24,7 +22,7 @@ public class Deck {
             deckInUse.add(new RotationCard(2,Rotation.left,"Rotate left"));
         }
         for (int i = 0; i < 12; i++) {
-            deckInUse.add(new MovementCard(1,2,"Move two    "));
+            deckInUse.add(new MovementCard(1,2,"Move two"));
         }
         for (int i = 0; i < 6; i++) {
             deckInUse.add(new MovementCard(1,3,"Move three"));
