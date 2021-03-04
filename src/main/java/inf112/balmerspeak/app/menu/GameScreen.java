@@ -219,7 +219,7 @@ public class GameScreen implements Screen {
         register.setHeight(270);
         register.setWidth(Gdx.graphics.getWidth());
         register.bottom().debug();
-        
+
 
         //set up the menu box
         Dialog dialog = new Dialog("Card menu", skin1);
@@ -265,10 +265,7 @@ public class GameScreen implements Screen {
         stage.addActor(dialog);
         stage.addActor(register);
         Gdx.input.setInputProcessor(stage);
-
-        //this.ui = new UserInterface(this, stage);
-
-
+        
     }
 
     private void updateCardTable() {
