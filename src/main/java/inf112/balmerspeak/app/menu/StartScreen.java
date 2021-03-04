@@ -92,8 +92,23 @@ public class StartScreen extends MainScreen implements Screen {
             }
         };
 
+        TextButton continueDialogBtn = new TextButton("Continue", skin);
+        continueDialogBtn.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                super.clicked(event, x, y);
+                String IP = ipField.getText();
+                try { 
+                    game.startGameClient(IP, username);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+                game.changeScreen(new LobbyScreen(game, false));
+            }
+        });
+
         usernameDialog.add(userField);
-        usernameDialog.button("Continue", userField.getText()); //sends "true" as the result
+        usernameDialog.button(continueDialogBtn); //sends "true" as the result
         usernameDialog.key(Input.Keys.ENTER, userField.getText()); //sends "true" when the ENTER key is pressed
 
 
