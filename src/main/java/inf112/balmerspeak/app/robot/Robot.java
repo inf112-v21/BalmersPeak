@@ -1,5 +1,6 @@
 package inf112.balmerspeak.app.robot;
 
+import inf112.balmerspeak.app.cards.Deck;
 import inf112.balmerspeak.app.cards.MovementCard;
 import inf112.balmerspeak.app.cards.ProgramCard;
 
@@ -13,6 +14,7 @@ public class Robot implements IRobot{
     private int ll = 3;
     private Direction direction;
     private ArrayList<ProgramCard> hand = new ArrayList<>();
+    private Deck deck = new Deck();
     private int hand_size = 9;
 
     public Robot(int xCoord, int yCoord, Direction dir){
@@ -77,6 +79,12 @@ public class Robot implements IRobot{
 
     public void setDirection(Direction dir){
         this.direction = dir;
+    }
+
+    public ArrayList<ProgramCard> giveHand(int amount){
+        for (ProgramCard cards : deck.getCards(amount))
+            hand.add(cards);
+        return hand;
     }
 
 

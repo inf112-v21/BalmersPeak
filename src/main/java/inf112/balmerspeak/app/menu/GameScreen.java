@@ -42,9 +42,7 @@ public class GameScreen implements Screen {
 
     private OrthogonalTiledMapRenderer rend;
 
-    private static CardGetter getter = new CardGetter();
     private ArrayList<ProgramCard> hand = new ArrayList<>();
-    private UserInterface ui;
 
     private InputHandler input;
     private MapHandler mapHandler;
@@ -60,9 +58,6 @@ public class GameScreen implements Screen {
 
     public GameScreen() {
 
-
-        robot = new Robot(0,0, Direction.NORTH);
-
         // Create input handler
         input = new InputHandler();
         Gdx.input.setInputProcessor(input);
@@ -77,13 +72,10 @@ public class GameScreen implements Screen {
         cam.position.set((cam.viewportWidth / 2), (cam.viewportHeight / 2) - 4, 0);
         cam.update();
 
-
-
-
         rend.setView(cam);
-        MovementCard card = new MovementCard(1,2,"move 1");
-        handleMoveCard(card);
 
+        //set player at (0,0)
+        robot = new Robot(0,0, Direction.NORTH);
     }
 
     public boolean shouldMove(int dx, int dy) {
@@ -98,6 +90,7 @@ public class GameScreen implements Screen {
         return !(outsideX || outsideY);
     }
 
+    //Unused, but still usable for testing
     public void handleMove() {
         // Changes in the x coordinate
         int dx = 0;
@@ -144,10 +137,13 @@ public class GameScreen implements Screen {
     }
 
     public void handleMoveCard(MovementCard card){
+        // Changes in the x coordinate
         int dx = 0;
+
+        // Changes in the y coordinate
         int dy = 0;
 
-
+        //Check for direction
         if (robot.getDirection().equals(Direction.NORTH))
             dy += card.getDistance();
         else if (robot.getDirection().equals(Direction.SOUTH))
@@ -157,11 +153,26 @@ public class GameScreen implements Screen {
         else if (robot.getDirection().equals(Direction.WEST))
             dx -= card.getDistance();
 
+        // Player x and y coordinates
         int playerX = robot.getX();
         int playerY = robot.getY();
 
+        // Only update if the player is allowed to move
         if (shouldMove(dx, dy)){
             mapHandler.movePlayer(playerX, playerY, dx, dy);
+            robot.set(playerX + dx, playerY + dy);
+        }
+        // Check if player won
+        if (mapHandler.checkWin(playerX + dx, playerY + dy)) {
+            System.out.println("You won!");
+            mapHandler.changePlayerTextureWin(playerX + dx, playerY + dy);
+            robot.set(playerX + dx, playerY + dy);
+        }
+
+        // Check if player died
+        if (mapHandler.checkDeath(playerX + dx, playerY + dy)) {
+            System.out.println("You died :(");
+            mapHandler.changePlayerTextureDeath(playerX + dx, playerY + dy);
             robot.set(playerX + dx, playerY + dy);
         }
 
@@ -202,26 +213,32 @@ public class GameScreen implements Screen {
     @Override
     public void show() {
         // Called when this screen becomes the current screen for the Game.
-        hand = getter.getCardList();
+        hand = robot.giveHand(5);
         stage = new Stage(new ScreenViewport());
         Table register = new Table();
         register.setHeight(270);
         register.setWidth(Gdx.graphics.getWidth());
         register.bottom().debug();
+        
 
+        //set up the menu box
         Dialog dialog = new Dialog("Card menu", skin1);
         dialog.setSize(Gdx.graphics.getWidth()/2, 160);
         dialog.setPosition(0,100);
 
+        //add the drop down box
         SelectBox<ProgramCard> selectBox = new SelectBox<>(skin1);
         Array<ProgramCard> a = new Array<>();
         for (ProgramCard card : hand)
             a.add(card);
         selectBox.setItems(a);
+
+        //add the button to start the sequence of moves
         TextButton button = new TextButton("Start round", skin1);
         button.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent changeEvent, Actor actor) {
+                //moves the robot for each card in list
                 for (ProgramCard card : queueList){
                     if (card.getType().equals(MovementType.movement)) {
                         handleMoveCard((MovementCard) card);
@@ -262,14 +279,12 @@ public class GameScreen implements Screen {
     @Override
     public void render(float v) {
         rend.render();
-
-        // Check input and move character
         Label label = new Label("Queue: " + queueList, skin1);
         label.setPosition(Gdx.graphics.getWidth()/2+10, 200);
         stage.addActor(label);
         stage.act(Gdx.graphics.getDeltaTime());
         stage.draw();;
-        handleMove();
+        //handleMove();
 
     }
 

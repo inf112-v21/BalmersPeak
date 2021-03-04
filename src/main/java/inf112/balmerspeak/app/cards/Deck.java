@@ -9,7 +9,6 @@ public class Deck {
     public int deck_size = 84;
 
     public ArrayList<ProgramCard> deckInUse = new ArrayList<>();
-    public ArrayList<ProgramCard> temp;
 
     //Lage deck med å bruke: public Deck deck = new Deck();
 
@@ -19,7 +18,6 @@ public class Deck {
     }
 
     public void createDeck() {
-        ArrayList<ProgramCard> cards = new ArrayList<>();
         for (int i = 0; i < 18; i++) {
             deckInUse.add(new MovementCard(1,1,"Move one"));
             deckInUse.add(new RotationCard(2,Rotation.right,"Rotate right"));
