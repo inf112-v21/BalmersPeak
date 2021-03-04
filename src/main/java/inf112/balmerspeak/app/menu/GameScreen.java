@@ -3,9 +3,7 @@ package inf112.balmerspeak.app.menu;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.OrthographicCamera;
-import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
-import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
@@ -22,7 +20,6 @@ import java.util.ArrayList;
 public class GameScreen implements Screen {
 
     Stage stage;
-    Skin skin;
     // Background image
     private OrthogonalTiledMapRenderer rend;
 
@@ -36,13 +33,16 @@ public class GameScreen implements Screen {
 
     private Robot robot;
 
-    Skin skin1 = new Skin(Gdx.files.internal("assets/default/skin/uiskin.json"));
+    Skin skin1;
 
     public GameScreen() {
 
         // Create input handler
         input = new InputHandler();
         Gdx.input.setInputProcessor(input);
+
+        //load skins
+        skin1 = new Skin(Gdx.files.internal("assets/default/skin/uiskin.json"));
 
         // Create map handler
         mapHandler = new MapHandler();
