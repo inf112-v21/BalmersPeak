@@ -444,7 +444,7 @@ com.badlogic.gdx.scenes.scene2d.ui.Window$WindowStyle: {
 		titleFont: font
 		titleFontColor: white
 	},
-	"dialog": {
+	dialog: {
 		background: window-c
 		titleFont: font
 		titleFontColor: white
