@@ -8,13 +8,18 @@ import com.badlogic.gdx.math.Vector2;
 import inf112.balmerspeak.app.InputHandler;
 import inf112.balmerspeak.app.MapHandler;
 
+
+
 public class GameScreen implements Screen {
 
     private OrthogonalTiledMapRenderer rend;
 
-
     private InputHandler input;
     private MapHandler mapHandler;
+
+
+
+;
 
     private Vector2 playerVec;
 

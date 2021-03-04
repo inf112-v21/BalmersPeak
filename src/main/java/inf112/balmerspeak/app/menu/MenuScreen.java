@@ -9,6 +9,8 @@ import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import inf112.balmerspeak.app.GUI;
+import inf112.balmerspeak.app.menu.Screens;
+
 
 public class MenuScreen extends MainScreen implements Screen {
     // Game object
@@ -41,7 +43,7 @@ public class MenuScreen extends MainScreen implements Screen {
         // Play button
         TextButton playButton = new TextButton("Play", skin);
         playButton.setLabel(playLabel);
-        addNavigationButtonListeners(playButton, game, Screens.GAME);
+        addNavigationButtonListeners(playButton, game, Screens.START);
 
         // Options button
         TextButton optionsButton = new TextButton("Options", skin);
