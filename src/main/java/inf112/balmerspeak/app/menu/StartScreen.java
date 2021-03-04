@@ -116,6 +116,23 @@ public class StartScreen extends MainScreen implements Screen {
         root.add(backToMenu).prefWidth(200.0f).prefHeight(100.0f);
 
 
+        joinBtn.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                super.clicked(event, x, y);
+                usernameDialog.show(getStage());
+                setIsHost(false);
+            }
+        });
+
+        hostBtn.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                super.clicked(event, x, y);
+                usernameDialog.show(getStage());
+                setIsHost(true);
+            }
+        });
 
         continueDialogBtn.addListener(new ClickListener() {
             @Override
@@ -141,6 +158,8 @@ public class StartScreen extends MainScreen implements Screen {
         });
     }
 
+
+
     public void setIsHost(boolean isHost) {
         this.isHost = isHost;
     }
@@ -149,20 +168,7 @@ public class StartScreen extends MainScreen implements Screen {
         this.username = username;
     }
 
-    public void addHostListener(TextButton btn) {
-        btn.addListener(new ClickListener() {
-            @Override
-            public void clicked(InputEvent event, float x, float y) {
-                super.clicked(event, x, y);
-                usernameDialog.show(getStage());
-                setIsHost(event.getRelatedActor().equals(hostBtn));
-            }
-        });
-    }
-
     public Stage getStage() { return super.getStage(); }
-
-
 
 
     @Override
