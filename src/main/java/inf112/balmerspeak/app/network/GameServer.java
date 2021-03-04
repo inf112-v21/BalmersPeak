@@ -13,7 +13,7 @@ public class GameServer extends Server {
     public GameServer() throws IOException {
         super();
         this.start();
-        this.bind(54555, 54777);
+        this.bind(32402);
         ipAddress = IPFinder.get();
 
         // Adding listeners

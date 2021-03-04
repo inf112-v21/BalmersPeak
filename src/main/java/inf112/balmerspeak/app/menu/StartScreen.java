@@ -62,7 +62,7 @@ public class StartScreen extends MainScreen implements Screen {
 
 
         // Add ip address text field
-        TextField ipField = new TextField("IP Address: ", skin);
+        ipField = new TextField("IP Address: ", skin);
 
 
         // Add back to menu button
@@ -115,7 +115,7 @@ public class StartScreen extends MainScreen implements Screen {
             public void clicked(InputEvent event, float x, float y) {
                 super.clicked(event, x, y);
                 // Fetch ip from textfield
-                String IP = ipField.getMessageText();
+                String IP = ipField.getText();
                 // Start a Client connection
                 try {
                     game.startGameClient(IP);

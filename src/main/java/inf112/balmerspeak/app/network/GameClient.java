@@ -11,7 +11,7 @@ public class GameClient extends Client {
     public GameClient(String ipAddress) throws IOException {
         super();
         this.start();
-        this.connect(5000, ipAddress, 54555, 54777);
+        this.connect(5000, ipAddress, 32401);
 
         // Add listeners
         this.addListener(new Listener() {
