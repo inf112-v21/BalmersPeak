@@ -61,13 +61,6 @@ public class StartScreen extends MainScreen implements Screen {
         joinBtn = new TextButton("Join", skin);
         joinBtn.setLabel(joinbtnLabel);
 
-        // Add listener to joinBtn to connect to a host
-        addHostListener(hostBtn);
-        addHostListener(joinBtn);
-
-
-
-
 
         // Add ip address text field
         ipField = new TextField("IP Address: ", skin);
@@ -79,7 +72,6 @@ public class StartScreen extends MainScreen implements Screen {
 
         // Add hover listeners
         addHoverListeners(hostBtn, game);
-        addNavigationButtonListeners(hostBtn, game, Screens.LOBBY);
         addHoverListeners(joinBtn, game);
         addHoverListeners(backToMenu, game);
         addNavigationButtonListeners(backToMenu, game, Screens.MENU);
@@ -131,6 +123,7 @@ public class StartScreen extends MainScreen implements Screen {
                 super.clicked(event, x, y);
                 usernameDialog.show(getStage());
                 setIsHost(true);
+                System.out.println("Set isHost to true");
             }
         });
 
@@ -138,14 +131,13 @@ public class StartScreen extends MainScreen implements Screen {
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 super.clicked(event, x, y);
-                if (isHost) {
+                if (!isHost) {
                     String IP = ipField.getText();
-                    if (isHost)
-                        try {
-                            game.startGameClient(IP, username);
-                        } catch (IOException e) {
-                            e.printStackTrace();
-                        }
+                    try {
+                        game.startGameClient(IP, username);
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
                 } else {
                     try {
                         game.startGameServer(username);
