@@ -104,10 +104,6 @@ public class MapHandler {
         return this.hole.getCell(xCoord, yCoord) != null;
     }
 
-    public boolean checkWrench(int xCoord, int yCoord) {
-        return this.wrench.getCell(xCoord, yCoord) != null;
-    }
-
     public void changePlayerTextureWin(int xCoord, int yCoord) {
         this.playerLayer.setCell(xCoord, yCoord, wonCell);
     }
