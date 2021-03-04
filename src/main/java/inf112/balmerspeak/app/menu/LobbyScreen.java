@@ -29,6 +29,8 @@ public class LobbyScreen extends MainScreen implements Screen {
 
     String statusIP;
 
+    Label ipLabel;
+
 
     public LobbyScreen(GUI game, boolean isHost) {
 
@@ -61,7 +63,7 @@ public class LobbyScreen extends MainScreen implements Screen {
 
 
         // Add IP label
-        Label ipLabel = super.getBtnLabel(statusIP);
+        ipLabel = super.getBtnLabel(statusIP);
 
         // Add connected label
         Label connectedLbl = super.getBtnLabel("Connected clients: ");
@@ -85,9 +87,10 @@ public class LobbyScreen extends MainScreen implements Screen {
         root.add(backToMenu).prefWidth(200.0f).prefHeight(100.0f);
     }
 
-    // TODO: REMOVE THIS< PURELY FOR TESTING
+
 
     public void hostNameChanged(String hostName) {
+        this.hostName = hostName;
         statusIP = "You are connected to: " + hostName;
     }
 
@@ -101,6 +104,7 @@ public class LobbyScreen extends MainScreen implements Screen {
     @Override
     public void render(float v) {
         super.render(v);
+        ipLabel.setText(statusIP);
     }
 
     @Override
