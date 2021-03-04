@@ -5,5 +5,6 @@ public enum Screens {
     OPTIONS,
     RULES,
     START,
+    LOBBY,
     GAME;
 }

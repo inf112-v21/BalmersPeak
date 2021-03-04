@@ -50,6 +50,7 @@ public class StartScreen extends MainScreen implements Screen {
 
         // Add hover listeners
         addHoverListeners(hostBtn, game);
+        addNavigationButtonListeners(hostBtn, game, Screens.LOBBY);
         addHoverListeners(joinBtn, game);
         addHoverListeners(backToMenu, game);
         addNavigationButtonListeners(backToMenu, game, Screens.MENU);
