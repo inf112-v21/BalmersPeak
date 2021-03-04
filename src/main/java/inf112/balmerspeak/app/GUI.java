@@ -22,8 +22,8 @@ public class GUI extends Game {
         client = new GameClient(ipAddress, username);
     }
 
-    public void startGameServer() throws IOException {
-        server = new GameServer();
+    public void startGameServer(String username) throws IOException {
+        server = new GameServer(username);
     }
 
 

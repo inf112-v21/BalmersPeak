@@ -30,7 +30,7 @@ public class GameClient extends Client {
             public void received(Connection connection, Object object) {
                 super.received(connection, object);
                 String msg = (String) object;
-                if (msg.startsWith("CONNECTED:")) {
+                if (msg.startsWith("USERNAME:")) {
                     // Host has sent username
                     hostName = msg.substring(9);
                     setHostName(hostName);

@@ -13,12 +13,14 @@ public class GameServer extends Server {
     private String ipAddress;
     private LobbyScreen lobby;
     private ArrayList<Connection> clients;
+    private String username;
 
-    public GameServer() throws IOException {
+    public GameServer(String username) throws IOException {
         super();
         this.start();
         this.bind(32402);
-        ipAddress = IPFinder.get();
+        this.ipAddress = IPFinder.get();
+        this.username = username;
 
         // Adding listeners
         this.addListener(new Listener() {
@@ -32,10 +34,14 @@ public class GameServer extends Server {
                 if (msg.startsWith("CONNECTED:")) {
                     displayConnectedClient(connection.getRemoteAddressTCP().toString(), msg);
                     // TODO: send username back
-                    connection.sendTCP("Hello");
+                    connection.sendTCP("USERNAME:" + getUsername());
                 }
             }
         });
+    }
+
+    public String getUsername() {
+        return this.username;
     }
 
     public void setLobby(LobbyScreen screen) {

@@ -21,13 +21,15 @@ public class StartScreen extends MainScreen implements Screen {
 
     // Join button
     TextButton joinBtn;
-    // IP Address fielde
+    // IP Address field
     TextField ipField;
 
     // Username dialog
     Dialog usernameDialog;
     // username
     public String username;
+
+    boolean isHost;
 
 
     public StartScreen(GUI game) {
@@ -60,9 +62,8 @@ public class StartScreen extends MainScreen implements Screen {
         joinBtn.setLabel(joinbtnLabel);
 
         // Add listener to joinBtn to connect to a host
-        addJoinListener();
-        // Add listener to hostBtn to start a server
-        addHostListener();
+        addHostListener(hostBtn);
+        addHostListener(joinBtn);
 
 
 
@@ -93,19 +94,6 @@ public class StartScreen extends MainScreen implements Screen {
         };
 
         TextButton continueDialogBtn = new TextButton("Continue", skin);
-        continueDialogBtn.addListener(new ClickListener() {
-            @Override
-            public void clicked(InputEvent event, float x, float y) {
-                super.clicked(event, x, y);
-                String IP = ipField.getText();
-                try {
-                    game.startGameClient(IP, username);
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-                game.changeScreen(new LobbyScreen(game, false));
-            }
-        });
 
         usernameDialog.add(userField);
         usernameDialog.button(continueDialogBtn); //sends "true" as the result
@@ -126,40 +114,55 @@ public class StartScreen extends MainScreen implements Screen {
         root.add(joinBtn).prefWidth(200.0f).prefHeight(100.0f);
         root.row();
         root.add(backToMenu).prefWidth(200.0f).prefHeight(100.0f);
+
+
+
+        continueDialogBtn.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                super.clicked(event, x, y);
+                if (isHost) {
+                    String IP = ipField.getText();
+                    if (isHost)
+                        try {
+                            game.startGameClient(IP, username);
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+                } else {
+                    try {
+                        game.startGameServer(username);
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                }
+                game.changeScreen(new LobbyScreen(game, isHost));
+            }
+        });
+    }
+
+    public void setIsHost(boolean isHost) {
+        this.isHost = isHost;
     }
 
     public void setUsername(String username) {
         this.username = username;
     }
 
-    public void addHostListener() {
-        hostBtn.addListener(new ClickListener() {
+    public void addHostListener(TextButton btn) {
+        btn.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 super.clicked(event, x, y);
-                // Start a game server
-                try {
-                    game.startGameServer();
-                    game.changeScreen(new LobbyScreen(game, true));
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
+                usernameDialog.show(getStage());
+                setIsHost(event.getRelatedActor().equals(hostBtn));
             }
         });
     }
 
     public Stage getStage() { return super.getStage(); }
 
-    public void addJoinListener() {
-        joinBtn.addListener(new ClickListener() {
-            @Override
-            public void clicked(InputEvent event, float x, float y) {
-                super.clicked(event, x, y);
-                // Fetch ip from text field
-                usernameDialog.show(getStage());
-            }
-        });
-    }
+
 
 
     @Override
