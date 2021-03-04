@@ -98,7 +98,7 @@ public class StartScreen extends MainScreen implements Screen {
             public void clicked(InputEvent event, float x, float y) {
                 super.clicked(event, x, y);
                 String IP = ipField.getText();
-                try { 
+                try {
                     game.startGameClient(IP, username);
                 } catch (IOException e) {
                     e.printStackTrace();
@@ -109,7 +109,6 @@ public class StartScreen extends MainScreen implements Screen {
 
         usernameDialog.add(userField);
         usernameDialog.button(continueDialogBtn); //sends "true" as the result
-        usernameDialog.key(Input.Keys.ENTER, userField.getText()); //sends "true" when the ENTER key is pressed
 
 
 
@@ -157,16 +156,7 @@ public class StartScreen extends MainScreen implements Screen {
             public void clicked(InputEvent event, float x, float y) {
                 super.clicked(event, x, y);
                 // Fetch ip from text field
-                String IP = ipField.getText();
-                // Start a Client connection
-                try {
-                    // Show username dialog
-                    usernameDialog.show(getStage());
-                    game.startGameClient(IP, username);
-                    game.changeScreen(new LobbyScreen(game, false));
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
+                usernameDialog.show(getStage());
             }
         });
     }
