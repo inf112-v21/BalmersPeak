@@ -1,14 +1,26 @@
 package inf112.balmerspeak.app.menu;
 
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
+import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import inf112.balmerspeak.app.GUI;
+
+import java.io.IOException;
 
 
 public class StartScreen extends MainScreen implements Screen {
 
     // Game object
     private GUI game;
+
+    // Host button
+    TextButton hostBtn;
+
+    // Join button
+    TextButton joinBtn;
+    // IP Address fielde
+    TextField ipField;
 
 
     public StartScreen(GUI game) {
@@ -35,10 +47,19 @@ public class StartScreen extends MainScreen implements Screen {
         Label title = super.getTitleLabel("Robo Rally");
 
         // Add host button
-        TextButton hostBtn = new TextButton("Host", skin);
+        hostBtn = new TextButton("Host", skin);
         hostBtn.setLabel(hostBtnLabel);
-        TextButton joinBtn = new TextButton("Join", skin);
+        joinBtn = new TextButton("Join", skin);
         joinBtn.setLabel(joinbtnLabel);
+
+        // Add listener to joinBtn to connect to a host
+        addJoinListener();
+        // Add listener to hostBtn to start a server
+        addHostListener();
+
+
+
+
 
         // Add ip address text field
         TextField ipField = new TextField("IP Address: ", skin);
@@ -70,6 +91,38 @@ public class StartScreen extends MainScreen implements Screen {
         root.add(joinBtn).prefWidth(200.0f).prefHeight(100.0f);
         root.row();
         root.add(backToMenu).prefWidth(200.0f).prefHeight(100.0f);
+    }
+
+    public void addHostListener() {
+        hostBtn.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                super.clicked(event, x, y);
+                // Start a game server
+                try {
+                    game.startGameServer();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        });
+    }
+
+    public void addJoinListener() {
+        joinBtn.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                super.clicked(event, x, y);
+                // Fetch ip from textfield
+                String IP = ipField.getMessageText();
+                // Start a Client connection
+                try {
+                    game.startGameClient(IP);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        });
     }
 
 

@@ -1,4 +1,26 @@
 package inf112.balmerspeak.app.network;
 
-public class GameServer {
+import com.esotericsoftware.kryonet.Connection;
+import com.esotericsoftware.kryonet.Listener;
+import com.esotericsoftware.kryonet.Server;
+
+import java.io.IOException;
+
+public class GameServer extends Server {
+
+    private String ipAddress;
+
+    public GameServer() throws IOException {
+        super();
+        this.start();
+        this.bind(54555, 54777);
+
+        // Adding listeners
+        this.addListener(new Listener() {
+            public void received(Connection connection, String object) {
+                System.out.println(object);
+                connection.sendTCP("Hello");
+            }
+        });
+    }
 }

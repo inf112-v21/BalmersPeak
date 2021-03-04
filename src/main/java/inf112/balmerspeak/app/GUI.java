@@ -5,11 +5,25 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL30;
 import inf112.balmerspeak.app.menu.MenuScreen;
+import inf112.balmerspeak.app.network.GameClient;
+import inf112.balmerspeak.app.network.GameServer;
+
+import java.io.IOException;
 
 
 public class GUI extends Game {
 
     public Volume volume;
+    public GameClient client;
+    public GameServer server;
+
+    public void startGameClient(String ipAddress) throws IOException {
+        client = new GameClient(ipAddress);
+    }
+
+    public void startGameServer() throws IOException {
+        server = new GameServer();
+    }
 
 
     public void changeScreen(Screen newScreen) {
