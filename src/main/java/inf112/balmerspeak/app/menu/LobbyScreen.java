@@ -16,6 +16,15 @@ public class LobbyScreen extends MainScreen implements Screen {
     // ip address
     private String ipAddress;
 
+    // username
+    private String username;
+
+    // table of connected clients
+    private Table connectedClients;
+
+    // skin
+    Skin skin;
+
 
     public LobbyScreen(GUI game, boolean isHost) {
 
@@ -33,8 +42,11 @@ public class LobbyScreen extends MainScreen implements Screen {
         // Get root table
         Table root = super.getRoot();
 
+        // Clients table
+        connectedClients = new Table();
+
         // Get skin
-        Skin skin = super.getSkin();
+        skin = super.getSkin();
 
         // Get buttons label
         Label backBtnLabel = super.getBtnLabel("Back");
@@ -62,12 +74,16 @@ public class LobbyScreen extends MainScreen implements Screen {
         root.row();
         root.add(ipLabel).padBottom(50.0f);
         root.row();
-        root.add(connectedLbl).padBottom(50.0f);
+        root.add(connectedLbl);
         root.row();
-
-        // TODO: Some function to add connected clients programmatically here
-
+        root.add(connectedClients).prefWidth(400.0f).prefHeight(300.0f);
+        root.row();
         root.add(backToMenu).prefWidth(200.0f).prefHeight(100.0f);
+    }
+
+    public void addConnectedClient(String ipAddress, String username) {
+        connectedClients.row();
+        connectedClients.add(new Label(username + " - " + ipAddress, skin));
     }
 
 

@@ -1,7 +1,9 @@
 package inf112.balmerspeak.app.menu;
 
+import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
+import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import inf112.balmerspeak.app.GUI;
@@ -21,6 +23,11 @@ public class StartScreen extends MainScreen implements Screen {
     TextButton joinBtn;
     // IP Address fielde
     TextField ipField;
+
+    // Username dialog
+    Dialog usernameDialog;
+    // username
+    public String username;
 
 
     public StartScreen(GUI game) {
@@ -76,6 +83,19 @@ public class StartScreen extends MainScreen implements Screen {
         addHoverListeners(backToMenu, game);
         addNavigationButtonListeners(backToMenu, game, Screens.MENU);
 
+        // Add username dialog
+        usernameDialog = new Dialog("Choose username", skin, "dialog") {
+            public void result(Object obj) {
+                System.out.println("result "+obj);
+                setUsername((String) obj);
+            }
+        };
+        TextField userField = new TextField("Username: ", skin);
+        usernameDialog.add(userField);
+        usernameDialog.button("Continue", userField.getText()); //sends "true" as the result
+        usernameDialog.key(Input.Keys.ENTER, userField.getText()); //sends "true" when the ENTER key is pressed
+
+
 
         // Add game title
         root.add(title).padBottom(100.0f).colspan(3).center();
@@ -91,6 +111,10 @@ public class StartScreen extends MainScreen implements Screen {
         root.add(joinBtn).prefWidth(200.0f).prefHeight(100.0f);
         root.row();
         root.add(backToMenu).prefWidth(200.0f).prefHeight(100.0f);
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
     }
 
     public void addHostListener() {
@@ -109,16 +133,20 @@ public class StartScreen extends MainScreen implements Screen {
         });
     }
 
+    public Stage getStage() { return super.getStage(); }
+
     public void addJoinListener() {
         joinBtn.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 super.clicked(event, x, y);
-                // Fetch ip from textfield
+                // Fetch ip from text field
                 String IP = ipField.getText();
                 // Start a Client connection
                 try {
-                    game.startGameClient(IP);
+                    // Show username dialog
+                    usernameDialog.show(getStage());
+                    game.startGameClient(IP, username);
                     game.changeScreen(new LobbyScreen(game, false));
                 } catch (IOException e) {
                     e.printStackTrace();

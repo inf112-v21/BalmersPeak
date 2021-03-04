@@ -4,6 +4,7 @@ import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL30;
+import inf112.balmerspeak.app.menu.LobbyScreen;
 import inf112.balmerspeak.app.menu.MenuScreen;
 import inf112.balmerspeak.app.network.GameClient;
 import inf112.balmerspeak.app.network.GameServer;
@@ -17,8 +18,8 @@ public class GUI extends Game {
     public GameClient client;
     public GameServer server;
 
-    public void startGameClient(String ipAddress) throws IOException {
-        client = new GameClient(ipAddress);
+    public void startGameClient(String ipAddress, String username) throws IOException {
+        client = new GameClient(ipAddress, username);
     }
 
     public void startGameServer() throws IOException {
@@ -28,6 +29,10 @@ public class GUI extends Game {
 
 
     public void changeScreen(Screen newScreen) {
+        // if lobby screen, update GameServer
+        if (newScreen instanceof LobbyScreen) {
+            this.server.setLobby((LobbyScreen) newScreen);
+        }
         Screen oldScreen = getScreen();
         setScreen(newScreen);
         // Dispose the old screen to release resources

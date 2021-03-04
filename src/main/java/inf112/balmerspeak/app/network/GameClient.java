@@ -8,10 +8,16 @@ import java.io.IOException;
 
 public class GameClient extends Client {
 
-    public GameClient(String ipAddress) throws IOException {
+    private String username;
+
+    public GameClient(String ipAddress, String username) throws IOException {
         super();
         this.start();
         this.connect(5000, ipAddress, 32401);
+        this.username = username;
+
+        // Send username to host on creation
+        sendRequest("CONNECTED: " + username);
 
         // Add listeners
         this.addListener(new Listener() {

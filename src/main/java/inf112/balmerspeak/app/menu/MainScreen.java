@@ -49,6 +49,9 @@ public class MainScreen implements Screen {
         return this.root;
     }
 
+    // Get stage
+    public Stage getStage() { return this.stage; }
+
     // Get button label
     public Label getBtnLabel(String text) {
         Label lbl = new Label(text, buttonStyle);
