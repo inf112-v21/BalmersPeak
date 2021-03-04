@@ -1,7 +1,6 @@
 package inf112.balmerspeak.app.robot;
 
 import inf112.balmerspeak.app.cards.Deck;
-import inf112.balmerspeak.app.cards.MovementCard;
 import inf112.balmerspeak.app.cards.ProgramCard;
 
 import java.util.ArrayList;
