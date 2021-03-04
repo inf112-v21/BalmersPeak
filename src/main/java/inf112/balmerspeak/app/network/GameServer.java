@@ -14,6 +14,7 @@ public class GameServer extends Server {
         super();
         this.start();
         this.bind(54555, 54777);
+        ipAddress = IPFinder.get();
 
         // Adding listeners
         this.addListener(new Listener() {
