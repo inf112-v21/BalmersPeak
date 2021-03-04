@@ -67,7 +67,6 @@ public class MainScreen implements Screen {
             case RULES: return new RulesScreen(game);
             case GAME: return new GameScreen();
             case START: return new StartScreen(game);
-            case LOBBY: return new LobbyScreen(game);
             default: return new MenuScreen(game);
         }
     }

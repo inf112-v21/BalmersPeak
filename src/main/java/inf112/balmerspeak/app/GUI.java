@@ -26,6 +26,7 @@ public class GUI extends Game {
     }
 
 
+
     public void changeScreen(Screen newScreen) {
         Screen oldScreen = getScreen();
         setScreen(newScreen);

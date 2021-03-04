@@ -24,4 +24,8 @@ public class GameServer extends Server {
             }
         });
     }
+
+    public String getIPAddress() {
+        return this.ipAddress;
+    }
 }

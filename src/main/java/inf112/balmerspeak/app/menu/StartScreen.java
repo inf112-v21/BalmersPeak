@@ -101,6 +101,7 @@ public class StartScreen extends MainScreen implements Screen {
                 // Start a game server
                 try {
                     game.startGameServer();
+                    game.changeScreen(new LobbyScreen(game, true));
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
@@ -118,6 +119,7 @@ public class StartScreen extends MainScreen implements Screen {
                 // Start a Client connection
                 try {
                     game.startGameClient(IP);
+                    game.changeScreen(new LobbyScreen(game, false));
                 } catch (IOException e) {
                     e.printStackTrace();
                 }

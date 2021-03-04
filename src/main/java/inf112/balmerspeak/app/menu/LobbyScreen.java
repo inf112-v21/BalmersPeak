@@ -10,9 +10,20 @@ public class LobbyScreen extends MainScreen implements Screen {
     // Game object
     private GUI game;
 
+    // Whether the person is host of the game
+    private boolean isHost;
 
-    public LobbyScreen(GUI game) {
+    // ip address
+    private String ipAddress;
+
+
+    public LobbyScreen(GUI game, boolean isHost) {
+
         this.game = game;
+        this.isHost = isHost;
+        if (isHost) {
+            ipAddress = game.server.getIPAddress();
+        }
     }
 
     @Override
@@ -28,8 +39,13 @@ public class LobbyScreen extends MainScreen implements Screen {
         // Get buttons label
         Label backBtnLabel = super.getBtnLabel("Back");
 
+
+        // Decide title text
+        String statusIP = isHost ? "Your IP (host): "  + ipAddress : "You are connected to: " + ipAddress; // TODO: FETCH IP address from host
+
+
         // Add IP label
-        Label ipLabel = super.getBtnLabel("Game IP: 192.186.19"); //TODO: make this dynamic
+        Label ipLabel = super.getBtnLabel(statusIP);
 
         // Add connected label
         Label connectedLbl = super.getBtnLabel("Connected clients: ");
