@@ -25,6 +25,10 @@ public class LobbyScreen extends MainScreen implements Screen {
     // skin
     Skin skin;
 
+    private String hostName;
+
+    String statusIP;
+
 
     public LobbyScreen(GUI game, boolean isHost) {
 
@@ -53,7 +57,7 @@ public class LobbyScreen extends MainScreen implements Screen {
 
 
         // Decide title text
-        String statusIP = isHost ? "Your IP (host): "  + ipAddress : "You are connected to: " + ipAddress; // TODO: FETCH IP address from host
+        statusIP = isHost ? "Your IP (host): "  + ipAddress : "You are connected to: " + hostName; // TODO: FETCH IP address from host
 
 
         // Add IP label
@@ -80,6 +84,13 @@ public class LobbyScreen extends MainScreen implements Screen {
         root.row();
         root.add(backToMenu).prefWidth(200.0f).prefHeight(100.0f);
     }
+
+    // TODO: REMOVE THIS< PURELY FOR TESTING
+
+    public void hostNameChanged(String hostName) {
+        statusIP = "You are connected to: " + hostName;
+    }
+
 
     public void addConnectedClient(String ipAddress, String username) {
         connectedClients.row();

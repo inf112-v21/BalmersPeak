@@ -22,11 +22,15 @@ public class GameServer extends Server {
 
         // Adding listeners
         this.addListener(new Listener() {
-            public void received(Connection connection, String object) {
+            public void received(Connection connection, Object object) {
+                System.out.println("RECEIVED");
                 System.out.println(object);
+                String msg = (String) object;
+
+
                 // Add client to lobby screen
-                if (object.startsWith("CONNECTED:")) {
-                    displayConnectedClient(connection.getRemoteAddressTCP().toString(), object);
+                if (msg.startsWith("CONNECTED:")) {
+                    displayConnectedClient(connection.getRemoteAddressTCP().toString(), msg);
                     // TODO: send username back
                     connection.sendTCP("Hello");
                 }

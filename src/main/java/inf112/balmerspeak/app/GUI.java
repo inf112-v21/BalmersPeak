@@ -30,8 +30,10 @@ public class GUI extends Game {
 
     public void changeScreen(Screen newScreen) {
         // if lobby screen, update GameServer
-        if (newScreen instanceof LobbyScreen) {
+        if (newScreen instanceof LobbyScreen && server != null) {
             this.server.setLobby((LobbyScreen) newScreen);
+        } else if (newScreen instanceof LobbyScreen && client != null) {
+            this.client.setLobby((LobbyScreen) newScreen);
         }
         Screen oldScreen = getScreen();
         setScreen(newScreen);

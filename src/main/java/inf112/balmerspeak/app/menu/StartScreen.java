@@ -84,13 +84,14 @@ public class StartScreen extends MainScreen implements Screen {
         addNavigationButtonListeners(backToMenu, game, Screens.MENU);
 
         // Add username dialog
+        TextField userField = new TextField("Username: ", skin);
         usernameDialog = new Dialog("Choose username", skin, "dialog") {
             public void result(Object obj) {
                 System.out.println("result "+obj);
-                setUsername((String) obj);
+                setUsername(userField.getText());
             }
         };
-        TextField userField = new TextField("Username: ", skin);
+
         usernameDialog.add(userField);
         usernameDialog.button("Continue", userField.getText()); //sends "true" as the result
         usernameDialog.key(Input.Keys.ENTER, userField.getText()); //sends "true" when the ENTER key is pressed
