@@ -19,7 +19,7 @@ import java.util.ArrayList;
 
 public class GameScreen implements Screen {
 
-    Stage stage;
+    private Stage stage;
     // Background image
     private OrthogonalTiledMapRenderer rend;
 
@@ -27,13 +27,13 @@ public class GameScreen implements Screen {
 
     private InputHandler input;
     private MapHandler mapHandler;
-    OrthographicCamera cam;
+    private OrthographicCamera cam;
 
-    ArrayList<ProgramCard> queueList = new ArrayList<>();
+    private ArrayList<ProgramCard> queueList = new ArrayList<>();
 
     private Robot robot;
 
-    Skin skin1;
+    private Skin skin1;
 
     public GameScreen() {
 
