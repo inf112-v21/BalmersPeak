@@ -11,6 +11,14 @@
   <name>BalmersPeak</name>
   <url>https://github.com/inf112-v21/BalmersPeak</url>
 
+  <repositories>
+    <repository>
+      <id>clojars</id>
+      <url>http://clojars.org/repo/</url>
+    </repository>
+  </repositories>
+
+
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <maven.compiler.release>9</maven.compiler.release>
@@ -44,6 +52,12 @@
       <version>1.9.13</version>
     </dependency>
 
+    <dependency>
+      <groupId>kryonet</groupId>
+      <artifactId>kryonet</artifactId>
+      <version>2.21</version>
+    </dependency>
+
 
     <!-- https://mvnrepository.com/artifact/com.badlogicgames.gdx/gdx-freetype-platform -->
     <dependency>
@@ -59,6 +73,12 @@
       <version>4.11</version>
       <scope>test</scope>
     </dependency>
+      <dependency>
+          <groupId>org.junit.jupiter</groupId>
+          <artifactId>junit-jupiter</artifactId>
+          <version>RELEASE</version>
+          <scope>test</scope>
+      </dependency>
   </dependencies>
 
   <build>

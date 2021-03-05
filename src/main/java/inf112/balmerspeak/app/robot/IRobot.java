@@ -19,4 +19,6 @@ public interface IRobot {
     void setLives(int x);
 
     boolean isAlive();
+
+    void setDirection(Direction dir);
 }
