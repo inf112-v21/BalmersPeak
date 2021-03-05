@@ -11,7 +11,6 @@ public class GameClient extends Client {
 
     private String username;
     private String hostName;
-    private String hostIP;
     private LobbyScreen lobby;
 
     public GameClient(String ipAddress, String username) throws IOException {
@@ -43,9 +42,6 @@ public class GameClient extends Client {
         this.lobby = screen;
     }
 
-    public void setHostIP(String hostIP) {
-        this.hostIP = hostIP;
-    }
 
     public void setHostName(String hostName) {
         this.hostName = hostName;

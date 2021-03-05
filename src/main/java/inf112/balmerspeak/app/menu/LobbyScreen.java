@@ -1,7 +1,12 @@
 package inf112.balmerspeak.app.menu;
 
 import com.badlogic.gdx.Screen;
-import com.badlogic.gdx.scenes.scene2d.ui.*;
+import com.badlogic.gdx.scenes.scene2d.ui.Skin;
+import com.badlogic.gdx.scenes.scene2d.ui.Table;
+import com.badlogic.gdx.scenes.scene2d.ui.Label;
+import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
+
+
 import inf112.balmerspeak.app.GUI;
 
 
@@ -16,20 +21,19 @@ public class LobbyScreen extends MainScreen implements Screen {
     // ip address
     private String ipAddress;
 
-    // username
-    private String username;
+
 
     // table of connected clients
     private Table connectedClients;
 
     // skin
-    Skin skin;
+    public Skin skin;
 
     private String hostName;
 
-    String statusIP;
+    public String statusIP;
 
-    Label ipLabel;
+    public Label ipLabel;
 
 
     public LobbyScreen(GUI game, boolean isHost) {

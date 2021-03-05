@@ -1,10 +1,14 @@
 package inf112.balmerspeak.app.menu;
 
-import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.badlogic.gdx.scenes.scene2d.ui.*;
+import com.badlogic.gdx.scenes.scene2d.ui.Dialog;
+import com.badlogic.gdx.scenes.scene2d.ui.Table;
+import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
+import com.badlogic.gdx.scenes.scene2d.ui.TextField;
+import com.badlogic.gdx.scenes.scene2d.ui.Skin;
+import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import inf112.balmerspeak.app.GUI;
 
@@ -17,19 +21,19 @@ public class StartScreen extends MainScreen implements Screen {
     private GUI game;
 
     // Host button
-    TextButton hostBtn;
+    public TextButton hostBtn;
 
     // Join button
-    TextButton joinBtn;
+    public TextButton joinBtn;
     // IP Address field
-    TextField ipField;
+    public TextField ipField;
 
     // Username dialog
-    Dialog usernameDialog;
+    public Dialog usernameDialog;
     // username
     public String username;
 
-    boolean isHost;
+    public boolean isHost;
 
 
     public StartScreen(GUI game) {

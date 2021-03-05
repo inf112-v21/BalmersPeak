@@ -12,7 +12,6 @@ public class GameServer extends Server {
 
     private String ipAddress;
     private LobbyScreen lobby;
-    private ArrayList<Connection> clients;
     private String username;
 
     public GameServer(String username) throws IOException {
