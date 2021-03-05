@@ -101,7 +101,7 @@ Før møtet
 Merge alle branchene, og sjekke at de fungerer som de skal.
 Rydde opp litt i oblig dokumenter vårt.
 Møtereferat:
-Vi fikk merget sammen det vi skulle, og fikk gjort koden klar for innlevering.
+Vi fikk merget sammen det vi skulle, og fikk gjort koden klar for innlevering. Alle møtte opp
 
  
 #### Bli enige om maks tre forbedringspunkter fra retrospektivet, som skal følges opp under neste sprint.
