@@ -15,4 +15,9 @@ public class RotationCard extends ProgramCard {
     public Rotation getRotation() {
         return rotation;
     }
+
+    @Override
+    public String toString() {
+        return "RotationCard " + rotation;
+    }
 }
