@@ -2,19 +2,12 @@ package inf112.balmerspeak.app.menu;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
-import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.OrthographicCamera;
-import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.TextureAtlas;
-import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
-import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Actor;
-import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
-import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import inf112.balmerspeak.app.InputHandler;
@@ -22,42 +15,36 @@ import inf112.balmerspeak.app.MapHandler;
 import inf112.balmerspeak.app.cards.*;
 import inf112.balmerspeak.app.robot.Direction;
 import inf112.balmerspeak.app.robot.Robot;
-import org.lwjgl.system.CallbackI;
-
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.MouseListener;
-import java.awt.event.TextEvent;
 import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
-import java.util.Scanner;
 
 public class GameScreen implements Screen {
 
-    Stage stage;
+    private Stage stage;
+    // Background image
 
     private OrthogonalTiledMapRenderer rend;
 
-    private ArrayList<ProgramCard> hand = new ArrayList<>();
+    private ArrayList<ProgramCard> hand;
 
     private InputHandler input;
     private MapHandler mapHandler;
-    OrthographicCamera cam;
+    private OrthographicCamera cam;
 
-    ArrayList<ProgramCard> queueList = new ArrayList<>();
-
-    private Vector2 playerVec;
+    private ArrayList<ProgramCard> queueList = new ArrayList<>();
 
     private Robot robot;
 
-    Skin skin1 = new Skin(Gdx.files.internal("assets/default/skin/uiskin.json"));
+    private Skin skin1;
 
     public GameScreen() {
 
         // Create input handler
         input = new InputHandler();
         Gdx.input.setInputProcessor(input);
+
+        //load skins
+        skin1 = new Skin(Gdx.files.internal("assets/default/skin/uiskin.json"));
+        hand = new ArrayList<>();
 
         // Create map handler
         mapHandler = new MapHandler();
@@ -262,7 +249,6 @@ public class GameScreen implements Screen {
         stage.addActor(dialog);
         stage.addActor(register);
         Gdx.input.setInputProcessor(stage);
-        
     }
 
 
