@@ -21,6 +21,7 @@ public class GameScreen implements Screen {
 
     private Stage stage;
     // Background image
+
     private OrthogonalTiledMapRenderer rend;
 
     private ArrayList<ProgramCard> hand;
@@ -196,7 +197,6 @@ public class GameScreen implements Screen {
         }
     }
 
-
     @Override
     public void show() {
         // Called when this screen becomes the current screen for the Game.
@@ -238,6 +238,7 @@ public class GameScreen implements Screen {
         });
 
         selectBox.addListener(new ChangeListener() {
+
         @Override
         public void changed(ChangeEvent changeEvent, Actor actor) {
             if (queueList.size() < 5) {
@@ -252,7 +253,6 @@ public class GameScreen implements Screen {
         stage.addActor(dialog);
         stage.addActor(register);
         Gdx.input.setInputProcessor(stage);
-
     }
 
 
