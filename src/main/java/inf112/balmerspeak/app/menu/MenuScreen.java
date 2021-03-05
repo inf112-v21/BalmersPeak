@@ -9,6 +9,8 @@ import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import inf112.balmerspeak.app.GUI;
+import inf112.balmerspeak.app.menu.Screens;
+
 
 public class MenuScreen extends MainScreen implements Screen {
     // Game object
@@ -32,6 +34,7 @@ public class MenuScreen extends MainScreen implements Screen {
 
         // Get buttons labels
         Label playLabel = super.getBtnLabel("Play");
+        Label playGameLabel = super.getBtnLabel("Go to Game");
         Label optionsLabel = super.getBtnLabel("Options");
         Label rulesLabel = super.getBtnLabel("Rules");
         Label quitLabel = super.getBtnLabel("Quit");
@@ -41,7 +44,13 @@ public class MenuScreen extends MainScreen implements Screen {
         // Play button
         TextButton playButton = new TextButton("Play", skin);
         playButton.setLabel(playLabel);
-        addNavigationButtonListeners(playButton, game, Screens.GAME);
+        addNavigationButtonListeners(playButton, game, Screens.START);
+
+        TextButton playGameButton = new TextButton("Go to Game", skin);
+        playGameButton.setLabel(playGameLabel);
+        addNavigationButtonListeners(playGameButton, game, Screens.GAME);
+
+
 
         // Options button
         TextButton optionsButton = new TextButton("Options", skin);
@@ -62,6 +71,8 @@ public class MenuScreen extends MainScreen implements Screen {
 
         // Add title and buttons to root table
         super.addTitle(250.0f);
+        root.add(playGameButton).prefWidth(200.0f).prefHeight(100.0f);
+        root.row();
         root.add(playButton).prefWidth(200.0f).prefHeight(100.0f);
         root.row();
         root.add(optionsButton).prefWidth(200.0f).prefHeight(100.0f);
