@@ -7,6 +7,7 @@ import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.maps.tiled.tiles.StaticTiledMapTile;
 
+
 public class MapHandler {
 
     // Map
@@ -89,12 +90,14 @@ public class MapHandler {
         return this.playerLayer;
     }
 
+
     public void movePlayer(int xCoord, int yCoord, int dx, int dy) {
         // Set new cell to the player texture
         this.playerLayer.setCell(xCoord + dx, yCoord + dy, this.player);
         // Set remove previous cell texture
         this.playerLayer.setCell(xCoord, yCoord, null);
     }
+
 
     public boolean checkWin(int xCoord, int yCoord) {
         return this.flag.getCell(xCoord, yCoord) != null;
