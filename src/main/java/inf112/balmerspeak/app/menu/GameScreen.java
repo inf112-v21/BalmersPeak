@@ -61,6 +61,10 @@ public class GameScreen implements Screen {
         robot = new Robot(0,0, Direction.NORTH);
     }
 
+    public Robot getRobot() {
+        return robot;
+    }
+
     public boolean shouldMove(int dx, int dy) {
         // Return false if dx and dy are zero
         if (dx == 0 && dy == 0)
