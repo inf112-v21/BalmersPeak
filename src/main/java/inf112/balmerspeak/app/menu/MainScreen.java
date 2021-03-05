@@ -49,6 +49,9 @@ public class MainScreen implements Screen {
         return this.root;
     }
 
+    // Get stage
+    public Stage getStage() { return this.stage; }
+
     // Get button label
     public Label getBtnLabel(String text) {
         Label lbl = new Label(text, buttonStyle);
@@ -66,6 +69,7 @@ public class MainScreen implements Screen {
             case OPTIONS: return new OptionsScreen(game);
             case RULES: return new RulesScreen(game);
             case GAME: return new GameScreen();
+            case START: return new StartScreen(game);
             default: return new MenuScreen(game);
         }
     }

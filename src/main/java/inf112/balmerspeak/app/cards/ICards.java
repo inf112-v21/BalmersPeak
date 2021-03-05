@@ -13,4 +13,6 @@ public interface ICards {
      * @return
      */
     String getName();
+
+    MovementType getType();
 }

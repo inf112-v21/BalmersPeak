@@ -8,14 +8,11 @@ public class Deck {
 
     public int deck_size = 84;
 
-    public ArrayList<ProgramCard> deckInUse;
-
-    //Lage deck med å bruke: public Deck deck = new Deck();
+    public ArrayList<ProgramCard> deckInUse = new ArrayList<>();
 
     public Deck() {
         createDeck();
-        //this.deckInUse = new ArrayList<>();
-        //this.deckInUse.addAll(cards);
+        shuffleDeck();
     }
 
     public void createDeck() {
@@ -40,5 +37,24 @@ public class Deck {
 
     public void clearDeck() {
         deckInUse.clear();
+    }
+
+    public ArrayList<ProgramCard> getCards(int amount) {
+        ArrayList<ProgramCard> cards = new ArrayList<>();
+        for (int i = 0; i < amount; i++) {
+            cards.add(deckInUse.remove(0));
+            if(deckInUse.size() == 0) {
+                createDeck();
+                shuffleDeck();
+            }
+        }
+        return cards;
+    }
+
+    public ProgramCard getCard() {
+        ProgramCard card = deckInUse.get(0);
+        deckInUse.add(card);
+        deckInUse.remove(card);
+        return card;
     }
 }
