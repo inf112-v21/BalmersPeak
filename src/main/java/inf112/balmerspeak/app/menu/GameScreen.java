@@ -17,12 +17,15 @@ import inf112.balmerspeak.app.robot.Direction;
 import inf112.balmerspeak.app.robot.Robot;
 import java.util.ArrayList;
 
+
+
 public class GameScreen implements Screen {
 
     private Stage stage;
     // Background image
 
     private OrthogonalTiledMapRenderer rend;
+
 
     private ArrayList<ProgramCard> hand;
 
@@ -34,6 +37,11 @@ public class GameScreen implements Screen {
 
     private Robot robot;
 
+
+
+
+
+    private Vector2 playerVec;
     private Skin skin1;
 
     public GameScreen() {

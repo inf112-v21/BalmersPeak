@@ -1,8 +1,10 @@
 package inf112.balmerspeak.app.menu;
 
-enum Screens {
+public enum Screens {
     MENU,
     OPTIONS,
     RULES,
+    START,
+    LOBBY,
     GAME;
 }
