@@ -19,21 +19,21 @@ import java.util.ArrayList;
 
 public class GameScreen implements Screen {
 
-    Stage stage;
+    private Stage stage;
     // Background image
     private OrthogonalTiledMapRenderer rend;
 
-    private ArrayList<ProgramCard> hand = new ArrayList<>();
+    private ArrayList<ProgramCard> hand;
 
     private InputHandler input;
     private MapHandler mapHandler;
-    OrthographicCamera cam;
+    private OrthographicCamera cam;
 
-    ArrayList<ProgramCard> queueList = new ArrayList<>();
+    private ArrayList<ProgramCard> queueList = new ArrayList<>();
 
     private Robot robot;
 
-    Skin skin1;
+    private Skin skin1;
 
     public GameScreen() {
 
@@ -43,6 +43,7 @@ public class GameScreen implements Screen {
 
         //load skins
         skin1 = new Skin(Gdx.files.internal("assets/default/skin/uiskin.json"));
+        hand = new ArrayList<>();
 
         // Create map handler
         mapHandler = new MapHandler();

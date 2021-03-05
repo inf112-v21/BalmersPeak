@@ -14,7 +14,6 @@ public class Robot implements IRobot{
     private Direction direction;
     private ArrayList<ProgramCard> hand = new ArrayList<>();
     private Deck deck = new Deck();
-    private int hand_size = 9;
 
     public Robot(int xCoord, int yCoord, Direction dir){
         x = xCoord;
