@@ -4,15 +4,16 @@ import com.esotericsoftware.kryonet.Connection;
 import com.esotericsoftware.kryonet.Listener;
 import com.esotericsoftware.kryonet.Server;
 import inf112.balmerspeak.app.menu.LobbyScreen;
-
 import java.io.IOException;
-import java.util.ArrayList;
+import com.dosse.upnp.UPnP;
+
 
 public class GameServer extends Server {
 
     private String ipAddress;
     private LobbyScreen lobby;
     private String username;
+
 
     public GameServer(String username) throws IOException {
         super();
@@ -32,7 +33,6 @@ public class GameServer extends Server {
                 // Add client to lobby screen
                 if (msg.startsWith("CONNECTED:")) {
                     displayConnectedClient(connection.getRemoteAddressTCP().toString(), msg);
-                    // TODO: send username back
                     connection.sendTCP("USERNAME:" + getUsername());
                 }
             }
