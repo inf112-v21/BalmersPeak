@@ -13,8 +13,6 @@
   <url>https://github.com/inf112-v21/BalmersPeak</url>
 
   <repositories>
-
-
     <repository>
       <id>in-project-repo</id>
       <name>In Project Repo</name>
@@ -75,8 +73,6 @@
       <artifactId>WaifUPnP</artifactId>
       <version>1.0</version>
     </dependency>
-
-
 
 
   </dependencies>
