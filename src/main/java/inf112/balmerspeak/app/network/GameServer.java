@@ -1,5 +1,6 @@
 package inf112.balmerspeak.app.network;
 
+import com.dosse.upnp.UPnP;
 import com.esotericsoftware.kryonet.Connection;
 import com.esotericsoftware.kryonet.Listener;
 import com.esotericsoftware.kryonet.Server;
@@ -32,6 +33,7 @@ public class GameServer extends Server {
                 if (msg.startsWith("CONNECTED:")) {
                     displayConnectedClient(connection.getRemoteAddressTCP().toString(), msg);
                     // Punch hole first
+                    UPnP.openPortTCP(32500);
                     connection.sendTCP("USERNAME:" + getUsername());
                 }
             }
