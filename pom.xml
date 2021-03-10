@@ -13,15 +13,12 @@
   <url>https://github.com/inf112-v21/BalmersPeak</url>
 
   <repositories>
-    <repository>
-      <id>clojars</id>
-      <url>http://clojars.org/repo/</url>
-    </repository>
+
 
     <repository>
-      <id>in-project</id>
+      <id>in-project-repo</id>
       <name>In Project Repo</name>
-      <url>file://${project.basedir}/libs</url>
+      <url>file:///${project.basedir}/in-project-repo</url>
     </repository>
   </repositories>
 
@@ -74,10 +71,14 @@
     </dependency>
 
     <dependency>
-      <groupId>com.adolfintel</groupId>
+      <groupId>com.dosse</groupId>
       <artifactId>WaifUPnP</artifactId>
       <version>1.0</version>
     </dependency>
+
+
+
+
   </dependencies>
 
   <build>

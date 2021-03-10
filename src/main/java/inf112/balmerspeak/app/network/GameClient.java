@@ -6,6 +6,7 @@ import com.esotericsoftware.kryonet.Listener;
 import inf112.balmerspeak.app.menu.LobbyScreen;
 import com.dosse.upnp.UPnP;
 
+
 import java.io.IOException;
 
 public class GameClient extends Client {
@@ -52,7 +53,6 @@ public class GameClient extends Client {
 
     public void sendRequest(String message) {
         // Punch hole first
-        UPnP.openPortTCP(32500);
         this.sendTCP(message);
     }
 

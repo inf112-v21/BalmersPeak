@@ -5,8 +5,6 @@ import com.esotericsoftware.kryonet.Listener;
 import com.esotericsoftware.kryonet.Server;
 import inf112.balmerspeak.app.menu.LobbyScreen;
 import java.io.IOException;
-import com.dosse.upnp.UPnP;
-
 
 public class GameServer extends Server {
 
@@ -34,7 +32,6 @@ public class GameServer extends Server {
                 if (msg.startsWith("CONNECTED:")) {
                     displayConnectedClient(connection.getRemoteAddressTCP().toString(), msg);
                     // Punch hole first
-                    UPnP.openPortTCP(32500);
                     connection.sendTCP("USERNAME:" + getUsername());
                 }
             }
