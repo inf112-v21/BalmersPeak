@@ -18,7 +18,7 @@ public class GameServer extends Server {
     public GameServer(String username) throws IOException {
         super();
         this.start();
-        this.bind(32402);
+        this.bind(32500);
         this.ipAddress = IPFinder.get();
         this.username = username;
 
@@ -33,6 +33,8 @@ public class GameServer extends Server {
                 // Add client to lobby screen
                 if (msg.startsWith("CONNECTED:")) {
                     displayConnectedClient(connection.getRemoteAddressTCP().toString(), msg);
+                    // Punch hole first
+                    UPnP.openPortTCP(32500);
                     connection.sendTCP("USERNAME:" + getUsername());
                 }
             }
