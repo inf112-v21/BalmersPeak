@@ -4,6 +4,7 @@ import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
@@ -56,6 +57,8 @@ public class GameScreen implements Screen {
     private Sprite cardSprite;
 
     Vector3 temp;
+    private Texture backgroundImage;
+
 
     public GameScreen() {
 
@@ -223,12 +226,11 @@ public class GameScreen implements Screen {
     @Override
     public void show() {
         // Called when this screen becomes the current screen for the Game.
-        hand = robot.giveHand(5);
+        hand = robot.giveHand(9);
         stage = new Stage(new ScreenViewport());
         Table register = new Table();
         register.setHeight(270);
         register.setWidth(Gdx.graphics.getWidth());
-
 
         //add the button to start the sequence of moves
         TextButton button = new TextButton("Start round", skin1);
@@ -248,25 +250,23 @@ public class GameScreen implements Screen {
             }
         });
 
-        int x = 200;
-        int y = 200;
-
         for (ProgramCard cards : robot.getHand()) {
             card = new Texture("assets/images/cards/" + cards.toString() +".png");
             Button.ButtonStyle tbs = new Button.ButtonStyle();
             tbs.up = new TextureRegionDrawable(new TextureRegion(card));
 
             Button b = new Button(tbs);
-            b.setPosition(x+300, y);
             b.addListener(new ChangeListener() {
                 @Override
                 public void changed(ChangeEvent changeEvent, Actor actor) {
-                    queueList.add(cards);
+                    
                 }
             });
 
             register.add(b);
         }
+        backgroundImage = new Texture("images/background.png");
+
 
         register.add(button);
         stage.addActor(register);
@@ -280,6 +280,9 @@ public class GameScreen implements Screen {
         label.setPosition(Gdx.graphics.getWidth()/2+10, 200);
         stage.addActor(label);
         stage.act(Gdx.graphics.getDeltaTime());
+        stage.getBatch().begin();
+        stage.getBatch().draw(backgroundImage, 0, 0, stage.getWidth(), 270);
+        stage.getBatch().end();
         stage.draw();
         //batch.begin();
         //cardSprite.draw(batch);
