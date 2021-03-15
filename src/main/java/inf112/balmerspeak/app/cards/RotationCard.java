@@ -18,6 +18,6 @@ public class RotationCard extends ProgramCard {
 
     @Override
     public String toString() {
-        return "RotationCard " + rotation;
+        return ""+rotation;
     }
 }
