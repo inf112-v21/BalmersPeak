@@ -19,26 +19,36 @@ public class PusherTest {
 
     @Test
     public void testPushNorth(){
-        pusherNorth.pushRobot(player);
+        roundList.add(1);
+        pusherNorth.pushRobot(player, 1);
         assertTrue(player.getX() == 5 && player.getY() == 6);
     }
 
     @Test
     public void testPushEast(){
-        pusherEast.pushRobot(player);
+        roundList.add(1);
+        pusherEast.pushRobot(player, 1);
         assertTrue(player.getX() == 6 && player.getY() == 5);
     }
 
     @Test
     public void testPushSouth(){
-        pusherSouth.pushRobot(player);
+        roundList.add(1);
+        pusherSouth.pushRobot(player, 1);
         assertTrue(player.getX() == 5 && player.getY() == 4);
     }
 
     @Test
     public void testPushWest(){
-        pusherWest.pushRobot(player);
+        roundList.add(1);
+        pusherWest.pushRobot(player, 1);
         assertTrue(player.getX() == 4 && player.getY() == 5);
+    }
+    @Test
+    public void testWontPushOnWrongRound(){
+        roundList.add(2);
+        pusherNorth.pushRobot(player,1);
+        assertTrue(player.getX() == pusherWest.getX() && player.getY() == pusherWest.getY());
     }
 
 }

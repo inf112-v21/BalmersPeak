@@ -18,17 +18,20 @@ public class Pusher {
         this.y = y;
     }
 
-    public void pushRobot(Robot robot){
+    public void pushRobot(Robot robot,int roundNumber){
         //Må ha ein && i if statements, som også sjekker om runder matcher et nummer i roundNumber
-        if (pusherDirection.equals(Direction.NORTH)){
+        if (pusherDirection.equals(Direction.NORTH) && roundNumbers.contains(roundNumber)){
             robot.set(robot.getX(), robot.getY()+1);
             //Må kalle robotens move for å faktisk flytte den
-        }else if (pusherDirection.equals(Direction.EAST)){
+        }else if (pusherDirection.equals(Direction.EAST) && roundNumbers.contains(roundNumber)){
             robot.set(robot.getX()+1, robot.getY());
-        }else if (pusherDirection.equals(Direction.SOUTH)){
+        }else if (pusherDirection.equals(Direction.SOUTH) && roundNumbers.contains(roundNumber)){
             robot.set(robot.getX(), robot.getY()-1);
-        }else if (pusherDirection.equals(Direction.WEST)){
+        }else if (pusherDirection.equals(Direction.WEST) && roundNumbers.contains(roundNumber)){
             robot.set(robot.getX()-1, robot.getY());
         }
     }
+    public int getX() {return x;}
+
+    public int getY() {return y;}
 }
