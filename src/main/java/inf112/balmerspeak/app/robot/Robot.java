@@ -9,11 +9,13 @@ public class Robot implements IRobot{
 
     private int x;
     private int y;
-    private int hp = 8;
+    private int hp = 10;
     private int ll = 3;
     private Direction direction;
     private ArrayList<ProgramCard> hand = new ArrayList<>();
     private Deck deck = new Deck();
+    private int spawnX;
+    private int spawnY;
 
     public Robot(int xCoord, int yCoord, Direction dir){
         x = xCoord;
@@ -83,6 +85,15 @@ public class Robot implements IRobot{
         for (ProgramCard cards : deck.getCards(amount))
             hand.add(cards);
         return hand;
+    }
+
+    public int getSpawnX(){return spawnX;}
+
+    public int getSpawnY(){return spawnY;}
+
+    public void setSpawnCoordinates(int spawnX, int spawnY){
+        this.spawnX = spawnX;
+        this.spawnY = spawnY;
     }
 
 
