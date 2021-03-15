@@ -10,12 +10,12 @@ import java.util.ArrayList;
 import static org.junit.Assert.assertTrue;
 
 public class PusherTest {
-    private ArrayList<Integer> roundList;
+    private ArrayList<Integer> roundList = new ArrayList<>();
     private Robot player = new Robot(5, 5, Direction.NORTH);
-    private Pusher pusherNorth =new Pusher(roundList, Direction.NORTH);
-    private Pusher pusherEast =new Pusher(roundList, Direction.EAST);
-    private Pusher pusherSouth =new Pusher(roundList, Direction.SOUTH);
-    private Pusher pusherWest =new Pusher(roundList, Direction.WEST);
+    private Pusher pusherNorth =new Pusher(roundList, Direction.NORTH,5,5);
+    private Pusher pusherEast =new Pusher(roundList, Direction.EAST,5,5);
+    private Pusher pusherSouth =new Pusher(roundList, Direction.SOUTH,5,5);
+    private Pusher pusherWest =new Pusher(roundList, Direction.WEST,5,5);
 
     @Test
     public void testPushNorth(){

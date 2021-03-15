@@ -6,12 +6,16 @@ import inf112.balmerspeak.app.robot.Robot;
 import java.util.ArrayList;
 
 public class Pusher {
-    public ArrayList<Integer> roundNumbers;
-    public Direction pusherDirection;
+    private ArrayList<Integer> roundNumbers;
+    private Direction pusherDirection;
+    private int x;
+    private int y;
 
-    public Pusher(ArrayList<Integer> roundNumbers,Direction pusherDirection){
+    public Pusher(ArrayList<Integer> roundNumbers,Direction pusherDirection,int x, int y){
         this.roundNumbers = roundNumbers;
         this.pusherDirection = pusherDirection;
+        this.x = x;
+        this.y = y;
     }
 
     public void pushRobot(Robot robot){
