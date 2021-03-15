@@ -1,14 +1,22 @@
 package inf112.balmerspeak.app.menu;
 
+import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.Sprite;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
-import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
+import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
+import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import inf112.balmerspeak.app.InputHandler;
@@ -16,6 +24,8 @@ import inf112.balmerspeak.app.MapHandler;
 import inf112.balmerspeak.app.cards.*;
 import inf112.balmerspeak.app.robot.Direction;
 import inf112.balmerspeak.app.robot.Robot;
+import org.lwjgl.system.CallbackI;
+
 import java.util.ArrayList;
 
 
@@ -40,11 +50,20 @@ public class GameScreen implements Screen {
 
     private Skin skin1;
 
+
+    private SpriteBatch batch;
+    private Texture card;
+    private Sprite cardSprite;
+
+    Vector3 temp;
+
     public GameScreen() {
 
         // Create input handler
         input = new InputHandler();
         Gdx.input.setInputProcessor(input);
+
+        temp=new Vector3();
 
         //load skins
         skin1 = new Skin(Gdx.files.internal("assets/default/skin/uiskin.json"));
@@ -209,23 +228,11 @@ public class GameScreen implements Screen {
         Table register = new Table();
         register.setHeight(270);
         register.setWidth(Gdx.graphics.getWidth());
-        register.bottom().debug();
 
-
-        //set up the menu box
-        Dialog dialog = new Dialog("Card menu", skin1);
-        dialog.setSize(Gdx.graphics.getWidth()/2, 160);
-        dialog.setPosition(0,100);
-
-        //add the drop down box
-        SelectBox<ProgramCard> selectBox = new SelectBox<>(skin1);
-        Array<ProgramCard> a = new Array<>();
-        for (ProgramCard card : hand)
-            a.add(card);
-        selectBox.setItems(a);
 
         //add the button to start the sequence of moves
         TextButton button = new TextButton("Start round", skin1);
+        button.setPosition(10,10);
         button.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent changeEvent, Actor actor) {
@@ -241,24 +248,30 @@ public class GameScreen implements Screen {
             }
         });
 
-        selectBox.addListener(new ChangeListener() {
+        int x = 200;
+        int y = 200;
 
-        @Override
-        public void changed(ChangeEvent changeEvent, Actor actor) {
-            if (queueList.size() < 5) {
-                queueList.add(selectBox.getSelected());
-            }
+        for (ProgramCard cards : robot.getHand()) {
+            card = new Texture("assets/images/cards/" + cards.toString() +".png");
+            Button.ButtonStyle tbs = new Button.ButtonStyle();
+            tbs.up = new TextureRegionDrawable(new TextureRegion(card));
+
+            Button b = new Button(tbs);
+            b.setPosition(x+300, y);
+            b.addListener(new ChangeListener() {
+                @Override
+                public void changed(ChangeEvent changeEvent, Actor actor) {
+                    queueList.add(cards);
+                }
+            });
+
+            register.add(b);
         }
-        });
-        dialog.getContentTable().defaults().pad(10);
-        dialog.getContentTable().add(selectBox);
-        dialog.add(button);
 
-        stage.addActor(dialog);
+        register.add(button);
         stage.addActor(register);
         Gdx.input.setInputProcessor(stage);
     }
-
 
     @Override
     public void render(float v) {
@@ -268,6 +281,9 @@ public class GameScreen implements Screen {
         stage.addActor(label);
         stage.act(Gdx.graphics.getDeltaTime());
         stage.draw();
+        //batch.begin();
+        //cardSprite.draw(batch);
+        //batch.end();
         //handleMove();
 
     }
