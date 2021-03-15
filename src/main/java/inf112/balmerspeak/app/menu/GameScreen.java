@@ -66,7 +66,7 @@ public class GameScreen implements Screen {
         temp=new Vector3();
 
         //load skins
-        skin1 = new Skin(Gdx.files.internal("assets/default/skin/uiskin.json"));
+        //skin1 = new Skin(Gdx.files.internal("assets/default/skin/uiskin.json"));
         hand = new ArrayList<>();
 
         // Create map handler
