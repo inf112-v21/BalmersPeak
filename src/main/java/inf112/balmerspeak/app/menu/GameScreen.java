@@ -196,36 +196,14 @@ public class GameScreen implements Screen {
     }
     public void handleRotation(RotationCard card){
         if (card.getRotation().equals(Rotation.left))
-            robot.setDirection(turn(Rotation.left, robot.getDirection()));
+            robot.setDirection(robot.turn(Rotation.left, robot.getDirection()));
         if (card.getRotation().equals(Rotation.right))
-            robot.setDirection(turn(Rotation.right, robot.getDirection()));
+            robot.setDirection(robot.turn(Rotation.right, robot.getDirection()));
         if (card.getRotation().equals(Rotation.uturn))
-            robot.setDirection(turn(Rotation.uturn, robot.getDirection()));
+            robot.setDirection(robot.turn(Rotation.uturn, robot.getDirection()));
 
     }
-    public Direction turn(Rotation rotation, Direction direction) {
-        switch (direction) {
-            case NORTH:
-                if (rotation.equals(Rotation.right)) return Direction.EAST;
-                else if (rotation.equals(Rotation.uturn)) return Direction.SOUTH;
-                else return Direction.WEST;
-            case SOUTH:
-                if (rotation.equals(Rotation.right)) return Direction.WEST;
-                else if (rotation.equals(Rotation.uturn)) return Direction.NORTH;
-                else return Direction.EAST;
-            case WEST:
-                if (rotation.equals(Rotation.right)) return Direction.NORTH;
-                else if (rotation.equals(Rotation.uturn)) return Direction.EAST;
-                else return Direction.SOUTH;
-            case EAST:
-                if (rotation.equals(Rotation.right)) return Direction.SOUTH;
-                else if (rotation.equals(Rotation.uturn)) return Direction.WEST;
-                else return Direction.NORTH;
-            default:
-                return null;
-        }
-    }
-
+    
     @Override
     public void show() {
         // Called when this screen becomes the current screen for the Game.
@@ -303,7 +281,7 @@ public class GameScreen implements Screen {
         life.setPosition(1500, 210);
         life.setSize(50,life.getHeight());
 
-        TextField health = new TextField("health", skin1);
+        TextField health = new TextField("Health", skin1);
         health.setPosition(1495, 110);
         health.setSize(60,health.getHeight());
 
