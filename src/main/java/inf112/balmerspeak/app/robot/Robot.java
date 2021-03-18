@@ -9,7 +9,7 @@ public class Robot implements IRobot{
 
     private int x;
     private int y;
-    private int hp = 8;
+    private int hp = 9;
     private int ll = 3;
     private Direction direction;
     private ArrayList<ProgramCard> hand = new ArrayList<>();
