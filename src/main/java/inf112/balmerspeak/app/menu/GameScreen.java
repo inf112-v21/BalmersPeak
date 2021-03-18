@@ -1,10 +1,7 @@
 package inf112.balmerspeak.app.menu;
 
-import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.Screen;
-import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
@@ -16,16 +13,13 @@ import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
-import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
-import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import inf112.balmerspeak.app.InputHandler;
 import inf112.balmerspeak.app.MapHandler;
 import inf112.balmerspeak.app.cards.*;
 import inf112.balmerspeak.app.robot.Direction;
 import inf112.balmerspeak.app.robot.Robot;
-import org.lwjgl.system.CallbackI;
 
 import java.util.ArrayList;
 
@@ -51,14 +45,9 @@ public class GameScreen implements Screen {
 
     private Skin skin1;
 
-
-    private SpriteBatch batch;
     private Texture card;
-    private Sprite cardSprite;
 
-    Vector3 temp;
     private Texture backgroundImage;
-    private boolean isPressed = true;
     private Texture life;
     private Texture health;
 
@@ -68,8 +57,6 @@ public class GameScreen implements Screen {
         // Create input handler
         input = new InputHandler();
         Gdx.input.setInputProcessor(input);
-
-        temp=new Vector3();
 
         //load skins
         skin1 = new Skin(Gdx.files.internal("assets/default/skin/uiskin.json"));
@@ -194,6 +181,8 @@ public class GameScreen implements Screen {
         }
 
     }
+
+    //Handles rotation cards
     public void handleRotation(RotationCard card){
         if (card.getRotation().equals(Rotation.left))
             robot.setDirection(robot.turn(Rotation.left, robot.getDirection()));
@@ -203,7 +192,7 @@ public class GameScreen implements Screen {
             robot.setDirection(robot.turn(Rotation.uturn, robot.getDirection()));
 
     }
-    
+
     @Override
     public void show() {
         // Called when this screen becomes the current screen for the Game.
@@ -230,6 +219,8 @@ public class GameScreen implements Screen {
                 }
             }
         });
+
+        //Adds the cards to the GUI
         int x = 100;
         for (ProgramCard cards : robot.getHand()) {
             card = new Texture("assets/images/cards/" + cards.toString() + ".png");
@@ -253,6 +244,7 @@ public class GameScreen implements Screen {
             stage.addActor(b);
         }
 
+        //Adds the life tokens to the GUI
         int xlife = 1300;
         for (int i = 0; i < robot.getLives(); i++) {
             life = new Texture("images/lifetoken.png");
@@ -264,7 +256,8 @@ public class GameScreen implements Screen {
             stage.addActor(b);
 
         }
-        
+
+        //Adds the health tokes to the GUI
         int xhealth = 1250;
         for (int i = 0; i < robot.getHealth(); i++) {
             health = new Texture("images/health_token.png");
@@ -277,10 +270,12 @@ public class GameScreen implements Screen {
             
         }
 
+        //Adds text field for lives
         TextField life = new TextField("Lives", skin1);
         life.setPosition(1500, 210);
         life.setSize(50,life.getHeight());
 
+        //Adds text field for health
         TextField health = new TextField("Health", skin1);
         health.setPosition(1495, 110);
         health.setSize(60,health.getHeight());
@@ -300,10 +295,13 @@ public class GameScreen implements Screen {
     @Override
     public void render(float v) {
         rend.render();
+
+        //Adds the queue list to the GUI
         TextField field = new TextField("Queue: " + queueList, skin1);
         field.setPosition(Gdx.graphics.getWidth()/4, 200);
         field.setSize(queueList.size()+400, field.getHeight());
         stage.addActor(field);
+        
         stage.act(Gdx.graphics.getDeltaTime());
         stage.getBatch().begin();
         stage.getBatch().draw(backgroundImage, 0, 0, stage.getWidth(), 270);
