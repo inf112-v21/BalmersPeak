@@ -19,7 +19,6 @@ public class Pusher {
     }
 
     public void pushRobot(Robot robot,int roundNumber){
-        //Må ha ein && i if statements, som også sjekker om runder matcher et nummer i roundNumber
         if (pusherDirection.equals(Direction.NORTH) && roundNumbers.contains(roundNumber)){
             robot.set(robot.getX(), robot.getY()+1);
             //Må kalle robotens move for å faktisk flytte den
