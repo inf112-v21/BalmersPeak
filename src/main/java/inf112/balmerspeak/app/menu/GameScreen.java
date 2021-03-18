@@ -58,6 +58,9 @@ public class GameScreen implements Screen {
 
     Vector3 temp;
     private Texture backgroundImage;
+    private boolean isPressed = true;
+    private Texture life;
+    private Texture health;
 
 
     public GameScreen() {
@@ -234,7 +237,7 @@ public class GameScreen implements Screen {
 
         //add the button to start the sequence of moves
         TextButton button = new TextButton("Start round", skin1);
-        button.setPosition(10,10);
+        button.setPosition(1100,100);
         button.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent changeEvent, Actor actor) {
@@ -249,9 +252,9 @@ public class GameScreen implements Screen {
                 }
             }
         });
-
+        int x = 100;
         for (ProgramCard cards : robot.getHand()) {
-            card = new Texture("assets/images/cards/" + cards.toString() +".png");
+            card = new Texture("assets/images/cards/" + cards.toString() + ".png");
             Button.ButtonStyle tbs = new Button.ButtonStyle();
             tbs.up = new TextureRegionDrawable(new TextureRegion(card));
 
@@ -259,16 +262,46 @@ public class GameScreen implements Screen {
             b.addListener(new ChangeListener() {
                 @Override
                 public void changed(ChangeEvent changeEvent, Actor actor) {
-                    
+                    if(!queueList.contains(cards) && queueList.size()<5) {
+                        queueList.add(cards);
+                    }
+                    else {
+                        queueList.remove(cards);
+                    }
                 }
             });
+            b.setPosition(x+=100, 50);
 
-            register.add(b);
+            stage.addActor(b);
         }
+
+        int xlife = 1300;
+        for (int i = 0; i < robot.getLives(); i++) {
+            life = new Texture("images/lifetoken.png");
+            Button.ButtonStyle tbs = new Button.ButtonStyle();
+            tbs.up = new TextureRegionDrawable(new TextureRegion(life));
+            Button b = new Button(tbs);
+            b.setPosition(xlife+=100, 150);
+            b.setSize(50,50);
+            stage.addActor(b);
+
+        }
+        
+        int xhealth = 1250;
+        for (int i = 0; i < robot.getHealth(); i++) {
+            health = new Texture("images/health_token.png");
+            Button.ButtonStyle tbs = new Button.ButtonStyle();
+            tbs.up = new TextureRegionDrawable(new TextureRegion(health));
+            Button b = new Button(tbs);
+            b.setPosition(xhealth+=50, 50);
+            b.setSize(50,50);
+            stage.addActor(b);
+            
+        }
+
         backgroundImage = new Texture("images/background.png");
 
-
-        register.add(button);
+        stage.addActor(button);
         stage.addActor(register);
         Gdx.input.setInputProcessor(stage);
     }
@@ -276,19 +309,15 @@ public class GameScreen implements Screen {
     @Override
     public void render(float v) {
         rend.render();
-        Label label = new Label("Queue: " + queueList, skin1);
-        label.setPosition(Gdx.graphics.getWidth()/2+10, 200);
-        stage.addActor(label);
+        TextField field = new TextField("Queue: " + queueList, skin1);
+        field.setPosition(Gdx.graphics.getWidth()/4+20, 200);
+        field.setSize(queueList.size()+400, field.getHeight());
+        stage.addActor(field);
         stage.act(Gdx.graphics.getDeltaTime());
         stage.getBatch().begin();
         stage.getBatch().draw(backgroundImage, 0, 0, stage.getWidth(), 270);
         stage.getBatch().end();
         stage.draw();
-        //batch.begin();
-        //cardSprite.draw(batch);
-        //batch.end();
-        //handleMove();
-
     }
 
     @Override
