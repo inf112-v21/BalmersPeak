@@ -299,6 +299,19 @@ public class GameScreen implements Screen {
             
         }
 
+        TextField life = new TextField("Lives", skin1);
+        life.setPosition(1500, 210);
+        life.setSize(50,life.getHeight());
+
+        TextField health = new TextField("health", skin1);
+        health.setPosition(1495, 110);
+        health.setSize(60,health.getHeight());
+
+        stage.addActor(life);
+        stage.addActor(health);
+
+
+
         backgroundImage = new Texture("images/background.png");
 
         stage.addActor(button);
@@ -310,7 +323,7 @@ public class GameScreen implements Screen {
     public void render(float v) {
         rend.render();
         TextField field = new TextField("Queue: " + queueList, skin1);
-        field.setPosition(Gdx.graphics.getWidth()/4+20, 200);
+        field.setPosition(Gdx.graphics.getWidth()/4, 200);
         field.setSize(queueList.size()+400, field.getHeight());
         stage.addActor(field);
         stage.act(Gdx.graphics.getDeltaTime());
