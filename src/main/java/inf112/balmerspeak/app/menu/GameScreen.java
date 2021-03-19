@@ -11,7 +11,11 @@ import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
+<<<<<<<<< Temporary merge branch 1
+import com.badlogic.gdx.math.Vector2;
+=========
 import com.badlogic.gdx.math.Vector3;
+>>>>>>>>> Temporary merge branch 2
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
@@ -50,6 +54,8 @@ public class GameScreen implements Screen {
     private Robot robot;
 
     private Skin skin1;
+<<<<<<<<< Temporary merge branch 1
+=========
 
 
     private SpriteBatch batch;
@@ -61,7 +67,9 @@ public class GameScreen implements Screen {
     private boolean isPressed = true;
     private Texture life;
     private Texture health;
+    Board b;
 
+>>>>>>>>> Temporary merge branch 2
 
     public GameScreen() {
 
@@ -87,8 +95,12 @@ public class GameScreen implements Screen {
 
         rend.setView(cam);
 
+        b = new Board("assets/map/map.tmx");
+        b.placeRobot(0,0);
+
         //set player at (0,0)
         robot = new Robot(0,0, Direction.NORTH);
+        hand = robot.giveHand(9);
     }
 
     public Robot getRobot() {
@@ -133,6 +145,7 @@ public class GameScreen implements Screen {
             // Move player textures
             mapHandler.movePlayer(playerX, playerY, dx, dy);
             robot.set(playerX + dx, playerY + dy);
+            b.placeRobot(playerX + dx, playerY + dy);
         }
 
         // Check if player won
@@ -147,6 +160,10 @@ public class GameScreen implements Screen {
             System.out.println("You died :(");
             mapHandler.changePlayerTextureDeath(playerX + dx, playerY + dy);
             robot.set(playerX + dx, playerY + dy);
+        }
+
+        if(b.hasRobot(0,1)){
+            robot.setLives(2);
         }
 
         // Update player coordinates
@@ -178,6 +195,7 @@ public class GameScreen implements Screen {
         if (shouldMove(dx, dy)){
             mapHandler.movePlayer(playerX, playerY, dx, dy);
             robot.set(playerX + dx, playerY + dy);
+            b.move(playerX,playerY, dx,dy);
         }
         // Check if player won
         if (mapHandler.checkWin(playerX + dx, playerY + dy)) {
@@ -187,13 +205,18 @@ public class GameScreen implements Screen {
         }
 
         // Check if player died
-        if (mapHandler.checkDeath(playerX + dx, playerY + dy)) {
-            System.out.println("You died :(");
+        if (b.getFlag(playerX + dx, playerY + dy) != null) {
+            //System.out.println("You died :(");
             mapHandler.changePlayerTextureDeath(playerX + dx, playerY + dy);
             robot.set(playerX + dx, playerY + dy);
+            b.move(playerX,playerY, dx,dy);
+            robot.setLives(robot.getLives()-1);
+            show();
         }
 
     }
+
+    //Handles rotation cards
     public void handleRotation(RotationCard card){
         if (card.getRotation().equals(Rotation.left))
             robot.setDirection(turn(Rotation.left, robot.getDirection()));
@@ -252,6 +275,8 @@ public class GameScreen implements Screen {
                 }
             }
         });
+
+        //Adds the cards to the GUI
         int x = 100;
         for (ProgramCard cards : robot.getHand()) {
             card = new Texture("assets/images/cards/" + cards.toString() + ".png");
@@ -275,6 +300,7 @@ public class GameScreen implements Screen {
             stage.addActor(b);
         }
 
+        //Adds the life tokens to the GUI
         int xlife = 1300;
         for (int i = 0; i < robot.getLives(); i++) {
             life = new Texture("images/lifetoken.png");
@@ -286,7 +312,8 @@ public class GameScreen implements Screen {
             stage.addActor(b);
 
         }
-        
+
+        //Adds the health tokes to the GUI
         int xhealth = 1250;
         for (int i = 0; i < robot.getHealth(); i++) {
             health = new Texture("images/health_token.png");
@@ -296,14 +323,16 @@ public class GameScreen implements Screen {
             b.setPosition(xhealth+=50, 50);
             b.setSize(50,50);
             stage.addActor(b);
-            
+
         }
 
+        //Adds text field for lives
         TextField life = new TextField("Lives", skin1);
         life.setPosition(1500, 210);
         life.setSize(50,life.getHeight());
 
-        TextField health = new TextField("health", skin1);
+        //Adds text field for health
+        TextField health = new TextField("Health", skin1);
         health.setPosition(1495, 110);
         health.setSize(60,health.getHeight());
 
@@ -322,10 +351,13 @@ public class GameScreen implements Screen {
     @Override
     public void render(float v) {
         rend.render();
+
+        //Adds the queue list to the GUI
         TextField field = new TextField("Queue: " + queueList, skin1);
         field.setPosition(Gdx.graphics.getWidth()/4, 200);
         field.setSize(queueList.size()+400, field.getHeight());
         stage.addActor(field);
+
         stage.act(Gdx.graphics.getDeltaTime());
         stage.getBatch().begin();
         stage.getBatch().draw(backgroundImage, 0, 0, stage.getWidth(), 270);

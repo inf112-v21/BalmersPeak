@@ -2,8 +2,14 @@ package inf112.balmerspeak.app.robot;
 
 import inf112.balmerspeak.app.cards.Deck;
 import inf112.balmerspeak.app.cards.ProgramCard;
+import inf112.balmerspeak.app.cards.Rotation;
 
 import java.util.ArrayList;
+
+
+import inf112.balmerspeak.app.robot.Direction;
+
+
 
 public class Robot implements IRobot{
 
@@ -12,6 +18,7 @@ public class Robot implements IRobot{
     private int hp = 9;
     private int ll = 3;
     private Direction direction;
+
     private ArrayList<ProgramCard> hand = new ArrayList<>();
     private Deck deck = new Deck();
 
@@ -24,6 +31,8 @@ public class Robot implements IRobot{
     public ArrayList<ProgramCard> getHand() {
         return hand;
     }
+
+
 
     @Override
     public int getX() {
@@ -83,6 +92,29 @@ public class Robot implements IRobot{
         for (ProgramCard cards : deck.getCards(amount))
             hand.add(cards);
         return hand;
+    }
+
+    public Direction turn(Rotation rotation, Direction direction) {
+        switch (direction) {
+            case NORTH:
+                if (rotation.equals(Rotation.right)) return Direction.EAST;
+                else if (rotation.equals(Rotation.uturn)) return Direction.SOUTH;
+                else return Direction.WEST;
+            case SOUTH:
+                if (rotation.equals(Rotation.right)) return Direction.WEST;
+                else if (rotation.equals(Rotation.uturn)) return Direction.NORTH;
+                else return Direction.EAST;
+            case WEST:
+                if (rotation.equals(Rotation.right)) return Direction.NORTH;
+                else if (rotation.equals(Rotation.uturn)) return Direction.EAST;
+                else return Direction.SOUTH;
+            case EAST:
+                if (rotation.equals(Rotation.right)) return Direction.SOUTH;
+                else if (rotation.equals(Rotation.uturn)) return Direction.WEST;
+                else return Direction.NORTH;
+            default:
+                return null;
+        }
     }
 
 

@@ -6,9 +6,6 @@ import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.maps.tiled.tiles.StaticTiledMapTile;
-import inf112.balmerspeak.app.board.Map;
-import inf112.balmerspeak.app.board.Walls;
-import inf112.balmerspeak.app.robot.Direction;
 
 
 public class MapHandler {
@@ -63,10 +60,8 @@ public class MapHandler {
         wonCell = new TiledMapTileLayer.Cell().setTile(playerWonTexture);
         dieCell = new TiledMapTileLayer.Cell().setTile(playerDiedTexture);
 
-
         // Place player at (0,0)
         playerLayer.setCell(0, 0, player);
-
     }
 
     public TiledMap getMap() {
@@ -124,5 +119,9 @@ public class MapHandler {
         this.playerLayer.setCell(xCoord, yCoord, dieCell);
     }
 
-    
+    public static Object checkGears(Robot robot) { return null;}
+
+
+
+
 }
