@@ -7,6 +7,7 @@ import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.maps.tiled.tiles.StaticTiledMapTile;
 import inf112.balmerspeak.app.Hole;
+import inf112.balmerspeak.app.Laser;
 import inf112.balmerspeak.app.flag.Flag;
 import inf112.balmerspeak.app.robot.Direction;
 import inf112.balmerspeak.app.robot.Robot;
@@ -35,8 +36,11 @@ public class Board {
     private Robot robots[][];
     private Flag flags[][];
     private Hole holes[][];
+    private Laser lasers[][];
 
     private TiledMapTileLayer hole;
+
+    private int flagOrder = 0;
 
 
     public Board(String filename){
@@ -75,9 +79,11 @@ public class Board {
         robots = new Robot[HEIGHT][WIDTH];
         flags = new Flag[HEIGHT][WIDTH];
         holes = new Hole[HEIGHT][WIDTH];
+        lasers = new Laser[HEIGHT][WIDTH];
 
         initHoles();
         initFlag();
+        initLaser();
 
 
 
@@ -106,7 +112,18 @@ public class Board {
         for (int y = 0; y < HEIGHT; y++) {
             for (int x = 0; x < WIDTH; x++) {
                 if(flag.getCell(x,y) != null)
-                    flags[y][x] = new Flag(+1);
+                    flags[y][x] = new Flag(flagOrder+=1);
+
+            }
+
+        }
+    }
+
+    public void initLaser(){
+        for (int y = 0; y < HEIGHT; y++) {
+            for (int x = 0; x < WIDTH; x++) {
+                if(laser.getCell(x,y) != null)
+                    lasers[y][x] = new Laser(x,y, Direction.NORTH);
 
             }
 
@@ -165,5 +182,9 @@ public class Board {
 
     public Hole getHole(int x, int y) {
         return holes[y][x];
+    }
+
+    public Laser getLaser(int x ,int y){
+        return lasers[y][x];
     }
 }

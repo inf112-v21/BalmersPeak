@@ -173,6 +173,10 @@ public class GameScreen implements Screen {
             robot.setLives(robot.getLives()-1);
             show();
         }
+        if (board.getLaser(playerX + dx, playerY + dy) != null){
+            robot.setHealth(robot.getHealth()-1);
+            show();
+        }
 
     }
 
