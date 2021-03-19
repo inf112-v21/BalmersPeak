@@ -1,6 +1,7 @@
 package inf112.balmerspeak.app.board;
 
 import inf112.balmerspeak.app.MapHandler;
+import inf112.balmerspeak.app.cards.MovementType;
 import inf112.balmerspeak.app.robot.Direction;
 import inf112.balmerspeak.app.robot.Robot;
 
@@ -9,11 +10,13 @@ public class ConveyorBelt {
     private int y;
     private Direction direction;
     private MapHandler map;
+    private MovementType beltType;
 
-    public ConveyorBelt(int x, int y, Direction direction, MapHandler map){
+    public ConveyorBelt(int x, int y, Direction direction, MovementType beltType, MapHandler map){
         this.x = x;
         this.y = y;
         this.direction = direction;
+        this.beltType = beltType;
         this.map = map;
     }
 
@@ -37,19 +40,22 @@ public class ConveyorBelt {
     }
 
     public boolean isRotatingBelt(){
-
+        //Må ha ein liste over de forskjellige beltene på brettet
         return false;
     }
 
     public boolean nextNextIsFull(){
-        if (map.checkPlayer(getNextX(getNextX(x)),getNextY(getNextY(y))) && map.checkBelt(getNextX(getNextX(x)),getNextY(getNextY(y))))
-            return true;
+        if (map.checkBelt(getNextX(getNextX(x)),getNextY(getNextY(y))))
+            return map.checkPlayer(getNextX(getNextX(x)),getNextY(getNextY(y)));
         else
             return false;
     }
 
     public boolean nextIsFull(){
-        return map.checkPlayer(getNextX(x),getNextY(y));
+        if (!map.checkBelt(getNextX(x),getNextY(y)))
+            return map.checkPlayer(getNextX(x),getNextY(y));
+        else
+            return false;
     }
 
     public void beltMove(Robot player) {

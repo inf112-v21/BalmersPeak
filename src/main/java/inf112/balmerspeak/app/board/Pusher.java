@@ -3,33 +3,44 @@ package inf112.balmerspeak.app.board;
 import inf112.balmerspeak.app.robot.Direction;
 import inf112.balmerspeak.app.robot.Robot;
 
-import java.util.ArrayList;
 
 public class Pusher {
-    private ArrayList<Integer> roundNumbers;
-    private Direction pusherDirection;
     private int x;
     private int y;
+    private Direction direction;
+    private RoundType roundType;
 
-    public Pusher(ArrayList<Integer> roundNumbers,Direction pusherDirection,int x, int y){
-        this.roundNumbers = roundNumbers;
-        this.pusherDirection = pusherDirection;
+    public Pusher(int x, int y, Direction direction, RoundType roundType){
         this.x = x;
         this.y = y;
+        this.direction = direction;
+        this.roundType = roundType;
     }
 
-    public void pushRobot(Robot robot,int roundNumber){
-        if (pusherDirection.equals(Direction.NORTH) && roundNumbers.contains(roundNumber)){
-            robot.set(robot.getX(), robot.getY()+1);
-            //Må kalle robotens move for å faktisk flytte den
-        }else if (pusherDirection.equals(Direction.EAST) && roundNumbers.contains(roundNumber)){
-            robot.set(robot.getX()+1, robot.getY());
-        }else if (pusherDirection.equals(Direction.SOUTH) && roundNumbers.contains(roundNumber)){
-            robot.set(robot.getX(), robot.getY()-1);
-        }else if (pusherDirection.equals(Direction.WEST) && roundNumbers.contains(roundNumber)){
-            robot.set(robot.getX()-1, robot.getY());
+    public void pushRobot(Robot player, RoundType thisRoundType){
+        if (roundType.equals(thisRoundType)){
+            player.set(getNextX(x),getNextY(y));
         }
     }
+
+    public int getNextX(int x){
+        if (direction.equals(Direction.EAST))
+            return x+1;
+        else if (direction.equals(Direction.WEST))
+            return x-1;
+        else
+            return x;
+    }
+
+    public int getNextY(int y){
+        if (direction.equals(Direction.NORTH))
+            return y+1;
+        else if (direction.equals(Direction.SOUTH))
+            return y-1;
+        else
+            return y;
+    }
+
     public int getX() {return x;}
 
     public int getY() {return y;}
