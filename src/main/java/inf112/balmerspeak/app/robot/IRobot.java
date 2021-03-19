@@ -1,5 +1,8 @@
 package inf112.balmerspeak.app.robot;
 
+
+import inf112.balmerspeak.app.robot.Direction;
+
 public interface IRobot {
 
     int getX();
