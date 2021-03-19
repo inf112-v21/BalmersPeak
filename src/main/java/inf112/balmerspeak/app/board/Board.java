@@ -12,6 +12,7 @@ import inf112.balmerspeak.app.flag.Flag;
 import inf112.balmerspeak.app.robot.Direction;
 import inf112.balmerspeak.app.robot.Robot;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 
 public class Board {
@@ -41,6 +42,10 @@ public class Board {
     private TiledMapTileLayer hole;
 
     private int flagOrder = 0;
+
+    ArrayList<Robot> players;
+
+    private int turn = 0;
 
 
     public Board(String filename){
@@ -81,12 +86,31 @@ public class Board {
         holes = new Hole[HEIGHT][WIDTH];
         lasers = new Laser[HEIGHT][WIDTH];
 
+        players = new ArrayList<>();
+        players.add(new Robot(0,0, Direction.NORTH));
+        players.add(new Robot(1,1, Direction.NORTH));
+
         initHoles();
         initFlag();
         initLaser();
 
 
 
+    }
+
+    public int switchTurn(){
+        if (turn == 0)
+            return turn = 1;
+        else
+            return turn = 0;
+    }
+
+    public ArrayList<Robot> getPlayers() {
+        return players;
+    }
+
+    public Robot getActivePlayer(){
+        return players.get(turn);
     }
 
     public TiledMap getMap() {
@@ -128,6 +152,10 @@ public class Board {
             }
 
         }
+    }
+
+    public Robot[][] getRobots() {
+        return robots;
     }
 
     public int getHEIGHT() {
