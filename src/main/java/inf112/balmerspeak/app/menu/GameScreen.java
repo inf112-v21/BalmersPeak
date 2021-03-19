@@ -67,7 +67,7 @@ public class GameScreen implements Screen {
     private boolean isPressed = true;
     private Texture life;
     private Texture health;
-    Board b;
+    Board board;
 
 >>>>>>>>> Temporary merge branch 2
 
@@ -84,10 +84,11 @@ public class GameScreen implements Screen {
         hand = new ArrayList<>();
 
         // Create map handler
-        mapHandler = new MapHandler();
+        board = new Board("assets/map/map.tmx");
+        //mapHandler = new MapHandler();
 
         cam = new OrthographicCamera();
-        rend = new OrthogonalTiledMapRenderer(mapHandler.getMap(), (float) 1 / 300);
+        rend = new OrthogonalTiledMapRenderer(board.getMap(), (float) 1 / 300);
 
         cam.setToOrtho(false, 16, 16);
         cam.position.set((cam.viewportWidth / 2), (cam.viewportHeight / 2) - 4, 0);
@@ -95,11 +96,7 @@ public class GameScreen implements Screen {
 
         rend.setView(cam);
 
-        b = new Board("assets/map/map.tmx");
-        b.placeRobot(0,0);
-
-        //set player at (0,0)
-        robot = new Robot(0,0, Direction.NORTH);
+        robot = board.placeRobot(0,0);
         hand = robot.giveHand(9);
     }
 
@@ -113,8 +110,8 @@ public class GameScreen implements Screen {
             return false;
 
         // These return true if the resulting playerVec are out of bounds
-        boolean outsideX = robot.getX() + dx > mapHandler.getBoard().getWidth()-1 || robot.getX() + dx < 0;
-        boolean outsideY = robot.getY() + dy > mapHandler.getBoard().getHeight()-1 || robot.getY() + dy < 0;
+        boolean outsideX = robot.getX() + dx > board.getBoard().getWidth()-1 || robot.getX() + dx < 0;
+        boolean outsideY = robot.getY() + dy > board.getBoard().getHeight()-1 || robot.getY() + dy < 0;
 
         return !(outsideX || outsideY);
     }
@@ -145,7 +142,7 @@ public class GameScreen implements Screen {
             // Move player textures
             mapHandler.movePlayer(playerX, playerY, dx, dy);
             robot.set(playerX + dx, playerY + dy);
-            b.placeRobot(playerX + dx, playerY + dy);
+            board.placeRobot(playerX + dx, playerY + dy);
         }
 
         // Check if player won
@@ -162,9 +159,6 @@ public class GameScreen implements Screen {
             robot.set(playerX + dx, playerY + dy);
         }
 
-        if(b.hasRobot(0,1)){
-            robot.setLives(2);
-        }
 
         // Update player coordinates
         input.clear();
@@ -193,23 +187,10 @@ public class GameScreen implements Screen {
 
         // Only update if the player is allowed to move
         if (shouldMove(dx, dy)){
-            mapHandler.movePlayer(playerX, playerY, dx, dy);
             robot.set(playerX + dx, playerY + dy);
-            b.move(playerX,playerY, dx,dy);
+            board.move(playerX,playerY, dx,dy);
         }
-        // Check if player won
-        if (mapHandler.checkWin(playerX + dx, playerY + dy)) {
-            System.out.println("You won!");
-            mapHandler.changePlayerTextureWin(playerX + dx, playerY + dy);
-            robot.set(playerX + dx, playerY + dy);
-        }
-
-        // Check if player died
-        if (b.getFlag(playerX + dx, playerY + dy) != null) {
-            //System.out.println("You died :(");
-            mapHandler.changePlayerTextureDeath(playerX + dx, playerY + dy);
-            robot.set(playerX + dx, playerY + dy);
-            b.move(playerX,playerY, dx,dy);
+        if (board.getHole(playerX + dx, playerY + dy) != null){
             robot.setLives(robot.getLives()-1);
             show();
         }
