@@ -14,6 +14,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import inf112.balmerspeak.app.InputHandler;
 import inf112.balmerspeak.app.MapHandler;
+import inf112.balmerspeak.app.board.Board;
 import inf112.balmerspeak.app.cards.*;
 import inf112.balmerspeak.app.robot.Direction;
 import inf112.balmerspeak.app.robot.Robot;
@@ -47,6 +48,7 @@ public class GameScreen implements Screen {
     private Texture backgroundImage;
     private Texture life;
     private Texture health;
+    Board b;
 
 
     public GameScreen() {
@@ -54,6 +56,7 @@ public class GameScreen implements Screen {
         // Create input handler
         input = new InputHandler();
         Gdx.input.setInputProcessor(input);
+
 
         //load skins
         skin1 = new Skin(Gdx.files.internal("assets/default/skin/uiskin.json"));
@@ -71,8 +74,12 @@ public class GameScreen implements Screen {
 
         rend.setView(cam);
 
+        b = new Board("assets/map/map.tmx");
+        b.placeRobot(0,0);
+
         //set player at (0,0)
         robot = new Robot(0,0, Direction.NORTH);
+        hand = robot.giveHand(9);
     }
 
     public Robot getRobot() {
@@ -117,6 +124,7 @@ public class GameScreen implements Screen {
             // Move player textures
             mapHandler.movePlayer(playerX, playerY, dx, dy);
             robot.set(playerX + dx, playerY + dy);
+            b.placeRobot(playerX + dx, playerY + dy);
         }
 
         // Check if player won
@@ -131,6 +139,10 @@ public class GameScreen implements Screen {
             System.out.println("You died :(");
             mapHandler.changePlayerTextureDeath(playerX + dx, playerY + dy);
             robot.set(playerX + dx, playerY + dy);
+        }
+
+        if(b.hasRobot(0,1)){
+            robot.setLives(2);
         }
 
         // Update player coordinates
@@ -162,6 +174,7 @@ public class GameScreen implements Screen {
         if (shouldMove(dx, dy)){
             mapHandler.movePlayer(playerX, playerY, dx, dy);
             robot.set(playerX + dx, playerY + dy);
+            b.move(playerX,playerY, dx,dy);
         }
         // Check if player won
         if (mapHandler.checkWin(playerX + dx, playerY + dy)) {
@@ -171,10 +184,13 @@ public class GameScreen implements Screen {
         }
 
         // Check if player died
-        if (mapHandler.checkDeath(playerX + dx, playerY + dy)) {
-            System.out.println("You died :(");
+        if (b.getFlag(playerX + dx, playerY + dy) != null) {
+            //System.out.println("You died :(");
             mapHandler.changePlayerTextureDeath(playerX + dx, playerY + dy);
             robot.set(playerX + dx, playerY + dy);
+            b.move(playerX,playerY, dx,dy);
+            robot.setLives(robot.getLives()-1);
+            show();
         }
 
     }
@@ -193,7 +209,6 @@ public class GameScreen implements Screen {
     @Override
     public void show() {
         // Called when this screen becomes the current screen for the Game.
-        hand = robot.giveHand(9);
         stage = new Stage(new ScreenViewport());
         Table register = new Table();
         register.setHeight(270);
@@ -264,7 +279,7 @@ public class GameScreen implements Screen {
             b.setPosition(xhealth+=50, 50);
             b.setSize(50,50);
             stage.addActor(b);
-            
+
         }
 
         //Adds text field for lives
