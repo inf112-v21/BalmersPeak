@@ -67,7 +67,8 @@ public class StartScreen extends MainScreen implements Screen {
 
 
         // Add ip address text field
-        ipField = new TextField("IP Address: ", skin);
+        ipField = new TextField("", skin);
+        ipField.setMessageText("IP of host: ");
 
 
         // Add back to menu button
@@ -81,7 +82,8 @@ public class StartScreen extends MainScreen implements Screen {
         addNavigationButtonListeners(backToMenu, game, Screens.MENU);
 
         // Add username dialog
-        TextField userField = new TextField("Username: ", skin);
+        TextField userField = new TextField("", skin);
+        userField.setMessageText("Username: ");
         usernameDialog = new Dialog("Choose username", skin, "dialog") {
             public void result(Object obj) {
                 setUsername(userField.getText());
