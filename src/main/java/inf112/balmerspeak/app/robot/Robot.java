@@ -2,6 +2,7 @@ package inf112.balmerspeak.app.robot;
 
 import inf112.balmerspeak.app.cards.Deck;
 import inf112.balmerspeak.app.cards.ProgramCard;
+import inf112.balmerspeak.app.cards.Rotation;
 
 import java.util.ArrayList;
 
@@ -9,7 +10,7 @@ public class Robot implements IRobot{
 
     private int x;
     private int y;
-    private int hp = 10;
+    private int hp = 9;
     private int ll = 3;
     private Direction direction;
     private ArrayList<ProgramCard> hand = new ArrayList<>();
@@ -87,6 +88,29 @@ public class Robot implements IRobot{
         return hand;
     }
 
+    public Direction turn(Rotation rotation, Direction direction) {
+        switch (direction) {
+            case NORTH:
+                if (rotation.equals(Rotation.right)) return Direction.EAST;
+                else if (rotation.equals(Rotation.uturn)) return Direction.SOUTH;
+                else return Direction.WEST;
+            case SOUTH:
+                if (rotation.equals(Rotation.right)) return Direction.WEST;
+                else if (rotation.equals(Rotation.uturn)) return Direction.NORTH;
+                else return Direction.EAST;
+            case WEST:
+                if (rotation.equals(Rotation.right)) return Direction.NORTH;
+                else if (rotation.equals(Rotation.uturn)) return Direction.EAST;
+                else return Direction.SOUTH;
+            case EAST:
+                if (rotation.equals(Rotation.right)) return Direction.SOUTH;
+                else if (rotation.equals(Rotation.uturn)) return Direction.WEST;
+                else return Direction.NORTH;
+            default:
+                return null;
+        }
+    }
+  
     public int getSpawnX(){return spawnX;}
 
     public int getSpawnY(){return spawnY;}
@@ -94,6 +118,7 @@ public class Robot implements IRobot{
     public void setSpawnCoordinates(int spawnX, int spawnY){
         this.spawnX = spawnX;
         this.spawnY = spawnY;
+
     }
 
 

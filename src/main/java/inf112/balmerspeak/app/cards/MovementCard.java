@@ -16,6 +16,6 @@ public class MovementCard extends ProgramCard {
 
     @Override
     public String toString() {
-        return "MovementCard " + distance;
+        return "move" + distance;
     }
 }
