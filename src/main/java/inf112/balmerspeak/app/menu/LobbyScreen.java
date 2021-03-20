@@ -31,6 +31,7 @@ public class LobbyScreen extends MainScreen implements Screen {
 
     private String hostName;
     private String hostIP;
+    private boolean hostNameChanged;
 
     public String statusIP;
 
@@ -97,7 +98,8 @@ public class LobbyScreen extends MainScreen implements Screen {
     public void setStatusLabel(String hostName, String hostIP) {
         this.hostName = hostName;
         this.hostIP = hostIP;
-        statusIP = "You are connected to: " + hostName + " at " + hostIP;
+        this.hostNameChanged = true;
+        this.statusIP = "You are connected to: " + hostName + " at " + hostIP;
     }
 
 
@@ -110,7 +112,11 @@ public class LobbyScreen extends MainScreen implements Screen {
     @Override
     public void render(float v) {
         super.render(v);
-        ipLabel.setText(statusIP);
+        if (hostNameChanged) {
+            System.out.println(this.statusIP);
+            ipLabel.setText(this.statusIP);
+            hostNameChanged = false;
+        }
     }
 
     @Override
