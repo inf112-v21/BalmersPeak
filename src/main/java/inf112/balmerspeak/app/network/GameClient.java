@@ -36,7 +36,7 @@ public class GameClient extends Client {
                     // Cast and print ip and username
                     InitMsg initMsg = (InitMsg) object;
                     // Send username and IP to lobby screen to display
-
+                    setHostNameAndIP(initMsg.getUsername(), initMsg.getIP());
                 }
             }
         });
@@ -55,7 +55,7 @@ public class GameClient extends Client {
     public void setHostNameAndIP(String hostName, String IP) {
         this.hostName = hostName;
         // Notify lobby screen
-        lobby.hostNameChanged(hostName, IP);
+        lobby.setStatusLabel(hostName, IP);
     }
 
     public void sendRequest(String message) {

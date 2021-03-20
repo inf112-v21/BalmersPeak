@@ -94,7 +94,7 @@ public class LobbyScreen extends MainScreen implements Screen {
 
 
 
-    public void hostNameChanged(String hostName, String hostIP) {
+    public void setStatusLabel(String hostName, String hostIP) {
         this.hostName = hostName;
         this.hostIP = hostIP;
         statusIP = "You are connected to: " + hostName + " at " + hostIP;
