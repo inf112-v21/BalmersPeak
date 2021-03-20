@@ -51,8 +51,6 @@ public class GameClient extends Client {
     }
 
     public void sendRequest(String message) {
-        // Punch hole first
-        UPnP.openPortTCP(32500);
         this.sendTCP(message);
     }
 
