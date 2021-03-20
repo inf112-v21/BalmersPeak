@@ -63,7 +63,7 @@ public class LobbyScreen extends MainScreen implements Screen {
 
 
         // Decide title text
-        statusIP = isHost ? "Your IP (host): "  + ipAddress : "You are connected to: " + hostName; // TODO: FETCH IP address from host
+        statusIP = isHost ? "Your IP (host): "  + ipAddress : "You are connected to " + hostName; // TODO: FETCH IP address from host
 
 
         // Add IP label

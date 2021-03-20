@@ -1,21 +1,25 @@
 package inf112.balmerspeak.app.network;
 
-import com.dosse.upnp.UPnP;
+import com.esotericsoftware.kryo.Kryo;
 import com.esotericsoftware.kryonet.Connection;
 import com.esotericsoftware.kryonet.Listener;
 import com.esotericsoftware.kryonet.Server;
 import inf112.balmerspeak.app.menu.LobbyScreen;
+import inf112.balmerspeak.app.network.messages.InitMsg;
+
 import java.io.IOException;
 
 public class GameServer extends Server {
 
-    private String ipAddress;
+    private final String ipAddress;
     private LobbyScreen lobby;
-    private String username;
+    private final String username;
 
 
     public GameServer(String username) throws IOException {
         super();
+        // Register classes here
+        this.registerClasses();
         this.start();
         this.bind(32500);
         this.ipAddress = IPFinder.get();
@@ -26,18 +30,23 @@ public class GameServer extends Server {
         // Adding listeners
         this.addListener(new Listener() {
             public void received(Connection connection, Object object) {
-                System.out.println("RECEIVED");
-                System.out.println(object);
-                String msg = (String) object;
-
-
-                // Add client to lobby screen
-                if (msg.startsWith("CONNECTED:")) {
-                    displayConnectedClient(connection.getRemoteAddressTCP().toString(), msg);
-                    connection.sendTCP("USERNAME:" + getUsername());
+                // Check which type of msg this is
+                if (object instanceof InitMsg) {
+                    // Init message received containing username and IP, casting it
+                    InitMsg initMsg = (InitMsg) object;
+                    // Print IP and username to confirm
+                    System.out.println("Got init message");
+                    System.out.println(initMsg.getIP() +  initMsg.getUsername());
+                    // Finally respond with own init message
+                    connection.sendTCP(new InitMsg(ipAddress, username));
                 }
             }
         });
+    }
+
+    public void registerClasses() {
+        Kryo kryo = this.getKryo();
+        kryo.register(InitMsg.class);
     }
 
     public String getUsername() {

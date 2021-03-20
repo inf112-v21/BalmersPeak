@@ -84,7 +84,6 @@ public class StartScreen extends MainScreen implements Screen {
         TextField userField = new TextField("Username: ", skin);
         usernameDialog = new Dialog("Choose username", skin, "dialog") {
             public void result(Object obj) {
-                System.out.println("result "+obj);
                 setUsername(userField.getText());
             }
         };
@@ -127,7 +126,6 @@ public class StartScreen extends MainScreen implements Screen {
                 super.clicked(event, x, y);
                 usernameDialog.show(getStage());
                 setIsHost(true);
-                System.out.println("Set isHost to true");
             }
         });
 
