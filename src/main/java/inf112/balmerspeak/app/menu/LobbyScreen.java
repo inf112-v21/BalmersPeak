@@ -30,6 +30,7 @@ public class LobbyScreen extends MainScreen implements Screen {
     public Skin skin;
 
     private String hostName;
+    private String hostIP;
 
     public String statusIP;
 
@@ -93,9 +94,10 @@ public class LobbyScreen extends MainScreen implements Screen {
 
 
 
-    public void hostNameChanged(String hostName) {
+    public void hostNameChanged(String hostName, String hostIP) {
         this.hostName = hostName;
-        statusIP = "You are connected to: " + hostName;
+        this.hostIP = hostIP;
+        statusIP = "You are connected to: " + hostName + " at " + hostIP;
     }
 
 

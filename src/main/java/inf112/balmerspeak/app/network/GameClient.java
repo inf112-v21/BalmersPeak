@@ -25,7 +25,7 @@ public class GameClient extends Client {
         this.username = username;
 
         // Send the init message as soon as we are connected
-        sendTCP(new InitMsg(ipAddress, username));
+        sendTCP(new InitMsg(IPFinder.get(), username));
 
         // Add listeners
         this.addListener(new Listener() {
@@ -35,8 +35,8 @@ public class GameClient extends Client {
                 if (object instanceof  InitMsg) {
                     // Cast and print ip and username
                     InitMsg initMsg = (InitMsg) object;
-                    System.out.println("Got init message from server");
-                    System.out.println(initMsg.getIP() + initMsg.getUsername());
+                    // Send username and IP to lobby screen to display
+
                 }
             }
         });
@@ -52,10 +52,10 @@ public class GameClient extends Client {
     }
 
 
-    public void setHostName(String hostName) {
+    public void setHostNameAndIP(String hostName, String IP) {
         this.hostName = hostName;
         // Notify lobby screen
-        lobby.hostNameChanged(hostName);
+        lobby.hostNameChanged(hostName, IP);
     }
 
     public void sendRequest(String message) {

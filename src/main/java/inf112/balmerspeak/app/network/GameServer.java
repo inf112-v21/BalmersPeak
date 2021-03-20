@@ -6,6 +6,7 @@ import com.esotericsoftware.kryonet.Listener;
 import com.esotericsoftware.kryonet.Server;
 import inf112.balmerspeak.app.menu.LobbyScreen;
 import inf112.balmerspeak.app.network.messages.InitMsg;
+import inf112.balmerspeak.app.network.messages.serializers.InitMsgSerializer;
 
 import java.io.IOException;
 
@@ -32,12 +33,9 @@ public class GameServer extends Server {
             public void received(Connection connection, Object object) {
                 // Check which type of msg this is
                 if (object instanceof InitMsg) {
-                    // Init message received containing username and IP, casting it
+                    // Init message received containing username and IP, cast it
                     InitMsg initMsg = (InitMsg) object;
-                    // Print IP and username to confirm
-                    System.out.println("Got init message");
-                    System.out.println(initMsg.getIP() +  initMsg.getUsername());
-                    // Finally respond with own init message
+                    // Respond with own init message
                     connection.sendTCP(new InitMsg(ipAddress, username));
                 }
             }
@@ -46,7 +44,7 @@ public class GameServer extends Server {
 
     public void registerClasses() {
         Kryo kryo = this.getKryo();
-        kryo.register(InitMsg.class);
+        kryo.register(InitMsg.class, new InitMsgSerializer());
     }
 
     public String getUsername() {
