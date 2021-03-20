@@ -16,13 +16,12 @@ public class GameServer extends Server {
 
     public GameServer(String username) throws IOException {
         super();
-        if (UPnP.openPortTCP(32500)) {
-            this.start();
-            this.bind(32500);
-        };
-
+        this.start();
+        this.bind(32500);
         this.ipAddress = IPFinder.get();
         this.username = username;
+
+
 
         // Adding listeners
         this.addListener(new Listener() {
