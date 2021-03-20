@@ -53,7 +53,6 @@ public class GameScreen implements Screen {
 
 
 
-
     public GameScreen() {
 
         // Create input handler

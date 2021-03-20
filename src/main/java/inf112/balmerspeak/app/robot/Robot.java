@@ -21,6 +21,8 @@ public class Robot implements IRobot{
 
     private ArrayList<ProgramCard> hand = new ArrayList<>();
     private Deck deck = new Deck();
+    private int spawnX;
+    private int spawnY;
 
     public Robot(int xCoord, int yCoord, Direction dir){
         x = xCoord;
@@ -115,6 +117,16 @@ public class Robot implements IRobot{
             default:
                 return null;
         }
+    }
+  
+    public int getSpawnX(){return spawnX;}
+
+    public int getSpawnY(){return spawnY;}
+
+    public void setSpawnCoordinates(int spawnX, int spawnY){
+        this.spawnX = spawnX;
+        this.spawnY = spawnY;
+
     }
 
 
