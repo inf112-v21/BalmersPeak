@@ -16,7 +16,7 @@ public class LobbyScreen extends MainScreen implements Screen {
     private GUI game;
 
     // Whether the person is host of the game
-    private boolean isHost;
+    private final boolean isHost;
 
     // ip address
     private String ipAddress;
@@ -63,10 +63,9 @@ public class LobbyScreen extends MainScreen implements Screen {
         // Get buttons label
         Label backBtnLabel = super.getBtnLabel("Back");
 
-
-        // Decide title text
-        statusIP = isHost ? "Your IP (host): "  + ipAddress : "You are connected to " + hostName; // TODO: FETCH IP address from host
-
+        // set status text if host
+        if (isHost)
+            statusIP = "You are hosting this game at " + ipAddress;
 
         // Add IP label
         ipLabel = super.getBtnLabel(statusIP);
@@ -98,8 +97,10 @@ public class LobbyScreen extends MainScreen implements Screen {
     public void setStatusLabel(String hostName, String hostIP) {
         this.hostName = hostName;
         this.hostIP = hostIP;
-        this.hostNameChanged = true;
         this.statusIP = "You are connected to: " + hostName + " at " + hostIP;
+        this.hostNameChanged = true;
+        ipLabel.setText(statusIP);
+        System.out.println("statsIP changed: " + statusIP);
     }
 
 
@@ -114,7 +115,7 @@ public class LobbyScreen extends MainScreen implements Screen {
         super.render(v);
         if (hostNameChanged) {
             System.out.println(this.statusIP);
-            ipLabel.setText(this.statusIP);
+            ipLabel = super.getBtnLabel(statusIP);
             hostNameChanged = false;
         }
     }
