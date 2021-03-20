@@ -6,6 +6,7 @@ import com.esotericsoftware.kryonet.Connection;
 import com.esotericsoftware.kryonet.Listener;
 import inf112.balmerspeak.app.menu.LobbyScreen;
 import inf112.balmerspeak.app.network.messages.InitMsg;
+import inf112.balmerspeak.app.network.messages.serializers.InitMsgSerializer;
 
 import java.io.IOException;
 
@@ -43,7 +44,7 @@ public class GameClient extends Client {
 
     public void registerClasses() {
         Kryo kryo = this.getKryo();
-        kryo.register(InitMsg.class);
+        kryo.register(InitMsg.class, new InitMsgSerializer());
     }
 
     public void setLobby(LobbyScreen screen) {
