@@ -1,12 +1,14 @@
 package inf112.balmerspeak.app.menu;
 
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 
 
+import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import inf112.balmerspeak.app.GUI;
 
 
@@ -77,6 +79,8 @@ public class LobbyScreen extends MainScreen implements Screen {
 
         TextButton backToMenu = new TextButton("Back", skin);
         backToMenu.setLabel(backBtnLabel);
+        // Add navigation listener
+        addNavListener(backToMenu);
 
 
         // Add game title
@@ -89,6 +93,23 @@ public class LobbyScreen extends MainScreen implements Screen {
         root.add(connectedClients).prefWidth(400.0f).prefHeight(300.0f);
         root.row();
         root.add(backToMenu).prefWidth(200.0f).prefHeight(100.0f);
+    }
+
+    public void addNavListener(TextButton btn) {
+        super.addHoverListeners(btn, game);
+        btn.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                super.clicked(event, x, y);
+                // if host, stop the server
+                if (isHost)
+                    game.stopServer();
+                else
+                    game.stopClient();
+                // Now navigate back to start screen
+                game.changeScreen(new StartScreen(game));
+            }
+        });
     }
 
 
