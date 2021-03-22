@@ -6,6 +6,11 @@ import inf112.balmerspeak.app.cards.Rotation;
 
 import java.util.ArrayList;
 
+
+import inf112.balmerspeak.app.robot.Direction;
+
+
+
 public class Robot implements IRobot{
 
     private int x;
@@ -13,6 +18,7 @@ public class Robot implements IRobot{
     private int hp = 9;
     private int ll = 3;
     private Direction direction;
+
     private ArrayList<ProgramCard> hand = new ArrayList<>();
     private Deck deck = new Deck();
     private int spawnX;
@@ -27,6 +33,8 @@ public class Robot implements IRobot{
     public ArrayList<ProgramCard> getHand() {
         return hand;
     }
+
+
 
     @Override
     public int getX() {
