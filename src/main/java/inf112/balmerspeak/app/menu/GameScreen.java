@@ -16,6 +16,8 @@ import inf112.balmerspeak.app.MapHandler;
 import inf112.balmerspeak.app.cards.*;
 import inf112.balmerspeak.app.robot.Direction;
 import inf112.balmerspeak.app.robot.Robot;
+import org.javatuples.Pair;
+
 import java.util.ArrayList;
 
 
@@ -40,7 +42,7 @@ public class GameScreen implements Screen {
 
     private Skin skin1;
 
-    public GameScreen() {
+    public GameScreen(Pair<Integer, Integer> startCoords) {
 
         // Create input handler
         input = new InputHandler();
@@ -63,7 +65,7 @@ public class GameScreen implements Screen {
         rend.setView(cam);
 
         //set player at (0,0)
-        robot = new Robot(0,0, Direction.NORTH);
+        robot = new Robot(startCoords.getValue0(), startCoords.getValue1(), Direction.NORTH);
     }
 
     public Robot getRobot() {

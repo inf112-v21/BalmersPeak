@@ -6,7 +6,9 @@ import com.esotericsoftware.kryonet.Listener;
 import com.esotericsoftware.kryonet.Server;
 import inf112.balmerspeak.app.menu.LobbyScreen;
 import inf112.balmerspeak.app.network.messages.InitMsg;
+import inf112.balmerspeak.app.network.messages.StartMsg;
 import inf112.balmerspeak.app.network.messages.serializers.InitMsgSerializer;
+import org.javatuples.Pair;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -63,14 +65,20 @@ public class GameServer extends Server {
         });
     }
 
+    public void sendStartMessage() {
+        // Send the starting coordinates to all connections
+        // TODO: send acrual cooridnates, not the same for every player
+        for (Connection player : clients.keySet()) {
+            player.sendTCP(new StartMsg(new Pair(2, 7)));
+        }
+
+    }
+
     public void registerClasses() {
         Kryo kryo = this.getKryo();
         kryo.register(InitMsg.class, new InitMsgSerializer());
     }
 
-    public String getUsername() {
-        return this.username;
-    }
 
     public void setLobby(LobbyScreen screen) {
         this.lobby = screen;
@@ -80,7 +88,4 @@ public class GameServer extends Server {
         return this.ipAddress;
     }
 
-    public void displayConnectedClient(String ipAddress, String username) {
-        lobby.addConnectedClient(ipAddress, username);
-    }
 }

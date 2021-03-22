@@ -1,5 +1,6 @@
 package inf112.balmerspeak.app.menu;
 
+import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
@@ -10,6 +11,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import inf112.balmerspeak.app.GUI;
+import org.javatuples.Pair;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -66,6 +68,7 @@ public class LobbyScreen extends MainScreen implements Screen {
 
         // Get buttons label
         Label backBtnLabel = super.getBtnLabel("Back");
+        Label startGameLbl = super.getBtnLabel("Start game");
 
         // set status text if host
         if (isHost)
@@ -80,10 +83,18 @@ public class LobbyScreen extends MainScreen implements Screen {
         // Get title
         Label title = super.getTitleLabel("Robo Rally");
 
+        // Create back button
         TextButton backToMenu = new TextButton("Back", skin);
         backToMenu.setLabel(backBtnLabel);
         // Add navigation listener
         addNavListener(backToMenu);
+
+        // Create play button
+        TextButton startButton = new TextButton("Start game", skin);
+        startButton.setLabel(startGameLbl);
+        addHoverListeners(startButton, game);
+        addStartGameListener(startButton);
+
 
 
         // Add game title
@@ -96,6 +107,24 @@ public class LobbyScreen extends MainScreen implements Screen {
         root.add(connectedClients).prefWidth(400.0f).prefHeight(300.0f);
         root.row();
         root.add(backToMenu).prefWidth(200.0f).prefHeight(100.0f);
+    }
+
+    public void startGame(Pair<Integer, Integer> startCoords) {
+        game.changeScreen(new GameScreen(startCoords));
+    }
+
+    public void addStartGameListener(TextButton btn) {
+        // Make server send start message
+        game.server.sendStartMessage();
+
+        // Go to game screen
+        btn.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                super.clicked(event, x, y);
+                game.changeScreen(new GameScreen(new Pair(2,7)));
+            }
+        });
     }
 
     public void addNavListener(TextButton btn) {

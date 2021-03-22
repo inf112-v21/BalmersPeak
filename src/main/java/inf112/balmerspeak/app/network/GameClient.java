@@ -6,6 +6,7 @@ import com.esotericsoftware.kryonet.Connection;
 import com.esotericsoftware.kryonet.Listener;
 import inf112.balmerspeak.app.menu.LobbyScreen;
 import inf112.balmerspeak.app.network.messages.InitMsg;
+import inf112.balmerspeak.app.network.messages.StartMsg;
 import inf112.balmerspeak.app.network.messages.serializers.InitMsgSerializer;
 
 import java.io.IOException;
@@ -40,6 +41,15 @@ public class GameClient extends Client {
                     // Send username and IP to lobby screen to display
                     setHostNameAndIP(initMsg.getUsername(), initMsg.getIP());
                 }
+
+                // Check if it is a StartMsg
+                else if (object instanceof StartMsg) {
+                    // Cast the message
+                    StartMsg startMsg = (StartMsg) object;
+
+                    // tell lobby to start the game
+                    lobby.startGame(startMsg.getCoordinates());
+                }
             }
         });
     }
@@ -59,10 +69,4 @@ public class GameClient extends Client {
         // Notify lobby screen
         lobby.setStatusLabel(hostName, IP);
     }
-
-    public void sendRequest(String message) {
-        this.sendTCP(message);
-    }
-
-
 }
