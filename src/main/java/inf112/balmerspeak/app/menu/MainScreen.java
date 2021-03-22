@@ -15,6 +15,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import inf112.balmerspeak.app.GUI;
+import org.javatuples.Pair;
 
 
 public class MainScreen implements Screen {
@@ -68,7 +69,7 @@ public class MainScreen implements Screen {
         switch(screen) {
             case OPTIONS: return new OptionsScreen(game);
             case RULES: return new RulesScreen(game);
-            case GAME: return new GameScreen(null); //TODO: fix this null
+            case GAME: return new GameScreen(new Pair(0,0)); //TODO: fix this null
             case START: return new StartScreen(game);
             default: return new MenuScreen(game);
         }

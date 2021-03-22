@@ -9,6 +9,7 @@ import inf112.balmerspeak.app.cards.Rotation;
 import inf112.balmerspeak.app.cards.RotationCard;
 import inf112.balmerspeak.app.robot.Direction;
 import inf112.balmerspeak.app.robot.Robot;
+import org.javatuples.Pair;
 import org.junit.Test;
 import org.junit.jupiter.api.BeforeAll;
 
@@ -30,7 +31,7 @@ public class GameScreenTest {
         new Lwjgl3Application(new GUI() {
             @Override
             public void create() {
-                changeScreen(g = new GameScreen(null)); //TODO: fix this null
+                changeScreen(g = new GameScreen(new Pair(0,0))); //TODO: fix this null
                 Gdx.app.exit();
             }
         }, cfg);

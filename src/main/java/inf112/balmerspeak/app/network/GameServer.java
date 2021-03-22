@@ -72,6 +72,7 @@ public class GameServer extends Server {
         System.out.println("called");
         System.out.println(clients.keySet().size());
         for (Connection player : clients.keySet()) {
+            System.out.println("sending");
             player.sendTCP(new StartMsg(new Pair(2, 7)));
         }
 

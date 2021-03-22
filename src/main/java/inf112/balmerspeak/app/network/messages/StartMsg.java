@@ -13,7 +13,7 @@ public class StartMsg {
     }
 
     public Pair<Integer, Integer> getCoordinates() {
-        return this.getCoordinates();
+        return this.startCoordinates;
     }
 
     public int getX() {
