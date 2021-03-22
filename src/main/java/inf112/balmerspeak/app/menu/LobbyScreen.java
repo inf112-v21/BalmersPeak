@@ -93,7 +93,9 @@ public class LobbyScreen extends MainScreen implements Screen {
         TextButton startButton = new TextButton("Start game", skin);
         startButton.setLabel(startGameLbl);
         addHoverListeners(startButton, game);
-        addStartGameListener(startButton);
+        // only host should be able to start game
+        if (isHost)
+            addStartGameListener(startButton);
 
 
 
@@ -107,6 +109,9 @@ public class LobbyScreen extends MainScreen implements Screen {
         root.add(connectedClients).prefWidth(400.0f).prefHeight(300.0f);
         root.row();
         root.add(backToMenu).prefWidth(200.0f).prefHeight(100.0f);
+        // only host should see start button
+        if (isHost)
+            root.add(startButton).prefWidth(200.0f).prefHeight(100.0f);
     }
 
     public void startGame(Pair<Integer, Integer> startCoords) {

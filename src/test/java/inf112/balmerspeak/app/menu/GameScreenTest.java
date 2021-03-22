@@ -30,7 +30,7 @@ public class GameScreenTest {
         new Lwjgl3Application(new GUI() {
             @Override
             public void create() {
-                changeScreen(g = new GameScreen());
+                changeScreen(g = new GameScreen(null)); //TODO: fix this null
                 Gdx.app.exit();
             }
         }, cfg);
