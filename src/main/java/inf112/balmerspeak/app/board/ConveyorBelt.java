@@ -31,15 +31,18 @@ public class ConveyorBelt {
     }
 
     public boolean canMove(){
-        if((!isRotatingBelt() && !nextIsFull()) || (isRotatingBelt() && !nextNextIsFull()))
+        if((!isRotatingBelt() && !nextIsFull())) {
+            System.out.println("Test 1");
             return true;
+        }else if (isRotatingBelt() && !nextNextIsFull()) {
+            System.out.println("Test 2");
+            return true;
+        }
         return false;
     }
 
     public boolean isRotatingBelt(){
-        if (beltType == MovementType.rotation)
-            return true;
-        return false;
+        return (beltType == MovementType.rotation);
     }
 
     public boolean nextNextIsFull(){
