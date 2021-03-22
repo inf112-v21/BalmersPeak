@@ -31,7 +31,7 @@ public class LobbyScreen extends MainScreen implements Screen {
     // table of connected clients
     private Table connectedClients;
     private ArrayList<String> connectedClientsStrings = new ArrayList<>();
-    private Map<String, Label> tableIndex = new HashMap<>();
+    private Map<String,Label> clientsLabels = new HashMap<>();
 
     // skin
     public Skin skin;
@@ -129,25 +129,19 @@ public class LobbyScreen extends MainScreen implements Screen {
 
 
     public void addConnectedClient(String ipAddress, String username) {
-        //connectedClientsStrings.add(username + " - " + ipAddress);
+        // Add label to list
+        clientsLabels.put(ipAddress, new Label(username + " - " + ipAddress,skin));
+
+        // Add to GUI
         connectedClients.row();
-        connectedClients.add(new Label(username + " - " + ipAddress, skin));
-        //tableIndex.put(ipAddress, new Label(username + " - " + ipAddress, skin));
+        connectedClients.add(clientsLabels.get(ipAddress));
     }
 
-    public void removeConnectedClient(String ipAddress, String username) {
+    public void removeConnectedClient(String ipAddress) {
         // Find the corresponding entry and remove it
-        System.out.println("Removing actor...");
-        connectedClients.removeActor(new Label(username + " - " + ipAddress, skin));
-       //updateConnectedClients();
-    }
-
-    public void updateConnectedClients() {
-        // Rebuild connected clients from arraylist of connected clients
-        for (String client : connectedClientsStrings) {
-            connectedClients.row();
-            connectedClients.add(new Label(client, skin));
-        }
+        connectedClients.removeActor(clientsLabels.get(ipAddress));
+        // Remove from label and ip map
+        clientsLabels.remove(ipAddress);
     }
 
 

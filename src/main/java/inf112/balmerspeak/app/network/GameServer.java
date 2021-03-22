@@ -31,7 +31,7 @@ public class GameServer extends Server {
         this.ipAddress = IPFinder.get();
         this.username = username;
         // Initialize clients list
-        clients = new HashMap<Connection, InitMsg>();
+        clients = new HashMap<>();
 
 
 
@@ -56,7 +56,7 @@ public class GameServer extends Server {
             public void disconnected(Connection connection) {
                 super.disconnected(connection);
                 // Remove from GUI lobby screen
-                lobby.removeConnectedClient(clients.get(connection).getIP(), clients.get(connection).getUsername());
+                lobby.removeConnectedClient(clients.get(connection).getIP());
                 // Remove connection from server list
                 clients.remove(connection);
             }
