@@ -30,14 +30,11 @@ public class LobbyScreen extends MainScreen implements Screen {
 
     // table of connected clients
     private Table connectedClients;
-    private ArrayList<String> connectedClientsStrings = new ArrayList<>();
     private Map<String,Label> clientsLabels = new HashMap<>();
 
     // skin
     public Skin skin;
 
-    private String hostName;
-    private String hostIP;
 
 
     public String statusIP;
@@ -121,10 +118,11 @@ public class LobbyScreen extends MainScreen implements Screen {
 
 
     public void setStatusLabel(String hostName, String hostIP) {
-        this.hostName = hostName;
-        this.hostIP = hostIP;
         this.statusIP = "You are connected to: " + hostName + " at " + hostIP;
-        ipLabel.setText(statusIP);
+        // Temp fix because this method is called before GUI is set up
+        // TODO: fix this so it is called later or host and ip is passed at creation of lobby
+        if (ipLabel != null)
+            ipLabel.setText(statusIP);
     }
 
 
