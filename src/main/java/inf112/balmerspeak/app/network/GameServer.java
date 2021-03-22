@@ -8,6 +8,7 @@ import inf112.balmerspeak.app.menu.LobbyScreen;
 import inf112.balmerspeak.app.network.messages.InitMsg;
 import inf112.balmerspeak.app.network.messages.StartMsg;
 import inf112.balmerspeak.app.network.messages.serializers.InitMsgSerializer;
+import inf112.balmerspeak.app.network.messages.serializers.StartMsgSerializer;
 import org.javatuples.Pair;
 
 import java.io.IOException;
@@ -68,6 +69,8 @@ public class GameServer extends Server {
     public void sendStartMessage() {
         // Send the starting coordinates to all connections
         // TODO: send acrual cooridnates, not the same for every player
+        System.out.println("called");
+        System.out.println(clients.keySet().size());
         for (Connection player : clients.keySet()) {
             player.sendTCP(new StartMsg(new Pair(2, 7)));
         }
@@ -77,6 +80,7 @@ public class GameServer extends Server {
     public void registerClasses() {
         Kryo kryo = this.getKryo();
         kryo.register(InitMsg.class, new InitMsgSerializer());
+        kryo.register(StartMsg.class, new StartMsgSerializer());
     }
 
 

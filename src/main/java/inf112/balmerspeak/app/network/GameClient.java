@@ -8,6 +8,7 @@ import inf112.balmerspeak.app.menu.LobbyScreen;
 import inf112.balmerspeak.app.network.messages.InitMsg;
 import inf112.balmerspeak.app.network.messages.StartMsg;
 import inf112.balmerspeak.app.network.messages.serializers.InitMsgSerializer;
+import inf112.balmerspeak.app.network.messages.serializers.StartMsgSerializer;
 
 import java.io.IOException;
 
@@ -57,6 +58,7 @@ public class GameClient extends Client {
     public void registerClasses() {
         Kryo kryo = this.getKryo();
         kryo.register(InitMsg.class, new InitMsgSerializer());
+        kryo.register(StartMsg.class, new StartMsgSerializer());
     }
 
     public void setLobby(LobbyScreen screen) {

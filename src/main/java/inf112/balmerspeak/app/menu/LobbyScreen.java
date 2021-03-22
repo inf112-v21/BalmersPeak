@@ -119,14 +119,13 @@ public class LobbyScreen extends MainScreen implements Screen {
     }
 
     public void addStartGameListener(TextButton btn) {
-        // Make server send start message
-        game.server.sendStartMessage();
-
         // Go to game screen
         btn.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 super.clicked(event, x, y);
+                // Send start message to clients
+                game.server.sendStartMessage();
                 game.changeScreen(new GameScreen(new Pair(2,7)));
             }
         });
