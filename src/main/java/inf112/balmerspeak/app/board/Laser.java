@@ -1,4 +1,4 @@
-package inf112.balmerspeak.app;
+package inf112.balmerspeak.app.board;
 
 import inf112.balmerspeak.app.robot.Direction;
 import inf112.balmerspeak.app.robot.Robot;

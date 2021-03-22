@@ -1,4 +1,4 @@
-package inf112.balmerspeak.app;
+package inf112.balmerspeak.app.board;
 
 public class Hole {
 

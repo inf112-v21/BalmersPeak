@@ -1,6 +1,8 @@
-package inf112.balmerspeak.app;
+package inf112.balmerspeak.app.board;
 
 
+import inf112.balmerspeak.app.MapHandler;
+import inf112.balmerspeak.app.Rotate;
 import inf112.balmerspeak.app.robot.Robot;
 
 import java.util.List;

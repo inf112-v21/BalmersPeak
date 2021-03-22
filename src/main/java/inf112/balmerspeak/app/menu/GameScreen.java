@@ -95,9 +95,8 @@ public class GameScreen implements Screen {
         // These return true if the resulting playerVec are out of bounds
         boolean outsideX = board.getActivePlayer().getX() + dx > board.getBoard().getWidth()-1 || board.getActivePlayer().getX() + dx < 0;
         boolean outsideY = board.getActivePlayer().getY() + dy > board.getBoard().getHeight()-1 || board.getActivePlayer().getY() + dy < 0;
-        boolean isPlayer = board.getRobot(board.getActivePlayer().getX() + dx, board.getActivePlayer().getY() + dy) != null;
 
-        return !(outsideX || outsideY || isPlayer);
+        return !(outsideX || outsideY);
     }
 
     //Unused, but still usable for testing
@@ -117,30 +116,25 @@ public class GameScreen implements Screen {
             dx += 1;
 
         // Player x and y coordinates
-        int playerX = robot.getX();
-        int playerY = robot.getY();
-
+        int playerX = board.getActivePlayer().getX();
+        int playerY = board.getActivePlayer().getY();
 
         // Only update if the player is allowed to move
-        if (shouldMove(dx, dy)) {
-            // Move player textures
-            mapHandler.movePlayer(playerX, playerY, dx, dy);
-            robot.set(playerX + dx, playerY + dy);
-            board.placeRobot(playerX + dx, playerY + dy);
-        }
+        if (shouldMove(dx, dy)){
+            board.move(playerX,playerY, dx,dy);
+            board.getActivePlayer().set(playerX + dx, playerY + dy);
 
-        // Check if player won
-        if (mapHandler.checkWin(playerX + dx, playerY + dy)) {
-            System.out.println("You won!");
-            mapHandler.changePlayerTextureWin(playerX + dx, playerY + dy);
-            robot.set(playerX + dx, playerY + dy);
-        }
-
-        // Check if player died
-        if (mapHandler.checkDeath(playerX + dx, playerY + dy)) {
-            System.out.println("You died :(");
-            mapHandler.changePlayerTextureDeath(playerX + dx, playerY + dy);
-            robot.set(playerX + dx, playerY + dy);
+            if (board.getHole(playerX + dx, playerY + dy) != null) {
+                board.getActivePlayer().setLives(board.getActivePlayer().getLives() - 1);
+                show();
+            }
+            if (board.getLaser(playerX + dx, playerY + dy) != null) {
+                board.getActivePlayer().setHealth(board.getActivePlayer().getHealth() - 1);
+                show();
+            }
+            if (board.getFlag(playerX + dx, playerY + dy) != null){
+                board.getActivePlayer().addFlag(board.getFlag(playerX +dx, playerY+dy));
+            }
         }
 
 
@@ -173,14 +167,18 @@ public class GameScreen implements Screen {
         if (shouldMove(dx, dy)){
             board.move(playerX,playerY, dx,dy);
             board.getActivePlayer().set(playerX + dx, playerY + dy);
-        }
-        if (board.getHole(playerX + dx, playerY + dy) != null){
-            board.getActivePlayer().setLives(robot.getLives()-1);
-            show();
-        }
-        if (board.getLaser(playerX + dx, playerY + dy) != null){
-            board.getActivePlayer().setHealth(robot.getHealth()-1);
-            show();
+
+            if (board.getHole(playerX + dx, playerY + dy) != null) {
+                board.getActivePlayer().setLives(board.getActivePlayer().getLives() - 1);
+                showHealthLives();
+            }
+            if (board.getLaser(playerX + dx, playerY + dy) != null) {
+                board.getActivePlayer().setHealth(board.getActivePlayer().getHealth() - 1);
+                showHealthLives();
+            }
+            if (board.getFlag(playerX + dx, playerY + dy) != null){
+                board.getActivePlayer().addFlag(board.getFlag(playerX +dx, playerY+dy));
+            }
         }
 
     }
@@ -193,6 +191,34 @@ public class GameScreen implements Screen {
             board.getActivePlayer().setDirection(board.getActivePlayer().turn(Rotation.right, board.getActivePlayer().getDirection()));
         if (card.getRotation().equals(Rotation.uturn))
             board.getActivePlayer().setDirection(board.getActivePlayer().turn(Rotation.uturn, board.getActivePlayer().getDirection()));
+    }
+
+    public void showHealthLives(){
+        int xlife = 1300;
+        for (int i = 0; i < board.getActivePlayer().getLives(); i++) {
+            life = new Texture("images/lifetoken.png");
+            Button.ButtonStyle tbs = new Button.ButtonStyle();
+            tbs.up = new TextureRegionDrawable(new TextureRegion(life));
+            Button b = new Button(tbs);
+            b.setPosition(xlife+=100, 150);
+            b.setSize(50,50);
+            stage.addActor(b);
+
+        }
+
+        //Adds the health tokes to the GUI
+        int xhealth = 1250;
+        for (int i = 0; i < board.getActivePlayer().getHealth(); i++) {
+            health = new Texture("images/health_token.png");
+            Button.ButtonStyle tbs = new Button.ButtonStyle();
+            tbs.up = new TextureRegionDrawable(new TextureRegion(health));
+            Button b = new Button(tbs);
+            b.setPosition(xhealth+=50, 50);
+            b.setSize(50,50);
+            stage.addActor(b);
+
+        }
+
     }
 
     @Override
@@ -250,30 +276,7 @@ public class GameScreen implements Screen {
         }
 
         //Adds the life tokens to the GUI
-        int xlife = 1300;
-        for (int i = 0; i < board.getActivePlayer().getLives(); i++) {
-            life = new Texture("images/lifetoken.png");
-            Button.ButtonStyle tbs = new Button.ButtonStyle();
-            tbs.up = new TextureRegionDrawable(new TextureRegion(life));
-            Button b = new Button(tbs);
-            b.setPosition(xlife+=100, 150);
-            b.setSize(50,50);
-            stage.addActor(b);
-
-        }
-
-        //Adds the health tokes to the GUI
-        int xhealth = 1250;
-        for (int i = 0; i < board.getActivePlayer().getHealth(); i++) {
-            health = new Texture("images/health_token.png");
-            Button.ButtonStyle tbs = new Button.ButtonStyle();
-            tbs.up = new TextureRegionDrawable(new TextureRegion(health));
-            Button b = new Button(tbs);
-            b.setPosition(xhealth+=50, 50);
-            b.setSize(50,50);
-            stage.addActor(b);
-
-        }
+        showHealthLives();
 
         //Adds text field for lives
         TextField life = new TextField("Lives", skin1);
@@ -294,7 +297,6 @@ public class GameScreen implements Screen {
 
         stage.addActor(button);
         stage.addActor(register);
-        Gdx.input.setInputProcessor(stage);
     }
 
     @Override
@@ -312,6 +314,7 @@ public class GameScreen implements Screen {
         stage.getBatch().draw(backgroundImage, 0, 0, stage.getWidth(), 270);
         stage.getBatch().end();
         stage.draw();
+        handleMove();
     }
 
     @Override
