@@ -1,4 +1,4 @@
-package inf112.balmerspeak.app.network;
+package inf112.balmerspeak.app.network.tools;
 
 import java.io.BufferedReader;
 import java.io.IOException;

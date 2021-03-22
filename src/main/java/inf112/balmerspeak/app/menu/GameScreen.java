@@ -54,7 +54,7 @@ public class GameScreen implements Screen {
 
 
 
-    public GameScreen(Pair<Integer, Integer> startCoords) {
+    public GameScreen() {
 
 
         // Create input handler

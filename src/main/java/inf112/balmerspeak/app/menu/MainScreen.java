@@ -69,7 +69,7 @@ public class MainScreen implements Screen {
         switch(screen) {
             case OPTIONS: return new OptionsScreen(game);
             case RULES: return new RulesScreen(game);
-            case GAME: return new GameScreen(new Pair(0,0)); //TODO: fix this null
+            case GAME: return new GameScreen();
             case START: return new StartScreen(game);
             default: return new MenuScreen(game);
         }

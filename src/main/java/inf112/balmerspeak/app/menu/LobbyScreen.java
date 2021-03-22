@@ -115,7 +115,7 @@ public class LobbyScreen extends MainScreen implements Screen {
     }
 
     public void startGame(Pair<Integer, Integer> startCoords) {
-        game.changeScreen(new GameScreen(startCoords));
+        game.changeScreen(new GameScreen());
     }
 
     public void addStartGameListener(TextButton btn) {
@@ -126,7 +126,7 @@ public class LobbyScreen extends MainScreen implements Screen {
                 super.clicked(event, x, y);
                 // Send start message to clients
                 game.server.sendStartMessage();
-                game.changeScreen(new GameScreen(new Pair(2,7)));
+                game.changeScreen(new GameScreen());
             }
         });
     }
@@ -152,10 +152,6 @@ public class LobbyScreen extends MainScreen implements Screen {
 
     public void setStatusLabel(String hostName, String hostIP) {
         this.statusIP = "You are connected to: " + hostName + " at " + hostIP;
-        // Temp fix because this method is called before GUI is set up
-        // TODO: fix this so it is called later or host and ip is passed at creation of lobby
-        if (ipLabel != null)
-            ipLabel.setText(statusIP);
     }
 
 

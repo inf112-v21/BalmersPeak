@@ -1,4 +1,4 @@
-package inf112.balmerspeak.app.network.messages.serializers;
+package inf112.balmerspeak.app.network.serializers;
 
 import com.esotericsoftware.kryo.Kryo;
 import com.esotericsoftware.kryo.Serializer;

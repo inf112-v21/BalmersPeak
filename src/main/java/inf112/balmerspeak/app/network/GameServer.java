@@ -4,15 +4,18 @@ import com.esotericsoftware.kryo.Kryo;
 import com.esotericsoftware.kryonet.Connection;
 import com.esotericsoftware.kryonet.Listener;
 import com.esotericsoftware.kryonet.Server;
+import inf112.balmerspeak.app.Game;
+import inf112.balmerspeak.app.Player;
 import inf112.balmerspeak.app.menu.LobbyScreen;
 import inf112.balmerspeak.app.network.messages.InitMsg;
 import inf112.balmerspeak.app.network.messages.StartMsg;
-import inf112.balmerspeak.app.network.messages.serializers.InitMsgSerializer;
-import inf112.balmerspeak.app.network.messages.serializers.StartMsgSerializer;
+import inf112.balmerspeak.app.network.serializers.InitMsgSerializer;
+import inf112.balmerspeak.app.network.serializers.StartMsgSerializer;
+import inf112.balmerspeak.app.network.tools.CoordsResolver;
+import inf112.balmerspeak.app.network.tools.IPFinder;
 import org.javatuples.Pair;
 
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -22,6 +25,7 @@ public class GameServer extends Server {
     private LobbyScreen lobby;
     private final String username;
     private Map<Connection, InitMsg> clients;
+    private Game game;
 
 
     public GameServer(String username) throws IOException {
@@ -67,16 +71,24 @@ public class GameServer extends Server {
     }
 
     public void sendStartMessage() {
-        // Send the starting coordinates to all connections
-        // TODO: send acrual cooridnates, not the same for every player
-        System.out.println("called");
-        System.out.println(clients.keySet().size());
-        for (Connection player : clients.keySet()) {
-            System.out.println("sending");
-            player.sendTCP(new StartMsg(new Pair(2, 7)));
-        }
+        // Resolve coordinates object
+        CoordsResolver resolver = new CoordsResolver();
+        // Make own player object with coords from resolver
+        Player thisPlayer = new Player(resolver.getCoordsPair());
+        // Instantiate new game
+        game = new Game(thisPlayer);
 
+        // Send start coordinates to every other client/player
+        for (Connection connection : clients.keySet()) {
+            // Add a player object to game with coordinates
+            Player tmpPlayer = new Player(resolver.getCoordsPair());
+            game.addPlayer(tmpPlayer);
+            // Send coords to relevant client
+            connection.sendTCP(new StartMsg(tmpPlayer.getCoords()));
+        }
     }
+
+
 
     public void registerClasses() {
         Kryo kryo = this.getKryo();

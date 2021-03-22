@@ -4,11 +4,14 @@ import com.esotericsoftware.kryo.Kryo;
 import com.esotericsoftware.kryonet.Client;
 import com.esotericsoftware.kryonet.Connection;
 import com.esotericsoftware.kryonet.Listener;
+import inf112.balmerspeak.app.Game;
+import inf112.balmerspeak.app.Player;
 import inf112.balmerspeak.app.menu.LobbyScreen;
 import inf112.balmerspeak.app.network.messages.InitMsg;
 import inf112.balmerspeak.app.network.messages.StartMsg;
-import inf112.balmerspeak.app.network.messages.serializers.InitMsgSerializer;
-import inf112.balmerspeak.app.network.messages.serializers.StartMsgSerializer;
+import inf112.balmerspeak.app.network.serializers.InitMsgSerializer;
+import inf112.balmerspeak.app.network.serializers.StartMsgSerializer;
+import inf112.balmerspeak.app.network.tools.IPFinder;
 
 import java.io.IOException;
 
@@ -17,6 +20,7 @@ public class GameClient extends Client {
     private String username;
     private String hostName;
     private LobbyScreen lobby;
+    private Game game;
 
     public GameClient(String ipAddress, String username) throws IOException {
         super();
@@ -47,6 +51,9 @@ public class GameClient extends Client {
                 else if (object instanceof StartMsg) {
                     // Cast the message
                     StartMsg startMsg = (StartMsg) object;
+
+                    // Instantiate game
+                    game = new Game(new Player(startMsg.getCoordinates()));
 
                     // tell lobby to start the game
                     lobby.startGame(startMsg.getCoordinates());
