@@ -55,10 +55,10 @@ public class GameServer extends Server {
             @Override
             public void disconnected(Connection connection) {
                 super.disconnected(connection);
-                // Remove connection from server list
-                clients.remove(connection);
                 // Remove from GUI lobby screen
                 lobby.removeConnectedClient(clients.get(connection).getIP(), clients.get(connection).getUsername());
+                // Remove connection from server list
+                clients.remove(connection);
             }
         });
     }

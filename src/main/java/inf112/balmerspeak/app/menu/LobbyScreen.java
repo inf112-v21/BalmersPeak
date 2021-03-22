@@ -12,6 +12,8 @@ import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import inf112.balmerspeak.app.GUI;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 
 public class LobbyScreen extends MainScreen implements Screen {
@@ -29,6 +31,7 @@ public class LobbyScreen extends MainScreen implements Screen {
     // table of connected clients
     private Table connectedClients;
     private ArrayList<String> connectedClientsStrings = new ArrayList<>();
+    private Map<String, Label> tableIndex = new HashMap<>();
 
     // skin
     public Skin skin;
@@ -126,13 +129,17 @@ public class LobbyScreen extends MainScreen implements Screen {
 
 
     public void addConnectedClient(String ipAddress, String username) {
-        connectedClientsStrings.add(username + " - " + ipAddress);
-        updateConnectedClients();
+        //connectedClientsStrings.add(username + " - " + ipAddress);
+        connectedClients.row();
+        connectedClients.add(new Label(username + " - " + ipAddress, skin));
+        //tableIndex.put(ipAddress, new Label(username + " - " + ipAddress, skin));
     }
 
     public void removeConnectedClient(String ipAddress, String username) {
         // Find the corresponding entry and remove it
-       connectedClientsStrings.remove(ipAddress + " - " + username);
+        System.out.println("Removing actor...");
+        connectedClients.removeActor(new Label(username + " - " + ipAddress, skin));
+       //updateConnectedClients();
     }
 
     public void updateConnectedClients() {
