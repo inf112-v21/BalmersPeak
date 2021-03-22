@@ -114,7 +114,7 @@ public class LobbyScreen extends MainScreen implements Screen {
             root.add(startButton).prefWidth(200.0f).prefHeight(100.0f);
     }
 
-    public void startGame(Pair<Integer, Integer> startCoords) {
+    public void startGame() {
         game.changeScreen(new GameScreen());
     }
 

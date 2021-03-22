@@ -8,12 +8,10 @@ import inf112.balmerspeak.app.Game;
 import inf112.balmerspeak.app.Player;
 import inf112.balmerspeak.app.menu.LobbyScreen;
 import inf112.balmerspeak.app.network.messages.InitMsg;
-import inf112.balmerspeak.app.network.messages.StartMsg;
 import inf112.balmerspeak.app.network.serializers.InitMsgSerializer;
-import inf112.balmerspeak.app.network.serializers.StartMsgSerializer;
+import inf112.balmerspeak.app.network.serializers.PlayerSerializer;
 import inf112.balmerspeak.app.network.tools.CoordsResolver;
 import inf112.balmerspeak.app.network.tools.IPFinder;
-import org.javatuples.Pair;
 
 import java.io.IOException;
 import java.util.HashMap;
@@ -71,20 +69,24 @@ public class GameServer extends Server {
     }
 
     public void sendStartMessage() {
-        // Resolve coordinates object
+        // Coords resolver
         CoordsResolver resolver = new CoordsResolver();
-        // Make own player object with coords from resolver
-        Player thisPlayer = new Player(resolver.getCoordsPair());
-        // Instantiate new game
-        game = new Game(thisPlayer);
+        // Instantiate game with own player object
+        game = new Game(new Player(resolver.getCoordsPair(), username, ipAddress));
 
-        // Send start coordinates to every other client/player
-        for (Connection connection : clients.keySet()) {
-            // Add a player object to game with coordinates
-            Player tmpPlayer = new Player(resolver.getCoordsPair());
+        // Make player object for every other connection and add to game
+        for (Connection client : clients.keySet()) {
+            Player tmpPlayer = new Player(resolver.getCoordsPair(), clients.get(client).getUsername(), clients.get(client).getUsername());
             game.addPlayer(tmpPlayer);
-            // Send coords to relevant client
-            connection.sendTCP(new StartMsg(tmpPlayer.getCoords()));
+            // Send player object to each client
+            client.sendTCP(tmpPlayer);
+        }
+
+        // Now send every player to every client
+        for (Connection client : clients.keySet()) {
+            for (Player player : game.getPlayers()) {
+                client.sendTCP(player);
+            }
         }
     }
 
@@ -93,7 +95,7 @@ public class GameServer extends Server {
     public void registerClasses() {
         Kryo kryo = this.getKryo();
         kryo.register(InitMsg.class, new InitMsgSerializer());
-        kryo.register(StartMsg.class, new StartMsgSerializer());
+        kryo.register(Player.class, new PlayerSerializer());
     }
 
 

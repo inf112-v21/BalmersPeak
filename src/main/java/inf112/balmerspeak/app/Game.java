@@ -16,4 +16,8 @@ public class Game {
         this.players.add(newPlayer);
     }
 
+    public ArrayList<Player> getPlayers() {
+        return this.players;
+    }
+
 }
