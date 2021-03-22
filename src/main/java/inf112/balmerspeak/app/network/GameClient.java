@@ -29,6 +29,8 @@ public class GameClient extends Client {
 
         // Add listeners
         this.addListener(new Listener() {
+
+
             @Override
             public void received(Connection connection, Object object) {
                 // Check type of incoming message
