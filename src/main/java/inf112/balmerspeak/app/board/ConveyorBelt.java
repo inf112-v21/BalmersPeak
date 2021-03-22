@@ -31,16 +31,14 @@ public class ConveyorBelt {
     }
 
     public boolean canMove(){
-        if(!isRotatingBelt() && !nextIsFull())
+        if((!isRotatingBelt() && !nextIsFull()) || (isRotatingBelt() && !nextNextIsFull()))
             return true;
-        else if (isRotatingBelt() && !nextNextIsFull())
-            return true;
-        else
         return false;
     }
 
     public boolean isRotatingBelt(){
-        //Må ha ein liste over de forskjellige beltene på brettet
+        if (beltType == MovementType.rotation)
+            return true;
         return false;
     }
 
