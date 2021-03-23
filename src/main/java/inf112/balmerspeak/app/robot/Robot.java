@@ -147,9 +147,4 @@ public class Robot implements IRobot{
         this.spawnY = spawnY;
 
     }
-
-
-
-
-
 }

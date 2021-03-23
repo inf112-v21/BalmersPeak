@@ -10,6 +10,6 @@ public class Map {
     private Direction east = Direction.EAST;
 
     public Map(Board board) {
-        board.addItem(new Walls(north), 0,4);
+//        board.addItem(new Walls(north), 0,4);
     }
 }

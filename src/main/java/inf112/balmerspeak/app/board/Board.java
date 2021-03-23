@@ -6,11 +6,14 @@ import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.maps.tiled.tiles.StaticTiledMapTile;
+import inf112.balmerspeak.app.board.Hole;
+import inf112.balmerspeak.app.board.Laser;
 import inf112.balmerspeak.app.flag.Flag;
 import inf112.balmerspeak.app.robot.Direction;
 import inf112.balmerspeak.app.robot.Robot;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 
 public class Board {
 
@@ -31,16 +34,15 @@ public class Board {
     private final TiledMapTileLayer.Cell dieCell;
     private int WIDTH;
     private int HEIGHT;
-
     private Robot robots[][];
-    private Flag flag[][];
+    private Flag flags[][];
     private Hole holes[][];
     private Laser lasers[][];
+    private Walls walls[][];
 
     private TiledMapTileLayer hole;
 
     private int flagOrder = 0;
-
     ArrayList<Robot> players;
 
     private int turn = 0;
@@ -75,7 +77,7 @@ public class Board {
         wonCell = new TiledMapTileLayer.Cell().setTile(playerWonTexture);
         dieCell = new TiledMapTileLayer.Cell().setTile(playerDiedTexture);
 
-        TiledMapTileLayer board =  (TiledMapTileLayer) map.getLayers().get("Board");
+        TiledMapTileLayer board = (TiledMapTileLayer) map.getLayers().get("Board");
         WIDTH = board.getWidth();
         HEIGHT = board.getHeight();
 
@@ -83,6 +85,7 @@ public class Board {
         flags = new Flag[HEIGHT][WIDTH];
         holes = new Hole[HEIGHT][WIDTH];
         lasers = new Laser[HEIGHT][WIDTH];
+        walls = new Walls[HEIGHT][WIDTH];
 
         players = new ArrayList<>();
         players.add(new Robot(0,0, Direction.NORTH));
@@ -91,6 +94,7 @@ public class Board {
         initHoles();
         initFlag();
         initLaser();
+        initWalls();
 
     }
 
@@ -100,6 +104,7 @@ public class Board {
         else
             return turn = 0;
     }
+
 
     public ArrayList<Robot> getPlayers() {
         return players;
@@ -111,6 +116,10 @@ public class Board {
 
     public TiledMap getMap() {
         return map;
+    }
+
+    public boolean isFacingWall(int x, int y, Direction dir) {
+        return false;
     }
 
     public TiledMapTileLayer getBoard() {
@@ -142,7 +151,17 @@ public class Board {
             for (int x = 0; x < WIDTH; x++) {
                 if(laser.getCell(x,y) != null)
                     lasers[y][x] = new Laser(x,y, Direction.NORTH);
+            }
+        }
+    }
 
+    public void initWalls() {
+        for (int y = 0; y < HEIGHT; y++) {
+            for (int x = 0; x < WIDTH; x++) {
+                if (wall.getCell(x,y) != null) {
+                    walls[y][x] = new Walls(x, y,getWallDirection(x,y));
+//                    System.out.println(""+ x + y + getWallDirection(x,y));
+                }
             }
 
         }
@@ -208,5 +227,24 @@ public class Board {
 
     public Laser getLaser(int x ,int y){
         return lasers[y][x];
+    }
+
+    public Walls getWalls(int x, int y) {
+        return walls[y][x];
+    }
+
+    public Direction getWallDirection(int x,int y) {
+        int id = wall.getCell(x,y).getTile().getId();
+        switch (id) {
+            case 30:
+                return Direction.WEST;
+            case 31:
+                return Direction.NORTH;
+            case 23:
+                return Direction.EAST;
+            case 29:
+                return Direction.SOUTH;
+        }
+        return null;
     }
 }
