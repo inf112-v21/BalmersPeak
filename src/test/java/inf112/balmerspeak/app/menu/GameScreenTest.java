@@ -55,7 +55,7 @@ public class GameScreenTest {
         setup();
         MovementCard card = new MovementCard(1,1,"Movement 1");
         g.handleMoveCard(card);
-        assertTrue(g.getRobot().getY() == 1);
+        assertTrue(g.getPlayer().getRobot().getY() == 1);
 
     }
 
@@ -64,7 +64,7 @@ public class GameScreenTest {
         setup();
         RotationCard card = new RotationCard(1, Rotation.right, "Rotate right");
         g.handleRotation(card);
-        assertTrue(g.getRobot().getDirection().equals(Direction.EAST));
+        assertTrue(g.getPlayer().getRobot().getDirection().equals(Direction.EAST));
     }
 
 }

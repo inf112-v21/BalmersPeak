@@ -12,6 +12,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
+import inf112.balmerspeak.app.Game;
 import inf112.balmerspeak.app.InputHandler;
 import inf112.balmerspeak.app.Player;
 import inf112.balmerspeak.app.board.Board;
@@ -31,6 +32,7 @@ public class GameScreen implements Screen {
     private ArrayList<ProgramCard> queueList = new ArrayList<>();
 
     private Player player;
+    private Game game;
 
 
     private Skin skin1;
@@ -39,6 +41,7 @@ public class GameScreen implements Screen {
     private Texture life;
     private Texture health;
     Board board;
+
 
 
 
@@ -71,8 +74,21 @@ public class GameScreen implements Screen {
         return this.board;
     }
 
+
+    public Game getGame() {
+        return this.game;
+    }
+
+    public void setGame(Game game) {
+        this.game = game;
+    }
+
     public void setPlayer(Player myPlayer) {
         this.player = myPlayer;
+    }
+
+    public Player getPlayer() {
+        return this.player;
     }
 
     public boolean shouldMove(int dx, int dy) {
@@ -197,19 +213,8 @@ public class GameScreen implements Screen {
         button.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent changeEvent, Actor actor) {
-                //moves the robot for each card in list
-                for (ProgramCard card : queueList){
-                    if (card.getType().equals(MovementType.movement)) {
-                        handleMoveCard((MovementCard) card);
-                    }
-                    else {
-                        handleRotation((RotationCard) card);
-                    }
-                }
-                //board.switchTurn();
-                //queueList.clear();
+                game.handIsReady();
                 show();
-
             }
         });
 

@@ -7,10 +7,11 @@ import com.esotericsoftware.kryonet.Connection;
 import com.esotericsoftware.kryonet.Listener;
 import inf112.balmerspeak.app.Game;
 import inf112.balmerspeak.app.Player;
-import inf112.balmerspeak.app.menu.GameScreen;
 import inf112.balmerspeak.app.menu.LobbyScreen;
+import inf112.balmerspeak.app.network.messages.HandReadyMsg;
 import inf112.balmerspeak.app.network.messages.InitMsg;
 import inf112.balmerspeak.app.network.messages.NumPlayers;
+import inf112.balmerspeak.app.network.serializers.HandReadyMsgSerializer;
 import inf112.balmerspeak.app.network.serializers.InitMsgSerializer;
 import inf112.balmerspeak.app.network.serializers.NumPlayersSerializer;
 import inf112.balmerspeak.app.network.serializers.PlayerSerializer;
@@ -72,12 +73,16 @@ public class GameClient extends Client {
         // Check if all players were received, no error for now
         this.expectedPlayers = num.getNumPlayers();
         this.game = new Game(lobby.startGame());
+        this.game.setClient(this);
+        System.out.println("This game's client: " + this.game.toString());
     }
 
     private void handleReceivedPlayer(Player player) {
         // Check if this player is my own
         if (player.getId() == this.getID()) {
             game.setMyPlayer(player);
+            game.getGameScreen().setPlayer(player);
+
         } else {
             game.addPlayer(player);
         }
@@ -87,11 +92,16 @@ public class GameClient extends Client {
             game.gameLoop();
     }
 
+    public void alertServerPlayerIsReady() {
+        sendTCP(new HandReadyMsg(true));
+    }
+
     public void registerClasses() {
         Kryo kryo = this.getKryo();
         kryo.register(InitMsg.class, new InitMsgSerializer());
         kryo.register(Player.class, new PlayerSerializer());
         kryo.register(NumPlayers.class, new NumPlayersSerializer());
+        kryo.register(HandReadyMsg.class, new HandReadyMsgSerializer());
     }
 
     public void setLobby(LobbyScreen screen) {

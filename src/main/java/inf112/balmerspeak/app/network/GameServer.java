@@ -8,8 +8,10 @@ import inf112.balmerspeak.app.Game;
 import inf112.balmerspeak.app.Player;
 import inf112.balmerspeak.app.menu.GameScreen;
 import inf112.balmerspeak.app.menu.LobbyScreen;
+import inf112.balmerspeak.app.network.messages.HandReadyMsg;
 import inf112.balmerspeak.app.network.messages.InitMsg;
 import inf112.balmerspeak.app.network.messages.NumPlayers;
+import inf112.balmerspeak.app.network.serializers.HandReadyMsgSerializer;
 import inf112.balmerspeak.app.network.serializers.InitMsgSerializer;
 import inf112.balmerspeak.app.network.serializers.NumPlayersSerializer;
 import inf112.balmerspeak.app.network.serializers.PlayerSerializer;
@@ -48,9 +50,18 @@ public class GameServer extends Server {
         this.addListener(new Listener() {
             @Override
             public void received(Connection connection, Object object) {
-                // Check which type of msg this is
+                // Check for init message
                 if (object instanceof InitMsg) {
                     handleInitMsg(connection, (InitMsg) object, username);
+                }
+
+                // Check for hand ready message
+                else if (object instanceof HandReadyMsg) {
+                    // Set players hand to ready
+                    game.getPlayerById(connection.getID()).setHandReady(true);
+                    // Check if all players are ready
+                    if (game.getAllPlayersReady())
+                        game.startRound();
                 }
             }
 
@@ -116,6 +127,7 @@ public class GameServer extends Server {
         kryo.register(InitMsg.class, new InitMsgSerializer());
         kryo.register(Player.class, new PlayerSerializer());
         kryo.register(NumPlayers.class, new NumPlayersSerializer());
+        kryo.register(HandReadyMsg.class, new HandReadyMsgSerializer());
     }
 
 
