@@ -1,6 +1,7 @@
 package inf112.balmerspeak.app.menu;
 
 import com.badlogic.gdx.Game;
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
@@ -115,7 +116,7 @@ public class LobbyScreen extends MainScreen implements Screen {
     }
 
     public void startGame() {
-        game.changeScreen(new GameScreen());
+        Gdx.app.postRunnable(() -> game.changeScreen(new GameScreen()));
     }
 
     public void addStartGameListener(TextButton btn) {
