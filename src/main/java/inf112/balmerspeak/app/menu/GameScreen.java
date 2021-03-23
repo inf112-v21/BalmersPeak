@@ -13,11 +13,10 @@ import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import inf112.balmerspeak.app.InputHandler;
-import inf112.balmerspeak.app.MapHandler;
+import inf112.balmerspeak.app.Player;
 import inf112.balmerspeak.app.board.Board;
 import inf112.balmerspeak.app.cards.*;
 import inf112.balmerspeak.app.robot.Direction;
-import inf112.balmerspeak.app.robot.Robot;
 import java.util.ArrayList;
 
 
@@ -25,31 +24,21 @@ import java.util.ArrayList;
 public class GameScreen implements Screen {
 
     private Stage stage;
-    // Background image
-
     private OrthogonalTiledMapRenderer rend;
-
-
-    private ArrayList<ProgramCard> hand;
-
     private InputHandler input;
-    private MapHandler mapHandler;
     private OrthographicCamera cam;
 
     private ArrayList<ProgramCard> queueList = new ArrayList<>();
 
-    private Robot robot;
+    private Player player;
+
 
     private Skin skin1;
-
-
     private Texture card;
-
     private Texture backgroundImage;
     private Texture life;
     private Texture health;
     Board board;
-    int turn = 0;
 
 
 
@@ -63,7 +52,6 @@ public class GameScreen implements Screen {
 
         //load skins
         skin1 = new Skin(Gdx.files.internal("assets/default/skin/uiskin.json"));
-        hand = new ArrayList<>();
 
         // Create map handler
         board = new Board("assets/map/map.tmx");
@@ -83,11 +71,9 @@ public class GameScreen implements Screen {
         return this.board;
     }
 
-    public Robot getRobot() {
-        return robot;
+    public void setPlayer(Player myPlayer) {
+        this.player = myPlayer;
     }
-
-    public void setRobot(Robot robot) { this.robot = robot;}
 
     public boolean shouldMove(int dx, int dy) {
         // Return false if dx and dy are zero
@@ -102,53 +88,53 @@ public class GameScreen implements Screen {
         return !(outsideX || outsideY || isPlayer);
     }
 
-    //Unused, but still usable for testing
-    public void handleMove() {
-        // Changes in the x coordinate
-        int dx = 0;
-        // Changes in the y coordinate
-        int dy = 0;
-
-        if (input.wPressed)
-            dy += 1;
-        else if (input.aPressed)
-            dx -= 1;
-        else if(input.sPressed)
-            dy -=1;
-        else if (input.dPressed)
-            dx += 1;
-
-        // Player x and y coordinates
-        int playerX = robot.getX();
-        int playerY = robot.getY();
-
-
-        // Only update if the player is allowed to move
-        if (shouldMove(dx, dy)) {
-            // Move player textures
-            mapHandler.movePlayer(playerX, playerY, dx, dy);
-            robot.set(playerX + dx, playerY + dy);
-            board.placeRobot(playerX + dx, playerY + dy);
-        }
-
-        // Check if player won
-        if (mapHandler.checkWin(playerX + dx, playerY + dy)) {
-            System.out.println("You won!");
-            mapHandler.changePlayerTextureWin(playerX + dx, playerY + dy);
-            robot.set(playerX + dx, playerY + dy);
-        }
-
-        // Check if player died
-        if (mapHandler.checkDeath(playerX + dx, playerY + dy)) {
-            System.out.println("You died :(");
-            mapHandler.changePlayerTextureDeath(playerX + dx, playerY + dy);
-            robot.set(playerX + dx, playerY + dy);
-        }
-
-
-        // Update player coordinates
-        input.clear();
-    }
+//    //Unused, but still usable for testing
+//    public void handleMove() {
+//        // Changes in the x coordinate
+//        int dx = 0;
+//        // Changes in the y coordinate
+//        int dy = 0;
+//
+//        if (input.wPressed)
+//            dy += 1;
+//        else if (input.aPressed)
+//            dx -= 1;
+//        else if(input.sPressed)
+//            dy -=1;
+//        else if (input.dPressed)
+//            dx += 1;
+//
+//        // Player x and y coordinates
+//        int playerX = player.getRobot().getX();
+//        int playerY = player.getRobot().getY();
+//
+//
+//        // Only update if the player is allowed to move
+//        if (shouldMove(dx, dy)) {
+//            // Move player textures
+//            mapHandler.movePlayer(playerX, playerY, dx, dy);
+//            robot.set(playerX + dx, playerY + dy);
+//            board.placeRobot(playerX + dx, playerY + dy);
+//        }
+//
+//        // Check if player won
+//        if (mapHandler.checkWin(playerX + dx, playerY + dy)) {
+//            System.out.println("You won!");
+//            mapHandler.changePlayerTextureWin(playerX + dx, playerY + dy);
+//            robot.set(playerX + dx, playerY + dy);
+//        }
+//
+//        // Check if player died
+//        if (mapHandler.checkDeath(playerX + dx, playerY + dy)) {
+//            System.out.println("You died :(");
+//            mapHandler.changePlayerTextureDeath(playerX + dx, playerY + dy);
+//            robot.set(playerX + dx, playerY + dy);
+//        }
+//
+//
+//        // Update player coordinates
+//        input.clear();
+//    }
 
     public void handleMoveCard(MovementCard card){
         // Changes in the x coordinate
@@ -177,11 +163,11 @@ public class GameScreen implements Screen {
             board.getActivePlayer().set(playerX + dx, playerY + dy);
         }
         if (board.getHole(playerX + dx, playerY + dy) != null){
-            board.getActivePlayer().setLives(robot.getLives()-1);
+            board.getActivePlayer().setLives(player.getRobot().getLives()-1);
             show();
         }
         if (board.getLaser(playerX + dx, playerY + dy) != null){
-            board.getActivePlayer().setHealth(robot.getHealth()-1);
+            board.getActivePlayer().setHealth(player.getRobot().getHealth()-1);
             show();
         }
 
@@ -229,7 +215,7 @@ public class GameScreen implements Screen {
 
         //Adds the cards to the GUI
         int x = 100;
-        for (ProgramCard cards : robot.getHand()) {
+        for (ProgramCard cards : player.getRobot().getHand()) {
             card = new Texture("assets/images/cards/" + cards.toString() + ".png");
             Button.ButtonStyle tbs = new Button.ButtonStyle();
             tbs.up = new TextureRegionDrawable(new TextureRegion(card));

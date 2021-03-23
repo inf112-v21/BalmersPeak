@@ -26,10 +26,9 @@ public class Game {
     public void gameLoop() {
         // First, place robots
         placeRobotsAtStart();
-        // Set game screen robot to this player's robot
-        gameScreen.setRobot(myPlayer.getRobot());
+        // Set game screen player to this player
+        gameScreen.setPlayer(myPlayer);
         myPlayer.getRobot().giveHand(9);
-
     }
 
     // Places all players robots at their starting position
