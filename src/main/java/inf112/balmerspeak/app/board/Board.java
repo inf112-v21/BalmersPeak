@@ -129,14 +129,12 @@ public class Board {
     }
 
     public void initFlag(){
-        for (int y = 0; y < HEIGHT; y++) {
-            for (int x = 0; x < WIDTH; x++) {
-                if(flag.getCell(x,y) != null)
-                    flags[y][x] = new Flag(flagOrder+=1);
 
-            }
+        flags[1][9] = new Flag(2);
+        flags[5][15] = new Flag(1);
+        flags[10][6] = new Flag(3);
 
-        }
+
     }
 
     public void initLaser(){

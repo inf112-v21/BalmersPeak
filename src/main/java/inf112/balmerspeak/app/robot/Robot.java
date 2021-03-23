@@ -38,9 +38,18 @@ public class Robot implements IRobot{
     }
 
     public void addFlag(Flag flag){
-        collected.add(flag);
-        for (Flag flags : collected)
-            System.out.println(flags.getOrder());
+        if(collected.isEmpty() && flag.getOrder() == 1)
+            collected.add(flag);
+        else if (collected.size() == 1 && collected.get(0).getOrder() == 1 && flag.getOrder() == 2)
+            collected.add(flag);
+        else if (collected.size() == 2 && collected.get(0).getOrder() == 1 && collected.get(1).getOrder() == 2 && flag.getOrder() == 3)
+            collected.add(flag);
+        for (Flag flag1 : collected)
+            System.out.println(flag1.toString());
+    }
+
+    public boolean checkWinCondition() {
+        return collected.size() == 3;
     }
 
 

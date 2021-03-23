@@ -19,6 +19,7 @@ import inf112.balmerspeak.app.cards.*;
 import inf112.balmerspeak.app.robot.Direction;
 import inf112.balmerspeak.app.robot.Robot;
 
+import javax.swing.*;
 import java.util.ArrayList;
 
 
@@ -126,20 +127,30 @@ public class GameScreen implements Screen {
 
             if (board.getHole(playerX + dx, playerY + dy) != null) {
                 board.getActivePlayer().setLives(board.getActivePlayer().getLives() - 1);
-                show();
+                System.out.println("lost life");
+                showHealthLives();
             }
             if (board.getLaser(playerX + dx, playerY + dy) != null) {
                 board.getActivePlayer().setHealth(board.getActivePlayer().getHealth() - 1);
-                show();
+                System.out.println("Lost health");
+                showHealthLives();
             }
             if (board.getFlag(playerX + dx, playerY + dy) != null){
                 board.getActivePlayer().addFlag(board.getFlag(playerX +dx, playerY+dy));
             }
+            if (board.getActivePlayer().checkWinCondition())
+                System.out.println("Player" + board.getActivePlayer() + " won");
+
         }
 
 
         // Update player coordinates
         input.clear();
+    }
+
+    public void winFrame(){
+        JFrame f = new JFrame();
+        JOptionPane.showMessageDialog(f, "Player " + board.getActivePlayer().toString() + " won");
     }
 
     public void handleMoveCard(MovementCard card){
@@ -170,11 +181,11 @@ public class GameScreen implements Screen {
 
             if (board.getHole(playerX + dx, playerY + dy) != null) {
                 board.getActivePlayer().setLives(board.getActivePlayer().getLives() - 1);
-                showHealthLives();
+                show();
             }
             if (board.getLaser(playerX + dx, playerY + dy) != null) {
                 board.getActivePlayer().setHealth(board.getActivePlayer().getHealth() - 1);
-                showHealthLives();
+                show();
             }
             if (board.getFlag(playerX + dx, playerY + dy) != null){
                 board.getActivePlayer().addFlag(board.getFlag(playerX +dx, playerY+dy));
@@ -246,8 +257,6 @@ public class GameScreen implements Screen {
                 }
                 //board.switchTurn();
                 //queueList.clear();
-                show();
-
             }
         });
 
