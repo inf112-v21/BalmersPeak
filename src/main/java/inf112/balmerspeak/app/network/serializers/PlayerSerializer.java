@@ -14,7 +14,7 @@ public class PlayerSerializer extends Serializer<Player> {
     public void write(Kryo kryo, Output output, Player player) {
         // Write coords
         output.writeInt(player.getCoords().getValue0());
-        output.writeInt(player.getCoords().getValue0());
+        output.writeInt(player.getCoords().getValue1());
         // Write username and ip
         output.writeString(player.getUsername());
         output.writeString(player.getIpAddress());
