@@ -128,12 +128,12 @@ public class GameScreen implements Screen {
             if (board.getHole(playerX + dx, playerY + dy) != null) {
                 board.getActivePlayer().setLives(board.getActivePlayer().getLives() - 1);
                 System.out.println("lost life");
-                showHealthLives();
+                show();
             }
             if (board.getLaser(playerX + dx, playerY + dy) != null) {
                 board.getActivePlayer().setHealth(board.getActivePlayer().getHealth() - 1);
                 System.out.println("Lost health");
-                showHealthLives();
+                show();
             }
             if (board.getFlag(playerX + dx, playerY + dy) != null){
                 board.getActivePlayer().addFlag(board.getFlag(playerX +dx, playerY+dy));
@@ -181,15 +181,17 @@ public class GameScreen implements Screen {
 
             if (board.getHole(playerX + dx, playerY + dy) != null) {
                 board.getActivePlayer().setLives(board.getActivePlayer().getLives() - 1);
-                show();
+                showHealthLives();
             }
             if (board.getLaser(playerX + dx, playerY + dy) != null) {
                 board.getActivePlayer().setHealth(board.getActivePlayer().getHealth() - 1);
-                show();
+                showHealthLives();
             }
             if (board.getFlag(playerX + dx, playerY + dy) != null){
                 board.getActivePlayer().addFlag(board.getFlag(playerX +dx, playerY+dy));
             }
+            if (board.getActivePlayer().checkWinCondition())
+                System.out.println("Player" + board.getActivePlayer() + " won");
         }
 
     }
