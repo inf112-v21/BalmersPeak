@@ -26,16 +26,19 @@ public class Game {
     public void gameLoop() {
         // First, place robots
         placeRobotsAtStart();
+        // Set game screen robot to this player's robot
+        gameScreen.setRobot(myPlayer.getRobot());
+        myPlayer.getRobot().giveHand(9);
 
     }
 
     // Places all players robots at their starting position
     public void placeRobotsAtStart() {
         // Place own robot
-        gameScreen.getBoard().placeRobot(myPlayer.getCoords().getValue0(), myPlayer.getCoords().getValue1());
+        gameScreen.getBoard().placeRobot(myPlayer.getRobot().getX(), myPlayer.getRobot().getY());
         // Place everyone else's
         for (Player player : players) {
-            gameScreen.getBoard().placeRobot(player.getCoords().getValue0(), player.getCoords().getValue1());
+            gameScreen.getBoard().placeRobot(player.getRobot().getX(), player.getRobot().getY());
         }
     }
 

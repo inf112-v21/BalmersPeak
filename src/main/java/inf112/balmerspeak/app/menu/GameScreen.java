@@ -18,7 +18,6 @@ import inf112.balmerspeak.app.board.Board;
 import inf112.balmerspeak.app.cards.*;
 import inf112.balmerspeak.app.robot.Direction;
 import inf112.balmerspeak.app.robot.Robot;
-import org.javatuples.Pair;
 import java.util.ArrayList;
 
 
@@ -87,6 +86,8 @@ public class GameScreen implements Screen {
     public Robot getRobot() {
         return robot;
     }
+
+    public void setRobot(Robot robot) { this.robot = robot;}
 
     public boolean shouldMove(int dx, int dy) {
         // Return false if dx and dy are zero
@@ -228,7 +229,7 @@ public class GameScreen implements Screen {
 
         //Adds the cards to the GUI
         int x = 100;
-        for (ProgramCard cards : board.getActivePlayer().getHand()) {
+        for (ProgramCard cards : robot.getHand()) {
             card = new Texture("assets/images/cards/" + cards.toString() + ".png");
             Button.ButtonStyle tbs = new Button.ButtonStyle();
             tbs.up = new TextureRegionDrawable(new TextureRegion(card));
