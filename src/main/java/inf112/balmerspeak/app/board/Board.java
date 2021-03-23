@@ -6,14 +6,11 @@ import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.maps.tiled.tiles.StaticTiledMapTile;
-import inf112.balmerspeak.app.Hole;
-import inf112.balmerspeak.app.Laser;
 import inf112.balmerspeak.app.flag.Flag;
 import inf112.balmerspeak.app.robot.Direction;
 import inf112.balmerspeak.app.robot.Robot;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 
 public class Board {
 
@@ -34,6 +31,7 @@ public class Board {
     private final TiledMapTileLayer.Cell dieCell;
     private int WIDTH;
     private int HEIGHT;
+
     private Robot robots[][];
     private Flag flags[][];
     private Hole holes[][];
@@ -93,8 +91,6 @@ public class Board {
         initHoles();
         initFlag();
         initLaser();
-
-
 
     }
 

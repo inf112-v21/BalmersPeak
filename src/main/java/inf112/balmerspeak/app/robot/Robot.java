@@ -5,8 +5,10 @@ import inf112.balmerspeak.app.cards.ProgramCard;
 import inf112.balmerspeak.app.cards.Rotation;
 
 import java.util.ArrayList;
+import java.util.Collections;
 
 
+import inf112.balmerspeak.app.flag.Flag;
 import inf112.balmerspeak.app.robot.Direction;
 
 
@@ -20,6 +22,7 @@ public class Robot implements IRobot{
     private Direction direction;
 
     private ArrayList<ProgramCard> hand = new ArrayList<>();
+    private ArrayList<Flag> collected = new ArrayList<>();
     private Deck deck = new Deck();
     private int spawnX;
     private int spawnY;
@@ -32,6 +35,12 @@ public class Robot implements IRobot{
 
     public ArrayList<ProgramCard> getHand() {
         return hand;
+    }
+
+    public void addFlag(Flag flag){
+        collected.add(flag);
+        for (Flag flags : collected)
+            System.out.println(flags.getOrder());
     }
 
 
@@ -76,6 +85,7 @@ public class Robot implements IRobot{
     public void setLives(int x) {
         this.ll = x;
     }
+
 
     @Override
     public boolean isAlive() {
