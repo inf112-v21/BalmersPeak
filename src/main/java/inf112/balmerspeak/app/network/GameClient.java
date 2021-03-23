@@ -8,7 +8,9 @@ import inf112.balmerspeak.app.Game;
 import inf112.balmerspeak.app.Player;
 import inf112.balmerspeak.app.menu.LobbyScreen;
 import inf112.balmerspeak.app.network.messages.InitMsg;
+import inf112.balmerspeak.app.network.messages.NumPlayers;
 import inf112.balmerspeak.app.network.serializers.InitMsgSerializer;
+import inf112.balmerspeak.app.network.serializers.NumPlayersSerializer;
 import inf112.balmerspeak.app.network.serializers.PlayerSerializer;
 import inf112.balmerspeak.app.network.tools.IPFinder;
 
@@ -48,7 +50,7 @@ public class GameClient extends Client {
                 }
 
                 // check for player
-                if (object instanceof Player) {
+                else if (object instanceof Player) {
                     Player player = (Player) object;
                     // If there is no game object, instantiate it
                     if (game == null) {
@@ -62,6 +64,16 @@ public class GameClient extends Client {
                     }
                 }
 
+                else if (object instanceof NumPlayers) {
+                    // Means every player has been received, can start the game loop
+                    NumPlayers num = (NumPlayers) object;
+                    if (num.getNumPlayers() == game.getPlayers().size()) {
+                        System.out.println("All players received");
+                    }
+                    // Starting the game here
+                    game.gameLoop();
+                }
+
             }
         });
     }
@@ -70,6 +82,7 @@ public class GameClient extends Client {
         Kryo kryo = this.getKryo();
         kryo.register(InitMsg.class, new InitMsgSerializer());
         kryo.register(Player.class, new PlayerSerializer());
+        kryo.register(NumPlayers.class, new NumPlayersSerializer());
     }
 
     public void setLobby(LobbyScreen screen) {

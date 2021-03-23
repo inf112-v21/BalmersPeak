@@ -8,7 +8,9 @@ import inf112.balmerspeak.app.Game;
 import inf112.balmerspeak.app.Player;
 import inf112.balmerspeak.app.menu.LobbyScreen;
 import inf112.balmerspeak.app.network.messages.InitMsg;
+import inf112.balmerspeak.app.network.messages.NumPlayers;
 import inf112.balmerspeak.app.network.serializers.InitMsgSerializer;
+import inf112.balmerspeak.app.network.serializers.NumPlayersSerializer;
 import inf112.balmerspeak.app.network.serializers.PlayerSerializer;
 import inf112.balmerspeak.app.network.tools.CoordsResolver;
 import inf112.balmerspeak.app.network.tools.IPFinder;
@@ -46,14 +48,7 @@ public class GameServer extends Server {
             public void received(Connection connection, Object object) {
                 // Check which type of msg this is
                 if (object instanceof InitMsg) {
-                    // Init message received containing username and IP, cast it
-                    InitMsg initMsg = (InitMsg) object;
-                    // Add client to connections list
-                    clients.put(connection, initMsg);
-                    // Add client to lobby screen
-                    lobby.addConnectedClient(initMsg.getIP(), initMsg.getUsername());
-                    // Respond with own init message
-                    connection.sendTCP(new InitMsg(ipAddress, username));
+                    handleInitMsg(connection, (InitMsg) object, username);
                 }
             }
 
@@ -66,6 +61,15 @@ public class GameServer extends Server {
                 clients.remove(connection);
             }
         });
+    }
+
+    private void handleInitMsg(Connection connection, InitMsg initMsg, String username) {
+        // Add client to connections list
+        clients.put(connection, initMsg);
+        // Add client to lobby screen
+        lobby.addConnectedClient(initMsg.getIP(), initMsg.getUsername());
+        // Respond with own init message
+        connection.sendTCP(new InitMsg(ipAddress, username));
     }
 
     public void sendStartMessage() {
@@ -88,6 +92,14 @@ public class GameServer extends Server {
                 client.sendTCP(player);
             }
         }
+
+        // Now send the number of players for the clients to confirm and start game loop.
+        for (Connection client : clients.keySet()) {
+            client.sendTCP(new NumPlayers(this.getConnections().length));
+        }
+
+        // Now start the server game loop
+        game.gameLoop();
     }
 
 
@@ -96,6 +108,7 @@ public class GameServer extends Server {
         Kryo kryo = this.getKryo();
         kryo.register(InitMsg.class, new InitMsgSerializer());
         kryo.register(Player.class, new PlayerSerializer());
+        kryo.register(NumPlayers.class, new NumPlayersSerializer());
     }
 
 
