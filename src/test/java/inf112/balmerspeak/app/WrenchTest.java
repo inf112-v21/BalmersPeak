@@ -9,7 +9,7 @@ import static org.junit.Assert.assertTrue;
 
 public class WrenchTest {
     private Robot player = new Robot(0, 0, Direction.NORTH);
-    private Wrench wrench = new Wrench(1);
+    private Wrench wrench = new Wrench(1,0,0);
     @Test
     public void testHealingAmount(){
         player.setHealth(1);
@@ -28,5 +28,11 @@ public class WrenchTest {
         wrench.fixDmg(player);
         wrench.fixDmg(player);
         assertTrue(player.getHealth() == 10);
+    }
+
+    @Test
+    public void testSpawnSetter(){
+        wrench.setNewSpawn(player);
+        assertTrue(player.getSpawnX() == wrench.getX() && player.getSpawnY() == player.getSpawnY());
     }
 }
