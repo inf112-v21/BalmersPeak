@@ -18,6 +18,8 @@ public class PlayerSerializer extends Serializer<Player> {
         // Write username and ip
         output.writeString(player.getUsername());
         output.writeString(player.getIpAddress());
+        // Write id
+        output.writeInt(player.getId());
     }
 
     @Override
@@ -25,6 +27,6 @@ public class PlayerSerializer extends Serializer<Player> {
         // Read coords
         Pair<Integer,Integer> coords = new Pair(input.readInt(), input.readInt());
         // Read username and IP and return player object
-        return new Player(coords, input.readString(), input.readString());
+        return new Player(coords, input.readString(), input.readString(), input.readInt());
     }
 }
