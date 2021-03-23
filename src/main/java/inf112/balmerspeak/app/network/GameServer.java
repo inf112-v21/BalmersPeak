@@ -82,14 +82,16 @@ public class GameServer extends Server {
         // Coords resolver
         CoordsResolver resolver = new CoordsResolver();
         // Instantiate game with own player object
-        game = new Game(new Player(resolver.getCoordsPair(), username, ipAddress), this.gameScreen);
+        Player myPlayer = new Player(resolver.getCoordsPair(), username, ipAddress);
+        game = new Game(myPlayer, this.gameScreen);
 
-        // Make player object for every other connection and add to game
+        // Send each client their own player + the host player
         for (Connection client : clients.keySet()) {
             Player tmpPlayer = new Player(resolver.getCoordsPair(), clients.get(client).getUsername(), clients.get(client).getUsername());
             game.addPlayer(tmpPlayer);
             // Send player object to each client
             client.sendTCP(tmpPlayer);
+            client.sendTCP(myPlayer);
         }
 
         // Now send every player to every client

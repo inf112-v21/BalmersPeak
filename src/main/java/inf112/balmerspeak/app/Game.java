@@ -11,6 +11,7 @@ public class Game {
     private ArrayList<Player> players;
     private GameScreen gameScreen;
 
+
     public Game(Player player, GameScreen gameScreen) {
         this.player = player;
         this.players = new ArrayList<>();

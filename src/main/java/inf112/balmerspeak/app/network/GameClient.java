@@ -24,6 +24,7 @@ public class GameClient extends Client {
     private String hostName;
     private LobbyScreen lobby;
     private Game game;
+    private int expectedPlayers;
 
 
     public GameClient(String ipAddress, String username) throws IOException {
@@ -68,12 +69,7 @@ public class GameClient extends Client {
 
     private void handleReceivedNumPlayers(NumPlayers num) {
         // Check if all players were received, no error for now
-        if (num.getNumPlayers() == game.getPlayers().size()) {
-            System.out.println("All players received");
-            // TODO: alert server if not all were instantiated
-        }
-        // Starting the game here
-        game.gameLoop();
+        this.expectedPlayers = num.getNumPlayers();
     }
 
     private void handleReceivedPlayer(Player player) {
@@ -88,6 +84,10 @@ public class GameClient extends Client {
         else {
             game.addPlayer(player);
         }
+
+        // Check if all players are received, and start game loop if so
+        if (game.getPlayers().size() == this.expectedPlayers)
+            game.gameLoop();
     }
 
     public void registerClasses() {
