@@ -80,6 +80,10 @@ public class GameScreen implements Screen {
         rend.setView(cam);
     }
 
+    public Board getBoard() {
+        return this.board;
+    }
+
     public Robot getRobot() {
         return robot;
     }

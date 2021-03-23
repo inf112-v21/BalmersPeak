@@ -7,6 +7,7 @@ import com.esotericsoftware.kryonet.Connection;
 import com.esotericsoftware.kryonet.Listener;
 import inf112.balmerspeak.app.Game;
 import inf112.balmerspeak.app.Player;
+import inf112.balmerspeak.app.menu.GameScreen;
 import inf112.balmerspeak.app.menu.LobbyScreen;
 import inf112.balmerspeak.app.network.messages.InitMsg;
 import inf112.balmerspeak.app.network.messages.NumPlayers;
@@ -59,7 +60,6 @@ public class GameClient extends Client {
 
                 // check for NumPlayers message
                 else if (object instanceof NumPlayers) {
-
                     handleReceivedNumPlayers((NumPlayers) object);
                 }
             }
@@ -79,9 +79,10 @@ public class GameClient extends Client {
     private void handleReceivedPlayer(Player player) {
         // If there is no game object, instantiate it
         if (game == null) {
-            game = new Game(player);
-            // tell lobby to start the game as well
-            lobby.startGame();
+            // Tell lobby to start game and save returned game screen
+            GameScreen screen = lobby.startGame();
+            // Create game object with this screen
+            game = new Game(player, screen);
         }
         // if there is a game object, this object is another player
         else {
@@ -99,7 +100,6 @@ public class GameClient extends Client {
     public void setLobby(LobbyScreen screen) {
         this.lobby = screen;
     }
-
 
     public void setHostNameAndIP(String hostName, String IP) {
         this.hostName = hostName;

@@ -115,8 +115,10 @@ public class LobbyScreen extends MainScreen implements Screen {
             root.add(startButton).prefWidth(200.0f).prefHeight(100.0f);
     }
 
-    public void startGame() {
-        Gdx.app.postRunnable(() -> game.changeScreen(new GameScreen()));
+    public GameScreen startGame() {
+        GameScreen screen = new GameScreen();
+        Gdx.app.postRunnable(() -> game.changeScreen(screen));
+        return screen;
     }
 
     public void addStartGameListener(TextButton btn) {
@@ -125,9 +127,12 @@ public class LobbyScreen extends MainScreen implements Screen {
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 super.clicked(event, x, y);
-                // Send start message to clients
+                // Create game screen
+                GameScreen screen = new GameScreen();
+                game.server.setGameScreen(screen);
+                // Create game object and pass to server
                 game.server.sendStartMessage();
-                game.changeScreen(new GameScreen());
+                game.changeScreen(screen);
             }
         });
     }
