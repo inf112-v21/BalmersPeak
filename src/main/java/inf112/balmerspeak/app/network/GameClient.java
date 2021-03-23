@@ -1,5 +1,6 @@
 package inf112.balmerspeak.app.network;
 
+import com.badlogic.gdx.Gdx;
 import com.esotericsoftware.kryo.Kryo;
 import com.esotericsoftware.kryonet.Client;
 import com.esotericsoftware.kryonet.Connection;
@@ -41,7 +42,8 @@ public class GameClient extends Client {
 
             @Override
             public void received(Connection connection, Object object) {
-                // Check type of incoming message
+
+                // Check for InitMsg message
                 if (object instanceof  InitMsg) {
                     // Cast and print ip and username
                     InitMsg initMsg = (InitMsg) object;
@@ -49,33 +51,42 @@ public class GameClient extends Client {
                     setHostNameAndIP(initMsg.getUsername(), initMsg.getIP());
                 }
 
-                // check for player
+                // check for player message
                 else if (object instanceof Player) {
-                    Player player = (Player) object;
-                    // If there is no game object, instantiate it
-                    if (game == null) {
-                        game = new Game(player);
-                        // tell lobby to start the game as well
-                        lobby.startGame();
-                    }
-                    // if there is a game object, this object is another player
-                    else {
-                        game.addPlayer(player);
-                    }
+                    // Hand off to gdx thread
+                    Gdx.app.postRunnable(() -> handleReceivedPlayer((Player) object));
                 }
 
+                // check for NumPlayers message
                 else if (object instanceof NumPlayers) {
-                    // Means every player has been received, can start the game loop
-                    NumPlayers num = (NumPlayers) object;
-                    if (num.getNumPlayers() == game.getPlayers().size()) {
-                        System.out.println("All players received");
-                    }
-                    // Starting the game here
-                    game.gameLoop();
-                }
 
+                    handleReceivedNumPlayers((NumPlayers) object);
+                }
             }
         });
+    }
+
+    private void handleReceivedNumPlayers(NumPlayers num) {
+        // Check if all players were received, no error for now
+        if (num.getNumPlayers() == game.getPlayers().size()) {
+            System.out.println("All players received");
+            // TODO: alert server if not all were instantiated
+        }
+        // Starting the game here
+        game.gameLoop();
+    }
+
+    private void handleReceivedPlayer(Player player) {
+        // If there is no game object, instantiate it
+        if (game == null) {
+            game = new Game(player);
+            // tell lobby to start the game as well
+            lobby.startGame();
+        }
+        // if there is a game object, this object is another player
+        else {
+            game.addPlayer(player);
+        }
     }
 
     public void registerClasses() {
