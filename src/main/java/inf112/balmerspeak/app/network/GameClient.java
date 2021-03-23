@@ -27,6 +27,7 @@ public class GameClient extends Client {
     private int expectedPlayers;
 
 
+
     public GameClient(String ipAddress, String username) throws IOException {
         super();
         // Register classes here
@@ -70,24 +71,16 @@ public class GameClient extends Client {
     private void handleReceivedNumPlayers(NumPlayers num) {
         // Check if all players were received, no error for now
         this.expectedPlayers = num.getNumPlayers();
+        this.game = new Game(lobby.startGame());
     }
 
     private void handleReceivedPlayer(Player player) {
-        // If there is no game object, instantiate it
-        if (game == null) {
-            // Tell lobby to start game and save returned game screen
-            GameScreen screen = lobby.startGame();
-            // Create game object with this screen
-            game = new Game(player, screen);
-        }
-        // if there is a game object, this object is another player
-        else {
+        // Check if this player is my own
+        if (player.getId() == this.getID()) {
+            game.setMyPlayer(player);
+        } else {
             game.addPlayer(player);
         }
-
-        // Check if all players are received, and start game loop if so
-        if (game.getPlayers().size() == this.expectedPlayers)
-            game.gameLoop();
     }
 
     public void registerClasses() {

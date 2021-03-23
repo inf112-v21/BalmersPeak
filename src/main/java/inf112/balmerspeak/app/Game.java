@@ -1,21 +1,25 @@
 package inf112.balmerspeak.app;
 
-import inf112.balmerspeak.app.board.Board;
 import inf112.balmerspeak.app.menu.GameScreen;
 
 import java.util.ArrayList;
 
 public class Game {
 
-    private Player player;
+    private Player myPlayer;
     private ArrayList<Player> players;
     private GameScreen gameScreen;
 
 
     public Game(Player player, GameScreen gameScreen) {
-        this.player = player;
+        this.myPlayer = player;
         this.players = new ArrayList<>();
         this.gameScreen = gameScreen;
+    }
+
+    public Game(GameScreen screen) {
+        this.players = new ArrayList<>();
+        this.gameScreen = screen;
     }
 
     // The game loop which executes all stages of the game and exits when a winner is determined
@@ -28,7 +32,7 @@ public class Game {
     // Places all players robots at their starting position
     public void placeRobotsAtStart() {
         // Place own robot
-        gameScreen.getBoard().placeRobot(player.getCoords().getValue0(), player.getCoords().getValue1());
+        gameScreen.getBoard().placeRobot(myPlayer.getCoords().getValue0(), myPlayer.getCoords().getValue1());
         // Place everyone else's
         for (Player player : players) {
             gameScreen.getBoard().placeRobot(player.getCoords().getValue0(), player.getCoords().getValue1());
@@ -41,6 +45,14 @@ public class Game {
 
     public ArrayList<Player> getPlayers() {
         return this.players;
+    }
+
+    public void setMyPlayer(Player myPlayer) {
+        this.myPlayer = myPlayer;
+    }
+
+    public Player getMyPlayer() {
+        return this.myPlayer;
     }
 
     public void setGameScreen(GameScreen screen) {

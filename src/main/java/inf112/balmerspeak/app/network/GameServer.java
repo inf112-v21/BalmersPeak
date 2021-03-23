@@ -79,19 +79,21 @@ public class GameServer extends Server {
     }
 
     public void sendStartMessage() {
+        // Send number of players first to every client
+        for (Connection client : clients.keySet()) {
+            client.sendTCP(new NumPlayers(clients.size()+1));
+        }
         // Coords resolver
         CoordsResolver resolver = new CoordsResolver();
         // Instantiate game with own player object
-        Player myPlayer = new Player(resolver.getCoordsPair(), username, ipAddress);
+        Player myPlayer = new Player(resolver.getCoordsPair(), username, ipAddress, 0); // host is always id 0
         game = new Game(myPlayer, this.gameScreen);
 
-        // Send each client their own player + the host player
+        // Construct player object for every client and add to game
         for (Connection client : clients.keySet()) {
-            Player tmpPlayer = new Player(resolver.getCoordsPair(), clients.get(client).getUsername(), clients.get(client).getUsername());
-            game.addPlayer(tmpPlayer);
-            // Send player object to each client
-            client.sendTCP(tmpPlayer);
-            client.sendTCP(myPlayer);
+            Player clientPlayer = new Player(resolver.getCoordsPair(), clients.get(client).getUsername(), clients.get(client).getIP(), client.getID());
+            // Add to game
+            game.addPlayer(clientPlayer);
         }
 
         // Now send every player to every client
@@ -99,11 +101,8 @@ public class GameServer extends Server {
             for (Player player : game.getPlayers()) {
                 client.sendTCP(player);
             }
-        }
-
-        // Now send the number of players for the clients to confirm and start game loop.
-        for (Connection client : clients.keySet()) {
-            client.sendTCP(new NumPlayers(this.getConnections().length));
+            // Send host player
+            client.sendTCP(myPlayer);
         }
 
         // Now start the server game loop
