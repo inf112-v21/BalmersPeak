@@ -78,12 +78,6 @@ public class GameScreen implements Screen {
         cam.update();
 
         rend.setView(cam);
-
-
-        for (Robot robots : board.getPlayers()) {
-            board.placeRobot(robots.getX(), robots.getY());
-            robots.giveHand(9);
-        }
     }
 
     public Robot getRobot() {
