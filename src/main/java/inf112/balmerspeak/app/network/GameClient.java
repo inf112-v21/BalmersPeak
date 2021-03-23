@@ -62,7 +62,7 @@ public class GameClient extends Client {
 
                 // check for NumPlayers message
                 else if (object instanceof NumPlayers) {
-                    handleReceivedNumPlayers((NumPlayers) object);
+                    Gdx.app.postRunnable(() -> handleReceivedNumPlayers((NumPlayers) object));
                 }
             }
         });
@@ -81,6 +81,10 @@ public class GameClient extends Client {
         } else {
             game.addPlayer(player);
         }
+
+        // Start game loop if number of players is correct
+        if (expectedPlayers == game.getPlayers().size()+1)
+            game.gameLoop();
     }
 
     public void registerClasses() {
