@@ -4,8 +4,11 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.Sprite;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
+import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
@@ -15,10 +18,12 @@ import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import inf112.balmerspeak.app.InputHandler;
 import inf112.balmerspeak.app.MapHandler;
 import inf112.balmerspeak.app.board.Board;
+import inf112.balmerspeak.app.board.Walls;
 import inf112.balmerspeak.app.cards.*;
 import inf112.balmerspeak.app.robot.Direction;
 import inf112.balmerspeak.app.robot.Robot;
 
+import javax.swing.*;
 import java.util.ArrayList;
 
 
@@ -50,8 +55,6 @@ public class GameScreen implements Screen {
     private Texture health;
     Board board;
     int turn = 0;
-
-
 
     public GameScreen() {
 
@@ -92,6 +95,10 @@ public class GameScreen implements Screen {
         if (dx == 0 && dy == 0)
             return false;
 
+        if ((board.getWalls(board.getActivePlayer().getX(), board.getActivePlayer().getY()) != null) && (board.getActivePlayer().getDirection() == board.getWalls(board.getActivePlayer().getX(),board.getActivePlayer().getY()).getDirection())) {
+            return false;
+        }
+
         // These return true if the resulting playerVec are out of bounds
         boolean outsideX = board.getActivePlayer().getX() + dx > board.getBoard().getWidth()-1 || board.getActivePlayer().getX() + dx < 0;
         boolean outsideY = board.getActivePlayer().getY() + dy > board.getBoard().getHeight()-1 || board.getActivePlayer().getY() + dy < 0;
@@ -120,10 +127,31 @@ public class GameScreen implements Screen {
         int playerY = board.getActivePlayer().getY();
 
         // Only update if the player is allowed to move
-        if (shouldMove(dx, dy)){
-            board.move(playerX,playerY, dx,dy);
+        if (shouldMove(dx, dy)) {
+            board.move(playerX, playerY, dx, dy);
             board.getActivePlayer().set(playerX + dx, playerY + dy);
 
+            if (board.getHole(playerX + dx, playerY + dy) != null) {
+                board.getActivePlayer().setLives(board.getActivePlayer().getLives() - 1);
+                System.out.println("lost life");
+                show();
+            }
+            if (board.getLaser(playerX + dx, playerY + dy) != null) {
+                board.getActivePlayer().setHealth(board.getActivePlayer().getHealth() - 1);
+                System.out.println("Lost health");
+                show();
+            }
+            if (board.getFlag(playerX + dx, playerY + dy) != null) {
+                board.getActivePlayer().addFlag(board.getFlag(playerX + dx, playerY + dy));
+            }
+            if (board.getActivePlayer().checkWinCondition())
+                System.out.println("Player" + board.getActivePlayer() + " won");
+
+            // Check if player died
+            if (shouldMove(dx, dy)) {
+                board.getActivePlayer().set(playerX + dx, playerY + dy);
+                board.move(playerX, playerY, dx, dy);
+            }
             if (board.getHole(playerX + dx, playerY + dy) != null) {
                 board.getActivePlayer().setLives(board.getActivePlayer().getLives() - 1);
                 show();
@@ -132,17 +160,19 @@ public class GameScreen implements Screen {
                 board.getActivePlayer().setHealth(board.getActivePlayer().getHealth() - 1);
                 show();
             }
-            if (board.getFlag(playerX + dx, playerY + dy) != null){
-                board.getActivePlayer().addFlag(board.getFlag(playerX +dx, playerY+dy));
-            }
+
+
+            // Update player coordinates
+            input.clear();
         }
-
-
-        // Update player coordinates
-        input.clear();
     }
 
-    public void handleMoveCard(MovementCard card){
+    public void winFrame(){
+        JFrame f = new JFrame();
+        JOptionPane.showMessageDialog(f, "Player " + board.getActivePlayer().toString() + " won");
+    }
+
+    public void handleMoveCard(MovementCard card) {
         // Changes in the x coordinate
         int dx = 0;
 
@@ -165,6 +195,7 @@ public class GameScreen implements Screen {
 
         // Only update if the player is allowed to move
         if (shouldMove(dx, dy)){
+            board.getActivePlayer().set(playerX + dx, playerY + dy);
             board.move(playerX,playerY, dx,dy);
             board.getActivePlayer().set(playerX + dx, playerY + dy);
 
@@ -179,6 +210,8 @@ public class GameScreen implements Screen {
             if (board.getFlag(playerX + dx, playerY + dy) != null){
                 board.getActivePlayer().addFlag(board.getFlag(playerX +dx, playerY+dy));
             }
+            if (board.getActivePlayer().checkWinCondition())
+                System.out.println("Player" + board.getActivePlayer() + " won");
         }
 
     }
@@ -193,7 +226,30 @@ public class GameScreen implements Screen {
             board.getActivePlayer().setDirection(board.getActivePlayer().turn(Rotation.uturn, board.getActivePlayer().getDirection()));
     }
 
-    public void showHealthLives(){
+    public Direction turn(Rotation rotation, Direction direction) {
+        switch (direction) {
+            case NORTH:
+                if (rotation.equals(Rotation.right)) return Direction.EAST;
+                else if (rotation.equals(Rotation.uturn)) return Direction.SOUTH;
+                else return Direction.WEST;
+            case SOUTH:
+                if (rotation.equals(Rotation.right)) return Direction.WEST;
+                else if (rotation.equals(Rotation.uturn)) return Direction.NORTH;
+                else return Direction.EAST;
+            case WEST:
+                if (rotation.equals(Rotation.right)) return Direction.NORTH;
+                else if (rotation.equals(Rotation.uturn)) return Direction.EAST;
+                else return Direction.SOUTH;
+            case EAST:
+                if (rotation.equals(Rotation.right)) return Direction.SOUTH;
+                else if (rotation.equals(Rotation.uturn)) return Direction.WEST;
+                else return Direction.NORTH;
+            default:
+                return null;
+        }
+    }
+
+    public void showHealthLives() {
         int xlife = 1300;
         for (int i = 0; i < board.getActivePlayer().getLives(); i++) {
             life = new Texture("images/lifetoken.png");
@@ -216,9 +272,7 @@ public class GameScreen implements Screen {
             b.setPosition(xhealth+=50, 50);
             b.setSize(50,50);
             stage.addActor(b);
-
         }
-
     }
 
     @Override
@@ -244,10 +298,6 @@ public class GameScreen implements Screen {
                         handleRotation((RotationCard) card);
                     }
                 }
-                //board.switchTurn();
-                //queueList.clear();
-                show();
-
             }
         });
 
@@ -297,6 +347,7 @@ public class GameScreen implements Screen {
 
         stage.addActor(button);
         stage.addActor(register);
+        Gdx.input.setInputProcessor(stage);
     }
 
     @Override
@@ -314,7 +365,6 @@ public class GameScreen implements Screen {
         stage.getBatch().draw(backgroundImage, 0, 0, stage.getWidth(), 270);
         stage.getBatch().end();
         stage.draw();
-        handleMove();
     }
 
     @Override
