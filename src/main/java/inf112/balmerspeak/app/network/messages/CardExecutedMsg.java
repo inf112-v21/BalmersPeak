@@ -2,7 +2,9 @@ package inf112.balmerspeak.app.network.messages;
 
 import inf112.balmerspeak.app.cards.ProgramCard;
 
-public class CardExecutedMsg {
+import java.io.Serializable;
+
+public class CardExecutedMsg implements Serializable {
 
     private int playerid;
     private ProgramCard card;

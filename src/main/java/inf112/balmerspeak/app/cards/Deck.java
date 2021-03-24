@@ -23,10 +23,10 @@ public class Deck implements Serializable {
             deckInUse.add(new RotationCard(2,Rotation.left,"Rotate left"));
         }
         for (int i = 0; i < 12; i++) {
-            deckInUse.add(new MovementCard(1,2,"Move two"));
+            deckInUse.add(new MovementCard(2,2,"Move two"));
         }
         for (int i = 0; i < 6; i++) {
-            deckInUse.add(new MovementCard(1,3,"Move three"));
+            deckInUse.add(new MovementCard(3,3,"Move three"));
             deckInUse.add(new MovementCard(2,-1,"Back up"));
             deckInUse.add(new RotationCard(2,Rotation.uturn,"U-turn"));
         }

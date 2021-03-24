@@ -31,7 +31,7 @@ public class GameScreen implements Screen {
 
     private ArrayList<ProgramCard> queueList = new ArrayList<>();
 
-    private Player player;
+    private Player myPlayer;
     private Game game;
 
 
@@ -83,83 +83,39 @@ public class GameScreen implements Screen {
         this.game = game;
     }
 
-    public void setPlayer(Player myPlayer) {
-        this.player = myPlayer;
+    public void setMyPlayer(Player myPlayer) {
+        this.myPlayer = myPlayer;
     }
 
-    public Player getPlayer() {
-        return this.player;
+    public Player getMyPlayer() {
+        return this.myPlayer;
     }
 
     public boolean shouldMove(int dx, int dy) {
         // Return false if dx and dy are zero
-        if (dx == 0 && dy == 0)
-            return false;
-
-        // These return true if the resulting playerVec are out of bounds
-        boolean outsideX = board.getActivePlayer().getX() + dx > board.getBoard().getWidth()-1 || board.getActivePlayer().getX() + dx < 0;
-        boolean outsideY = board.getActivePlayer().getY() + dy > board.getBoard().getHeight()-1 || board.getActivePlayer().getY() + dy < 0;
-        boolean isPlayer = board.getRobot(board.getActivePlayer().getX() + dx, board.getActivePlayer().getY() + dy) != null;
-
-        return !(outsideX || outsideY || isPlayer);
+//        if (dx == 0 && dy == 0)
+//            return false;
+//
+//        // These return true if the resulting playerVec are out of bounds
+//        boolean outsideX = board.getActivePlayer().getX() + dx > board.getBoard().getWidth()-1 || board.getActivePlayer().getX() + dx < 0;
+//        boolean outsideY = board.getActivePlayer().getY() + dy > board.getBoard().getHeight()-1 || board.getActivePlayer().getY() + dy < 0;
+//        boolean isPlayer = board.getRobot(board.getActivePlayer().getX() + dx, board.getActivePlayer().getY() + dy) != null;
+//
+//        return !(outsideX || outsideY || isPlayer);
+        // TODO: commented out for testing purposes
+        return true;
     }
 
-//    //Unused, but still usable for testing
-//    public void handleMove() {
-//        // Changes in the x coordinate
-//        int dx = 0;
-//        // Changes in the y coordinate
-//        int dy = 0;
-//
-//        if (input.wPressed)
-//            dy += 1;
-//        else if (input.aPressed)
-//            dx -= 1;
-//        else if(input.sPressed)
-//            dy -=1;
-//        else if (input.dPressed)
-//            dx += 1;
-//
-//        // Player x and y coordinates
-//        int playerX = player.getRobot().getX();
-//        int playerY = player.getRobot().getY();
-//
-//
-//        // Only update if the player is allowed to move
-//        if (shouldMove(dx, dy)) {
-//            // Move player textures
-//            mapHandler.movePlayer(playerX, playerY, dx, dy);
-//            robot.set(playerX + dx, playerY + dy);
-//            board.placeRobot(playerX + dx, playerY + dy);
-//        }
-//
-//        // Check if player won
-//        if (mapHandler.checkWin(playerX + dx, playerY + dy)) {
-//            System.out.println("You won!");
-//            mapHandler.changePlayerTextureWin(playerX + dx, playerY + dy);
-//            robot.set(playerX + dx, playerY + dy);
-//        }
-//
-//        // Check if player died
-//        if (mapHandler.checkDeath(playerX + dx, playerY + dy)) {
-//            System.out.println("You died :(");
-//            mapHandler.changePlayerTextureDeath(playerX + dx, playerY + dy);
-//            robot.set(playerX + dx, playerY + dy);
-//        }
-//
-//
-//        // Update player coordinates
-//        input.clear();
-//    }
-    public void executeCard(GeneralCard card) {
-        // Cast and call appropriate method
+
+    public void executeCard(GeneralCard card, Player player) {
+        // Call appropriate method
         if (card instanceof  MovementCard)
-            handleMoveCard((MovementCard) card);
+            handleMoveCard((MovementCard) card, player);
         else
-            handleRotation((RotationCard) card);
+            handleRotation((RotationCard) card, player);
     }
 
-    public void handleMoveCard(MovementCard card){
+    public void handleMoveCard(MovementCard card, Player player){
         // Changes in the x coordinate
         int dx = 0;
 
@@ -167,43 +123,42 @@ public class GameScreen implements Screen {
         int dy = 0;
 
         //Check for direction
-        if (board.getActivePlayer().getDirection().equals(Direction.NORTH))
+        if (player.getRobot().getDirection().equals(Direction.NORTH))
             dy += card.getDistance();
-        else if (board.getActivePlayer().getDirection().equals(Direction.SOUTH))
+        else if (player.getRobot().getDirection().equals(Direction.SOUTH))
             dy -= card.getDistance();
-        else if (board.getActivePlayer().getDirection().equals(Direction.EAST))
+        else if (player.getRobot().getDirection().equals(Direction.EAST))
             dx += card.getDistance();
-        else if (board.getActivePlayer().getDirection().equals(Direction.WEST))
+        else if (player.getRobot().getDirection().equals(Direction.WEST))
             dx -= card.getDistance();
 
         // Player x and y coordinates
-        int playerX = board.getActivePlayer().getX();
-        int playerY = board.getActivePlayer().getY();
+        int playerX = player.getRobot().getX();
+        int playerY = player.getRobot().getY();
 
         // Only update if the player is allowed to move
         if (shouldMove(dx, dy)){
-            board.move(playerX,playerY, dx,dy);
-            board.getActivePlayer().set(playerX + dx, playerY + dy);
+            board.moveAlternate(player, dx,dy);
+            player.getRobot().set(playerX + dx, playerY + dy);
         }
         if (board.getHole(playerX + dx, playerY + dy) != null){
-            board.getActivePlayer().setLives(player.getRobot().getLives()-1);
+            player.getRobot().setLives(player.getRobot().getLives()-1);
             show();
         }
         if (board.getLaser(playerX + dx, playerY + dy) != null){
-            board.getActivePlayer().setHealth(player.getRobot().getHealth()-1);
+            player.getRobot().setHealth(player.getRobot().getHealth()-1);
             show();
         }
-
     }
 
     //Handles rotation cards
-    public void handleRotation(RotationCard card){
+    public void handleRotation(RotationCard card, Player player){
         if (card.getRotation().equals(Rotation.left))
-            board.getActivePlayer().setDirection(board.getActivePlayer().turn(Rotation.left, board.getActivePlayer().getDirection()));
-        if (card.getRotation().equals(Rotation.right))
-            board.getActivePlayer().setDirection(board.getActivePlayer().turn(Rotation.right, board.getActivePlayer().getDirection()));
-        if (card.getRotation().equals(Rotation.uturn))
-            board.getActivePlayer().setDirection(board.getActivePlayer().turn(Rotation.uturn, board.getActivePlayer().getDirection()));
+            player.getRobot().setDirection(player.getRobot().turn(Rotation.left, player.getRobot().getDirection()));
+        else if (card.getRotation().equals(Rotation.right))
+            player.getRobot().setDirection(player.getRobot().turn(Rotation.right, player.getRobot().getDirection()));
+        else if (card.getRotation().equals(Rotation.uturn))
+            player.getRobot().setDirection(player.getRobot().turn(Rotation.uturn, player.getRobot().getDirection()));
     }
 
     @Override
@@ -227,7 +182,7 @@ public class GameScreen implements Screen {
 
         //Adds the cards to the GUI
         int x = 100;
-        for (ProgramCard cards : player.getHand()) {
+        for (ProgramCard cards : myPlayer.getHand()) {
             card = new Texture("assets/images/cards/" + cards.toString() + ".png");
             Button.ButtonStyle tbs = new Button.ButtonStyle();
             tbs.up = new TextureRegionDrawable(new TextureRegion(card));

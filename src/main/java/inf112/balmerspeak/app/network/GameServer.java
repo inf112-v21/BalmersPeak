@@ -1,5 +1,6 @@
 package inf112.balmerspeak.app.network;
 
+import com.badlogic.gdx.Gdx;
 import com.esotericsoftware.kryo.Kryo;
 import com.esotericsoftware.kryo.serializers.JavaSerializer;
 import com.esotericsoftware.kryonet.Connection;
@@ -62,7 +63,7 @@ public class GameServer extends Server {
                     game.getPlayerById(connection.getID()).setHandReady(true);
                     // Check if all players are ready
                     if (game.getAllPlayersReady())
-                        game.startRound();
+                        Gdx.app.postRunnable(() -> game.startRound());
                 }
             }
 
@@ -93,7 +94,7 @@ public class GameServer extends Server {
     // Send the card that was executed to all clients
     public void sendCardExecuted(ProgramCard card) {
         for (Connection client : clients.keySet()) {
-            //
+            client.sendTCP(new CardExecutedMsg(card.getPlayer().getId(), card));
         }
     }
 
@@ -136,6 +137,7 @@ public class GameServer extends Server {
         kryo.register(Player.class, new JavaSerializer());
         kryo.register(NumPlayers.class, new JavaSerializer());
         kryo.register(HandMsg.class, new JavaSerializer());
+        kryo.register(CardExecutedMsg.class, new JavaSerializer());
     }
 
 

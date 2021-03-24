@@ -10,6 +10,7 @@ import inf112.balmerspeak.app.Game;
 import inf112.balmerspeak.app.Player;
 import inf112.balmerspeak.app.cards.ProgramCard;
 import inf112.balmerspeak.app.menu.LobbyScreen;
+import inf112.balmerspeak.app.network.messages.CardExecutedMsg;
 import inf112.balmerspeak.app.network.messages.HandMsg;
 import inf112.balmerspeak.app.network.messages.InitMsg;
 import inf112.balmerspeak.app.network.messages.NumPlayers;
@@ -79,7 +80,7 @@ public class GameClient extends Client {
         // Check if this player is my own
         if (player.getId() == this.getID()) {
             game.setMyPlayer(player);
-            game.getGameScreen().setPlayer(player);
+            game.getGameScreen().setMyPlayer(player);
 
         } else {
             game.addPlayer(player);
@@ -100,6 +101,7 @@ public class GameClient extends Client {
         kryo.register(Player.class, new JavaSerializer());
         kryo.register(NumPlayers.class, new JavaSerializer());
         kryo.register(HandMsg.class, new JavaSerializer());
+        kryo.register(CardExecutedMsg.class, new JavaSerializer());
     }
 
     public void setLobby(LobbyScreen screen) {

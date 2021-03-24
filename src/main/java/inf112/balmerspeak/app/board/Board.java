@@ -8,6 +8,7 @@ import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.maps.tiled.tiles.StaticTiledMapTile;
 import inf112.balmerspeak.app.Hole;
 import inf112.balmerspeak.app.Laser;
+import inf112.balmerspeak.app.Player;
 import inf112.balmerspeak.app.flag.Flag;
 import inf112.balmerspeak.app.robot.Direction;
 import inf112.balmerspeak.app.robot.Robot;
@@ -193,8 +194,15 @@ public class Board {
         robots[y][x] = null;
     }
 
-    public void move(int x, int y, int dx, int dy){
+    public void moveAlternate(Player player, int dx, int dy) {
+        this.playerLayer.setCell(player.getRobot().getX(), player.getRobot().getY(), null);
+        this.playerLayer.setCell(player.getRobot().getX() + dx, player.getRobot().getY() + dy, this.player);
+    }
+
+    public void move(int x, int y, int dx, int dy) {
+
         robots[y+dy][x+dx] = robots[y][x];
+
         if(holes[y+dy][x+dx] != null) {
            this.playerLayer.setCell(x + dx, y + dy, dieCell);
         }

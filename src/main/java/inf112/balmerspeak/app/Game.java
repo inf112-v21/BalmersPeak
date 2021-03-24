@@ -1,5 +1,6 @@
 package inf112.balmerspeak.app;
 
+import com.badlogic.gdx.Gdx;
 import inf112.balmerspeak.app.cards.ProgramCard;
 import inf112.balmerspeak.app.menu.GameScreen;
 import inf112.balmerspeak.app.network.GameClient;
@@ -24,7 +25,7 @@ public class Game {
         this.gameScreen = gameScreen;
         this.server = server;
         gameScreen.setGame(this);
-        gameScreen.setPlayer(myPlayer);
+        gameScreen.setMyPlayer(myPlayer);
 
     }
 
@@ -52,11 +53,14 @@ public class Game {
         // Get sorted cards for the round
         ArrayList<ProgramCard> sortedCards = getCardOrder();
 
+
         for (ProgramCard card : sortedCards) {
             // Execute the movement and send to all clients
-            gameScreen.executeCard(card);
+            System.out.println("Executing player " + card.getPlayer().getId() + "'s card, " + card);
+            gameScreen.executeCard(card, card.getPlayer());
             // Send to all clients
             server.sendCardExecuted(card);
+            break; //TODO: for testing pruposes
         }
     }
 
@@ -124,12 +128,12 @@ public class Game {
         for (Player player : players) {
             ProgramCard card = player.getHand().remove(0);
             // Set owner of this card
-            card.setRobot(player.getRobot());
+            card.setPlayer(player);
             cards.add(card);
         }
         // Set host card
         ProgramCard myCard = myPlayer.getHand().remove(0);
-        myCard.setRobot(myPlayer.getRobot());
+        myCard.setPlayer(myPlayer);
         cards.add(myCard);
 
         Collections.sort(cards);

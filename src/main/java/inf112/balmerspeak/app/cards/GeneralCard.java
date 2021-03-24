@@ -1,5 +1,6 @@
 package inf112.balmerspeak.app.cards;
 
+import inf112.balmerspeak.app.Player;
 import inf112.balmerspeak.app.robot.Robot;
 
 import java.io.Serializable;
@@ -9,16 +10,12 @@ public class GeneralCard implements ICards, Serializable, Comparable<GeneralCard
     private MovementType type;
     private int priority;
     private String name;
-    private Robot robot;
+    private Player player;
 
     public GeneralCard(MovementType type, int priority, String name) {
         this.type = type;
         this.priority = priority;
         this.name = name;
-    }
-
-    public void setRobot(Robot robot) {
-        this.robot = robot;
     }
 
     @Override
@@ -32,8 +29,12 @@ public class GeneralCard implements ICards, Serializable, Comparable<GeneralCard
         return type;
     }
 
-    public Robot getRobot() {
-        return robot;
+    public void setPlayer(Player player) {
+        this.player = player;
+    }
+
+    public Player getPlayer() {
+        return this.player;
     }
 
 
