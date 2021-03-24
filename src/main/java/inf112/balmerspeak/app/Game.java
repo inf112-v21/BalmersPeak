@@ -82,6 +82,9 @@ public class Game {
             myPlayer.setHand(cards);
             // Set this player to ready
             myPlayer.setHandReady(true);
+            // Check if all players are ready
+            if (getAllPlayersReady())
+                Gdx.app.postRunnable(this::startRound);
         } else
             client.alertServerPlayerIsReady(cards);
     }
