@@ -4,7 +4,9 @@ import inf112.balmerspeak.app.robot.Direction;
 import inf112.balmerspeak.app.robot.Robot;
 import org.javatuples.Pair;
 
-public class Player {
+import java.io.Serializable;
+
+public class Player implements Serializable {
 
     private String username;
     private String ipAddress;

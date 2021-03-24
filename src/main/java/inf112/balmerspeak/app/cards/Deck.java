@@ -1,8 +1,9 @@
 package inf112.balmerspeak.app.cards;
 
+import java.io.Serializable;
 import java.util.*;
 
-public class Deck {
+public class Deck implements Serializable {
 
     public static final int hand_size = 9;
 

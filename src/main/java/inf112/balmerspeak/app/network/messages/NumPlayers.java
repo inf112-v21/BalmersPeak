@@ -1,6 +1,8 @@
 package inf112.balmerspeak.app.network.messages;
 
-public class NumPlayers {
+import java.io.Serializable;
+
+public class NumPlayers implements Serializable {
 
     private final int numPlayers;
 

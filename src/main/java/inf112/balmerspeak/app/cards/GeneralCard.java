@@ -2,7 +2,9 @@ package inf112.balmerspeak.app.cards;
 
 import inf112.balmerspeak.app.robot.Robot;
 
-public class GeneralCard implements ICards {
+import java.io.Serializable;
+
+public class GeneralCard implements ICards, Serializable {
 
     private MovementType type;
     private int priority;

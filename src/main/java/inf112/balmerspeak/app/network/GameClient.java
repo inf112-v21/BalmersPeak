@@ -2,6 +2,7 @@ package inf112.balmerspeak.app.network;
 
 import com.badlogic.gdx.Gdx;
 import com.esotericsoftware.kryo.Kryo;
+import com.esotericsoftware.kryo.serializers.JavaSerializer;
 import com.esotericsoftware.kryonet.Client;
 import com.esotericsoftware.kryonet.Connection;
 import com.esotericsoftware.kryonet.Listener;
@@ -12,10 +13,6 @@ import inf112.balmerspeak.app.menu.LobbyScreen;
 import inf112.balmerspeak.app.network.messages.HandMsg;
 import inf112.balmerspeak.app.network.messages.InitMsg;
 import inf112.balmerspeak.app.network.messages.NumPlayers;
-import inf112.balmerspeak.app.network.serializers.HandMsgSerializer;
-import inf112.balmerspeak.app.network.serializers.InitMsgSerializer;
-import inf112.balmerspeak.app.network.serializers.NumPlayersSerializer;
-import inf112.balmerspeak.app.network.serializers.PlayerSerializer;
 import inf112.balmerspeak.app.network.tools.IPFinder;
 
 import java.io.IOException;
@@ -32,7 +29,7 @@ public class GameClient extends Client {
 
 
     public GameClient(String ipAddress, String username) throws IOException {
-        super();
+        super(4096, 4096);
         // Register classes here
         this.registerClasses();
         this.start();
@@ -99,10 +96,10 @@ public class GameClient extends Client {
 
     public void registerClasses() {
         Kryo kryo = this.getKryo();
-        kryo.register(InitMsg.class, new InitMsgSerializer());
-        kryo.register(Player.class, new PlayerSerializer());
-        kryo.register(NumPlayers.class, new NumPlayersSerializer());
-        kryo.register(HandMsg.class, new HandMsgSerializer());
+        kryo.register(InitMsg.class, new JavaSerializer());
+        kryo.register(Player.class, new JavaSerializer());
+        kryo.register(NumPlayers.class, new JavaSerializer());
+        kryo.register(HandMsg.class, new JavaSerializer());
     }
 
     public void setLobby(LobbyScreen screen) {

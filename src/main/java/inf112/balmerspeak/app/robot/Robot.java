@@ -4,6 +4,7 @@ import inf112.balmerspeak.app.cards.Deck;
 import inf112.balmerspeak.app.cards.ProgramCard;
 import inf112.balmerspeak.app.cards.Rotation;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
 
@@ -11,7 +12,7 @@ import inf112.balmerspeak.app.robot.Direction;
 
 
 
-public class Robot implements IRobot{
+public class Robot implements IRobot, Serializable {
 
     private int x;
     private int y;
@@ -34,6 +35,9 @@ public class Robot implements IRobot{
         return hand;
     }
 
+    public void setHand(ArrayList<ProgramCard> cards) {
+        this.hand = cards;
+    }
 
 
     @Override

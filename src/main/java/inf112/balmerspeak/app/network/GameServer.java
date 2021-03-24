@@ -1,6 +1,7 @@
 package inf112.balmerspeak.app.network;
 
 import com.esotericsoftware.kryo.Kryo;
+import com.esotericsoftware.kryo.serializers.JavaSerializer;
 import com.esotericsoftware.kryonet.Connection;
 import com.esotericsoftware.kryonet.Listener;
 import com.esotericsoftware.kryonet.Server;
@@ -11,10 +12,6 @@ import inf112.balmerspeak.app.menu.LobbyScreen;
 import inf112.balmerspeak.app.network.messages.HandMsg;
 import inf112.balmerspeak.app.network.messages.InitMsg;
 import inf112.balmerspeak.app.network.messages.NumPlayers;
-import inf112.balmerspeak.app.network.serializers.HandMsgSerializer;
-import inf112.balmerspeak.app.network.serializers.InitMsgSerializer;
-import inf112.balmerspeak.app.network.serializers.NumPlayersSerializer;
-import inf112.balmerspeak.app.network.serializers.PlayerSerializer;
 import inf112.balmerspeak.app.network.tools.CoordsResolver;
 import inf112.balmerspeak.app.network.tools.IPFinder;
 
@@ -33,7 +30,7 @@ public class GameServer extends Server {
 
 
     public GameServer(String username) throws IOException {
-        super();
+        super(4096, 4096);
         // Register classes here
         this.registerClasses();
         // Start server and bind to port
@@ -58,7 +55,8 @@ public class GameServer extends Server {
                 // Check for hand ready message
                 else if (object instanceof HandMsg) {
                     // Set players hand to ready
-                    game.getPlayerById(connection.getID()).setHandReady(true);
+                    game.getPlayerById(connection.getID()).getRobot().setHand(((HandMsg) object).getCards());
+                    System.out.println("The player " + game.getPlayerById(connection.getID()).getRobot().getHand());
                     // Check if all players are ready
                     if (game.getAllPlayersReady())
                         game.startRound();
@@ -124,10 +122,10 @@ public class GameServer extends Server {
 
     public void registerClasses() {
         Kryo kryo = this.getKryo();
-        kryo.register(InitMsg.class, new InitMsgSerializer());
-        kryo.register(Player.class, new PlayerSerializer());
-        kryo.register(NumPlayers.class, new NumPlayersSerializer());
-        kryo.register(HandMsg.class, new HandMsgSerializer());
+        kryo.register(InitMsg.class, new JavaSerializer());
+        kryo.register(Player.class, new JavaSerializer());
+        kryo.register(NumPlayers.class, new JavaSerializer());
+        kryo.register(HandMsg.class, new JavaSerializer());
     }
 
 
