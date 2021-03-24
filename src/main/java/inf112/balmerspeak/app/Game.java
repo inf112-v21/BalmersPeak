@@ -1,5 +1,6 @@
 package inf112.balmerspeak.app;
 
+import inf112.balmerspeak.app.cards.ProgramCard;
 import inf112.balmerspeak.app.menu.GameScreen;
 import inf112.balmerspeak.app.network.GameClient;
 
@@ -56,12 +57,12 @@ public class Game {
     }
 
     // Alert server that this player is ready
-    public void handIsReady() {
+    public void handIsReady(ArrayList<ProgramCard> cards) {
         // if host, set player to ready
         if (myPlayer.getId() == 0)
             myPlayer.setHandReady(true);
         else
-            client.alertServerPlayerIsReady();
+            client.alertServerPlayerIsReady(cards);
     }
 
     public void addPlayer(Player newPlayer) {

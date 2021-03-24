@@ -213,7 +213,7 @@ public class GameScreen implements Screen {
         button.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent changeEvent, Actor actor) {
-                game.handIsReady();
+                game.handIsReady(queueList);
                 show();
             }
         });

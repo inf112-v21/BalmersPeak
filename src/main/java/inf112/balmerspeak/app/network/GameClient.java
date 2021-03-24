@@ -7,17 +7,19 @@ import com.esotericsoftware.kryonet.Connection;
 import com.esotericsoftware.kryonet.Listener;
 import inf112.balmerspeak.app.Game;
 import inf112.balmerspeak.app.Player;
+import inf112.balmerspeak.app.cards.ProgramCard;
 import inf112.balmerspeak.app.menu.LobbyScreen;
-import inf112.balmerspeak.app.network.messages.HandReadyMsg;
+import inf112.balmerspeak.app.network.messages.HandMsg;
 import inf112.balmerspeak.app.network.messages.InitMsg;
 import inf112.balmerspeak.app.network.messages.NumPlayers;
-import inf112.balmerspeak.app.network.serializers.HandReadyMsgSerializer;
+import inf112.balmerspeak.app.network.serializers.HandMsgSerializer;
 import inf112.balmerspeak.app.network.serializers.InitMsgSerializer;
 import inf112.balmerspeak.app.network.serializers.NumPlayersSerializer;
 import inf112.balmerspeak.app.network.serializers.PlayerSerializer;
 import inf112.balmerspeak.app.network.tools.IPFinder;
 
 import java.io.IOException;
+import java.util.ArrayList;
 
 public class GameClient extends Client {
 
@@ -74,7 +76,6 @@ public class GameClient extends Client {
         this.expectedPlayers = num.getNumPlayers();
         this.game = new Game(lobby.startGame());
         this.game.setClient(this);
-        System.out.println("This game's client: " + this.game.toString());
     }
 
     private void handleReceivedPlayer(Player player) {
@@ -92,8 +93,8 @@ public class GameClient extends Client {
             game.gameLoop();
     }
 
-    public void alertServerPlayerIsReady() {
-        sendTCP(new HandReadyMsg(true));
+    public void alertServerPlayerIsReady(ArrayList<ProgramCard> cards) {
+        sendTCP(new HandMsg(cards));
     }
 
     public void registerClasses() {
@@ -101,7 +102,7 @@ public class GameClient extends Client {
         kryo.register(InitMsg.class, new InitMsgSerializer());
         kryo.register(Player.class, new PlayerSerializer());
         kryo.register(NumPlayers.class, new NumPlayersSerializer());
-        kryo.register(HandReadyMsg.class, new HandReadyMsgSerializer());
+        kryo.register(HandMsg.class, new HandMsgSerializer());
     }
 
     public void setLobby(LobbyScreen screen) {
