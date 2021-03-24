@@ -12,7 +12,6 @@ public class Game {
     private ArrayList<Player> players;
     private GameScreen gameScreen;
     private GameClient client;
-    private boolean allPlayersReady;
 
 
     public Game(Player player, GameScreen gameScreen) {
@@ -43,7 +42,8 @@ public class Game {
     }
 
     public void startRound() {
-        System.out.println("Starting round...");
+        // All cards have been sent, find first card to execute
+
     }
 
     // Places all players robots at their starting position
@@ -59,9 +59,12 @@ public class Game {
     // Alert server that this player is ready
     public void handIsReady(ArrayList<ProgramCard> cards) {
         // if host, set player to ready
-        if (myPlayer.getId() == 0)
+        if (myPlayer.getId() == 0) {
+            // Set own hand to received cards
+            myPlayer.getRobot().setHand(cards);
+            // Set this player to ready
             myPlayer.setHandReady(true);
-        else
+        } else
             client.alertServerPlayerIsReady(cards);
     }
 

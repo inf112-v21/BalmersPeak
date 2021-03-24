@@ -54,9 +54,10 @@ public class GameServer extends Server {
 
                 // Check for hand ready message
                 else if (object instanceof HandMsg) {
-                    // Set players hand to ready
+                    // Set players hand
                     game.getPlayerById(connection.getID()).getRobot().setHand(((HandMsg) object).getCards());
-                    System.out.println("The player " + game.getPlayerById(connection.getID()).getRobot().getHand());
+                    // Set player to ready
+                    game.getPlayerById(connection.getID()).setHandReady(true);
                     // Check if all players are ready
                     if (game.getAllPlayersReady())
                         game.startRound();
