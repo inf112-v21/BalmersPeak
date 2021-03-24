@@ -151,6 +151,13 @@ public class GameScreen implements Screen {
 //        // Update player coordinates
 //        input.clear();
 //    }
+    public void executeCard(GeneralCard card) {
+        // Cast and call appropriate method
+        if (card instanceof  MovementCard)
+            handleMoveCard((MovementCard) card);
+        else
+            handleRotation((RotationCard) card);
+    }
 
     public void handleMoveCard(MovementCard card){
         // Changes in the x coordinate
@@ -252,7 +259,6 @@ public class GameScreen implements Screen {
             b.setPosition(xlife+=100, 150);
             b.setSize(50,50);
             stage.addActor(b);
-
         }
 
         //Adds the health tokes to the GUI
@@ -265,7 +271,6 @@ public class GameScreen implements Screen {
             b.setPosition(xhealth+=50, 50);
             b.setSize(50,50);
             stage.addActor(b);
-
         }
 
         //Adds text field for lives

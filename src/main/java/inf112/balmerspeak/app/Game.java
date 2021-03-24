@@ -3,9 +3,11 @@ package inf112.balmerspeak.app;
 import inf112.balmerspeak.app.cards.ProgramCard;
 import inf112.balmerspeak.app.menu.GameScreen;
 import inf112.balmerspeak.app.network.GameClient;
+import inf112.balmerspeak.app.network.GameServer;
 
 import java.util.ArrayList;
 import java.util.Collections;
+
 
 public class Game {
 
@@ -13,14 +15,17 @@ public class Game {
     private ArrayList<Player> players;
     private GameScreen gameScreen;
     private GameClient client;
+    private GameServer server;
 
 
-    public Game(Player player, GameScreen gameScreen) {
+    public Game(Player player, GameScreen gameScreen, GameServer server) {
         this.myPlayer = player;
         this.players = new ArrayList<>();
         this.gameScreen = gameScreen;
+        this.server = server;
         gameScreen.setGame(this);
         gameScreen.setPlayer(myPlayer);
+
     }
 
     public Game(GameScreen screen) {
@@ -42,12 +47,16 @@ public class Game {
         myPlayer.getRobot().giveHand(9);
     }
 
+    // All hands are ready, sort after priority and execute them
     public void startRound() {
-        // All cards have been sent, find list of first cards to execute
-        ArrayList<ProgramCard> cardsForThisRound = getCardOrder();
-        // Execute them in order and send to clients
-        for (ProgramCard card : cardsForThisRound) {
+        // Get sorted cards for the round
+        ArrayList<ProgramCard> sortedCards = getCardOrder();
 
+        for (ProgramCard card : sortedCards) {
+            // Execute the movement and send to all clients
+            gameScreen.executeCard(card);
+            // Send to all clients
+            server.sendCardExecuted(card);
         }
     }
 
@@ -108,18 +117,25 @@ public class Game {
         this.client = client;
     }
 
-    // Computes the order of cards for one round.
+    // Computes the order of cards for the whole round
     public ArrayList<ProgramCard> getCardOrder() {
-        // Fetch everyone's first card from deck
+        // Collect each first card and connect them to the player
         ArrayList<ProgramCard> cards = new ArrayList<>();
         for (Player player : players) {
-            cards.add(player.getRobot().getHand().remove(0));
+            ProgramCard card = player.getRobot().getHand().remove(0);
+            // Set owner of this card
+            card.setRobot(player.getRobot());
+            cards.add(card);
         }
-        // Add host players card
-        cards.add(myPlayer.getRobot().getHand().remove(0));
-        // Sort it for priority and return
+        // Set host card
+        ProgramCard myCard = myPlayer.getRobot().getHand().remove(0);
+        myCard.setRobot(myPlayer.getRobot());
+        cards.add(myCard);
+
         Collections.sort(cards);
+
         return cards;
     }
+
 
 }

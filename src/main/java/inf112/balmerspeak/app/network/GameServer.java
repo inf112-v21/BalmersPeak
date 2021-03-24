@@ -7,8 +7,10 @@ import com.esotericsoftware.kryonet.Listener;
 import com.esotericsoftware.kryonet.Server;
 import inf112.balmerspeak.app.Game;
 import inf112.balmerspeak.app.Player;
+import inf112.balmerspeak.app.cards.ProgramCard;
 import inf112.balmerspeak.app.menu.GameScreen;
 import inf112.balmerspeak.app.menu.LobbyScreen;
+import inf112.balmerspeak.app.network.messages.CardExecutedMsg;
 import inf112.balmerspeak.app.network.messages.HandMsg;
 import inf112.balmerspeak.app.network.messages.InitMsg;
 import inf112.balmerspeak.app.network.messages.NumPlayers;
@@ -88,6 +90,13 @@ public class GameServer extends Server {
         connection.sendTCP(new InitMsg(ipAddress, username));
     }
 
+    // Send the card that was executed to all clients
+    public void sendCardExecuted(ProgramCard card) {
+        for (Connection client : clients.keySet()) {
+            //
+        }
+    }
+
     public void sendStartMessage() {
         // Send number of players first to every client
         for (Connection client : clients.keySet()) {
@@ -97,7 +106,7 @@ public class GameServer extends Server {
         CoordsResolver resolver = new CoordsResolver();
         // Instantiate game with own player object
         Player myPlayer = new Player(resolver.getCoordsPair(), username, ipAddress, 0); // host is always id 0
-        game = new Game(myPlayer, this.gameScreen);
+        game = new Game(myPlayer, this.gameScreen, this);
 
         // Construct player object for every client and add to game
         for (Connection client : clients.keySet()) {

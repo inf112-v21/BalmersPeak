@@ -17,6 +17,10 @@ public class GeneralCard implements ICards, Serializable, Comparable<GeneralCard
         this.name = name;
     }
 
+    public void setRobot(Robot robot) {
+        this.robot = robot;
+    }
+
     @Override
     public int getPriority() { return priority; }
 
@@ -33,9 +37,9 @@ public class GeneralCard implements ICards, Serializable, Comparable<GeneralCard
     }
 
 
-
+    // Reverse order with highest priority first, therefore the reverse operation below
     @Override
     public int compareTo(GeneralCard other) {
-        return this.getPriority() - other.getPriority();
+        return other.getPriority() - this.getPriority();
     }
 }
