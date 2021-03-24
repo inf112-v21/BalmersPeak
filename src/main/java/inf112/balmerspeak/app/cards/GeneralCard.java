@@ -4,7 +4,7 @@ import inf112.balmerspeak.app.robot.Robot;
 
 import java.io.Serializable;
 
-public class GeneralCard implements ICards, Serializable {
+public class GeneralCard implements ICards, Serializable, Comparable<GeneralCard> {
 
     private MovementType type;
     private int priority;
@@ -32,4 +32,10 @@ public class GeneralCard implements ICards, Serializable {
         return robot;
     }
 
+
+
+    @Override
+    public int compareTo(GeneralCard other) {
+        return this.getPriority() - other.getPriority();
+    }
 }

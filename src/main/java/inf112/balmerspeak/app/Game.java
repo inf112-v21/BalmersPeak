@@ -5,6 +5,7 @@ import inf112.balmerspeak.app.menu.GameScreen;
 import inf112.balmerspeak.app.network.GameClient;
 
 import java.util.ArrayList;
+import java.util.Collections;
 
 public class Game {
 
@@ -42,8 +43,12 @@ public class Game {
     }
 
     public void startRound() {
-        // All cards have been sent, find first card to execute
+        // All cards have been sent, find list of first cards to execute
+        ArrayList<ProgramCard> cardsForThisRound = getCardOrder();
+        // Execute them in order and send to clients
+        for (ProgramCard card : cardsForThisRound) {
 
+        }
     }
 
     // Places all players robots at their starting position
@@ -101,6 +106,20 @@ public class Game {
 
     public void setClient(GameClient client) {
         this.client = client;
+    }
+
+    // Computes the order of cards for one round.
+    public ArrayList<ProgramCard> getCardOrder() {
+        // Fetch everyone's first card from deck
+        ArrayList<ProgramCard> cards = new ArrayList<>();
+        for (Player player : players) {
+            cards.add(player.getRobot().getHand().remove(0));
+        }
+        // Add host players card
+        cards.add(myPlayer.getRobot().getHand().remove(0));
+        // Sort it for priority and return
+        Collections.sort(cards);
+        return cards;
     }
 
 }
