@@ -44,7 +44,7 @@ public class Game {
         // First, place robots
         placeRobotsAtStart();
         // Set game screen player to this player
-        myPlayer.getRobot().giveHand(9);
+        myPlayer.dealHand(9);
     }
 
     // All hands are ready, sort after priority and execute them
@@ -75,7 +75,7 @@ public class Game {
         // if host, set player to ready
         if (myPlayer.getId() == 0) {
             // Set own hand to received cards
-            myPlayer.getRobot().setHand(cards);
+            myPlayer.setHand(cards);
             // Set this player to ready
             myPlayer.setHandReady(true);
         } else
@@ -122,13 +122,13 @@ public class Game {
         // Collect each first card and connect them to the player
         ArrayList<ProgramCard> cards = new ArrayList<>();
         for (Player player : players) {
-            ProgramCard card = player.getRobot().getHand().remove(0);
+            ProgramCard card = player.getHand().remove(0);
             // Set owner of this card
             card.setRobot(player.getRobot());
             cards.add(card);
         }
         // Set host card
-        ProgramCard myCard = myPlayer.getRobot().getHand().remove(0);
+        ProgramCard myCard = myPlayer.getHand().remove(0);
         myCard.setRobot(myPlayer.getRobot());
         cards.add(myCard);
 

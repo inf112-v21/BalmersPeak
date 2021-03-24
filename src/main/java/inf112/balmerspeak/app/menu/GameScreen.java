@@ -227,7 +227,7 @@ public class GameScreen implements Screen {
 
         //Adds the cards to the GUI
         int x = 100;
-        for (ProgramCard cards : player.getRobot().getHand()) {
+        for (ProgramCard cards : player.getHand()) {
             card = new Texture("assets/images/cards/" + cards.toString() + ".png");
             Button.ButtonStyle tbs = new Button.ButtonStyle();
             tbs.up = new TextureRegionDrawable(new TextureRegion(card));

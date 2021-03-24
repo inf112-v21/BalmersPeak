@@ -20,8 +20,6 @@ public class Robot implements IRobot, Serializable {
     private int ll = 3;
     private Direction direction;
 
-    private ArrayList<ProgramCard> hand = new ArrayList<>();
-    private Deck deck = new Deck();
     private int spawnX;
     private int spawnY;
 
@@ -29,14 +27,6 @@ public class Robot implements IRobot, Serializable {
         x = xCoord;
         y = yCoord;
         direction = dir;
-    }
-
-    public ArrayList<ProgramCard> getHand() {
-        return hand;
-    }
-
-    public void setHand(ArrayList<ProgramCard> cards) {
-        this.hand = cards;
     }
 
 
@@ -86,19 +76,11 @@ public class Robot implements IRobot, Serializable {
         return (getHealth() == 0 || getLives() == 0);
     }
 
-    public void giveCard(ProgramCard card) {
-        hand.add(card);
-    }
 
     public void setDirection(Direction dir){
         this.direction = dir;
     }
 
-    public ArrayList<ProgramCard> giveHand(int amount){
-        for (ProgramCard cards : deck.getCards(amount))
-            hand.add(cards);
-        return hand;
-    }
 
     public Direction turn(Rotation rotation, Direction direction) {
         switch (direction) {
@@ -132,9 +114,4 @@ public class Robot implements IRobot, Serializable {
         this.spawnY = spawnY;
 
     }
-
-
-
-
-
 }
