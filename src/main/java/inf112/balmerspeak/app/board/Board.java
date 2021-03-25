@@ -209,17 +209,10 @@ public class Board {
         int x = player.getRobot().getX();
         int y = player.getRobot().getY();
 
-        if(holes[y+dy][x+dx] != null) {
-           this.playerLayer.setCell(x + dx, y + dy, robotTextures.get(player.getId()));
-        }
-        else if(flags[y+dy][x+dx] != null)
-            this.playerLayer.setCell(x+dx,y+dy, robotTextures.get(player.getId()));
-        else {
-            this.playerLayer.setCell(x + dx, y + dy, robotTextures.get(player.getId()));
-        }
+
+        this.playerLayer.setCell(x + dx, y + dy, robotTextures.get(player.getId()));
         robots[y][x] = null;
         this.playerLayer.setCell(x, y, null);
-
     }
 
     public Hole getHole(int x, int y) {
