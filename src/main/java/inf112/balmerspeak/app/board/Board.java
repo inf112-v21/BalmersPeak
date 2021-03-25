@@ -81,6 +81,7 @@ public class Board {
         WIDTH = board.getWidth();
         HEIGHT = board.getHeight();
 
+        //set up the matrices for the board
         robots = new Robot[HEIGHT][WIDTH];
         flags = new Flag[HEIGHT][WIDTH];
         holes = new Hole[HEIGHT][WIDTH];
@@ -89,8 +90,8 @@ public class Board {
 
         players = new ArrayList<>();
         players.add(new Robot(0,0, Direction.NORTH));
-        players.add(new Robot(1,1, Direction.NORTH));
 
+        //inititalise the tiles
         initHoles();
         initFlag();
         initLaser();

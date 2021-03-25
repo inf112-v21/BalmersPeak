@@ -5,10 +5,12 @@ public class RotationCard extends ProgramCard {
     private Rotation rotation;
     public int rotate;
     public boolean uturn;
+    private int priority;
 
     public RotationCard(int priority, Rotation rotation, String name) {
         super(MovementType.rotation, priority, name);
         this.rotation = rotation;
+        this.priority = priority;
 
     }
 
@@ -18,6 +20,6 @@ public class RotationCard extends ProgramCard {
 
     @Override
     public String toString() {
-        return ""+rotation;
+        return "rotate"+rotation+priority;
     }
 }
