@@ -173,10 +173,15 @@ public class Board {
     }
 
     public void placeRobot(Player player){
-
         int x = player.getRobot().getX();
         int y = player.getRobot().getY();
-        playerLayer.setCell(x, y, robotTextures.get(player.getId()));
+
+        playerLayer.setCell(x, y, robotTextures.get(player.getId()).setRotation(1)); //rotate to face the correct way
+    }
+
+    public void rotateRobot(Player player, int degrees) {
+        TiledMapTileLayer.Cell robot = robotTextures.get(player.getId()).setRotation(degrees % 90);
+        playerLayer.setCell(player.getRobot().getX(), player.getRobot().getY(),robot);
     }
 
 
