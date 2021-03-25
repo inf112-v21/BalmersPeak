@@ -12,12 +12,12 @@ public class ConveyorBelt {
     private MapHandler map;
     private MovementType beltType;
 
-    public ConveyorBelt(int x, int y, Direction direction, MovementType beltType, MapHandler map){
+    public ConveyorBelt(int x, int y, Direction direction, MovementType beltType){
         this.x = x;
         this.y = y;
         this.direction = direction;
         this.beltType = beltType;
-        this.map = map;
+        this.map = new MapHandler();
     }
 
     public void runBelt(Robot player){

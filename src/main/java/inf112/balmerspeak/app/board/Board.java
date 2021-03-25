@@ -9,6 +9,7 @@ import com.badlogic.gdx.maps.tiled.tiles.StaticTiledMapTile;
 import inf112.balmerspeak.app.Player;
 import inf112.balmerspeak.app.board.Hole;
 import inf112.balmerspeak.app.board.Laser;
+import inf112.balmerspeak.app.cards.MovementType;
 import inf112.balmerspeak.app.flag.Flag;
 import inf112.balmerspeak.app.robot.Direction;
 import inf112.balmerspeak.app.robot.Robot;
@@ -38,6 +39,7 @@ public class Board {
     private Hole holes[][];
     private Laser lasers[][];
     private Walls walls[][];
+    private ConveyorBelt belts[][];
 
     // Robots
     TiledMapTileLayer.Cell robot0;
@@ -87,15 +89,13 @@ public class Board {
         holes = new Hole[HEIGHT][WIDTH];
         lasers = new Laser[HEIGHT][WIDTH];
         walls = new Walls[HEIGHT][WIDTH];
+        belts = new ConveyorBelt[HEIGHT][WIDTH];
 
-        players = new ArrayList<>();
-        players.add(new Robot(0,0, Direction.NORTH));
-        players.add(new Robot(1,1, Direction.NORTH));
 
-        initHoles();
+
+
         initFlag();
-        initLaser();
-        initWalls();
+        initBoardElements();
     }
 
     public void loadRobotTextures() {
@@ -132,58 +132,28 @@ public class Board {
         return board;
     }
 
-    public void initHoles(){
+    public void initBoardElements() {
         for (int y = 0; y < HEIGHT; y++) {
             for (int x = 0; x < WIDTH; x++) {
-                if(hole.getCell(x,y) != null) {
-                    holes[y][x] = new Hole(x,y);
-                }
-
+                if (hole.getCell(x,y) != null)
+                    holes[x][y] = new Hole(x,y);
+                else if (laser.getCell(x,y) != null)
+                    lasers[x][y] = new Laser(x,y, Direction.NORTH);
+                else if (wall.getCell(x,y) != null)
+                    walls[x][y] = new Walls(x,y, getWallDirection(x,y));
+                else if (conveyor.getCell(x,y) != null)
+                    belts[x][y] = new ConveyorBelt(x,y,getConveyorDirection(x,y), MovementType.movement);
             }
         }
     }
 
     public void initFlag(){
-
         flags[1][9] = new Flag(2);
         flags[5][15] = new Flag(1);
         flags[10][6] = new Flag(3);
-
-
     }
 
-    public void initLaser(){
-        for (int y = 0; y < HEIGHT; y++) {
-            for (int x = 0; x < WIDTH; x++) {
-                if(laser.getCell(x,y) != null)
-                    lasers[y][x] = new Laser(x,y, Direction.NORTH);
-            }
-        }
-    }
 
-    public void initWalls() {
-        for (int y = 0; y < HEIGHT; y++) {
-            for (int x = 0; x < WIDTH; x++) {
-                if (wall.getCell(x,y) != null) {
-                    walls[y][x] = new Walls(x, y,getWallDirection(x,y));
-//                    System.out.println(""+ x + y + getWallDirection(x,y));
-                }
-            }
-
-        }
-    }
-
-    public Robot[][] getRobots() {
-        return robots;
-    }
-
-    public int getHEIGHT() {
-        return HEIGHT;
-    }
-
-    public int getWIDTH() {
-        return WIDTH;
-    }
 
     public void placeRobot(Player player){
         int x = player.getRobot().getX();
@@ -195,6 +165,21 @@ public class Board {
     public void rotateRobot(Player player, int degrees) {
         TiledMapTileLayer.Cell robot = robotTextures.get(player.getId()).setRotation(degrees % 90);
         playerLayer.setCell(player.getRobot().getX(), player.getRobot().getY(),robot);
+    }
+
+    public void runBoardElements(Player player) {
+        int playerX = player.getRobot().getX();
+        int playerY = player.getRobot().getY();
+
+        if (isRobotOnBelt(playerX,playerY)) {
+            // execute belt
+            belts[playerX][playerY].runBelt(player.getRobot());
+        }
+    }
+
+
+    public boolean isRobotOnBelt(int x, int y) {
+        return conveyor.getCell(x,y) != null;
     }
 
 
@@ -255,6 +240,21 @@ public class Board {
 
     public Direction getWallDirection(int x,int y) {
         int id = wall.getCell(x,y).getTile().getId();
+        switch (id) {
+            case 30:
+                return Direction.WEST;
+            case 31:
+                return Direction.NORTH;
+            case 23:
+                return Direction.EAST;
+            case 29:
+                return Direction.SOUTH;
+        }
+        return null;
+    }
+
+    public Direction getConveyorDirection(int x,int y) {
+        int id = conveyor.getCell(x,y).getTile().getId();
         switch (id) {
             case 30:
                 return Direction.WEST;

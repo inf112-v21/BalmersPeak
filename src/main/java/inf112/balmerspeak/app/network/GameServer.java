@@ -108,7 +108,6 @@ public class GameServer extends Server {
         // Coords resolver
         CoordsResolver resolver = new CoordsResolver();
         Pair<Integer, Integer> start = resolver.getCoordsPair();
-        System.out.println("Putting host at: " + start);
         // Instantiate game with own player object
         Player myPlayer = new Player(start, username, ipAddress, 0); // host is always id 0
         game = new Game(myPlayer, this.gameScreen, this);

@@ -62,7 +62,7 @@ public class Game {
         runPhase1();
 
         // Phase 2: board elements move
-
+        runPhase2();
 
         // in order: conveyor belts, pushers, gears
         // Phase 3: lasers fire
@@ -80,7 +80,6 @@ public class Game {
             // Send to all clients
             server.sendCardExecuted(card);
             // Execute the movement and send to all clients
-            System.out.println("Executing player " + card.getPlayer().getId() + "'s card, " + card);
             gameScreen.executeCard(card, card.getPlayer());
         }
     }
