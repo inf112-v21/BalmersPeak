@@ -100,6 +100,7 @@ public class Board {
         initLaser();
         initWalls();
         initWrenches();
+        initConveyor();
     }
 
     public int switchTurn(){
@@ -181,15 +182,13 @@ public class Board {
         }
     }
 
-    public void initConveyor() {
+    public void initConveyor(){
         for (int y = 0; y < HEIGHT; y++) {
             for (int x = 0; x < WIDTH; x++) {
-                if (conveyor.getCell(x,y) != null) {
-                    conveyors[y][x] = new ConveyorBelt(x, y,);
-//                    System.out.println(""+ x + y + getWallDirection(x,y));
+                if (conveyor.getCell(x, y) != null) {
+                    conveyors[y][x] = new ConveyorBelt(x,y,getConveyorDirection(x,y),getConveyorMovementType(x,y));
                 }
             }
-
         }
     }
 
@@ -259,6 +258,16 @@ public class Board {
         return walls[y][x];
     }
 
+    public Wrench getWrench(int x, int y) {return wrenches[y][x];}
+
+    public ConveyorBelt getConveyor(int x, int y) {
+        return conveyors[y][x];
+    }
+
+    public boolean containsConveyor(int x, int y){
+        return conveyors[y][x] != null;
+    }
+
     public Direction getWallDirection(int x,int y) {
         int id = wall.getCell(x,y).getTile().getId();
         switch (id) {
@@ -276,16 +285,116 @@ public class Board {
 
     public Direction getConveyorDirection(int x,int y) {
         int id = conveyor.getCell(x,y).getTile().getId();
-        switch (id) {
-            case 30:
-                return Direction.WEST;
-            case 31:
-                return Direction.NORTH;
-            case 23:
-                return Direction.EAST;
-            case 29:
-                return Direction.SOUTH;
+        if (id == 13 || id == 49 || id == 77)
+            return Direction.NORTH;
+        else if (id == 52)
+            return Direction.EAST;
+        else if (id == 21 || id == 33  || id == 36 || id == 50)
+            return Direction.SOUTH;
+        else if (id == 22 || id == 28 ||  id == 51)
+            return Direction.WEST;
+        else
+            return null;
+    }
+
+    public ConveyorMovementTypes getConveyorMovementType(int x, int y){
+        int id = conveyor.getCell(x,y).getTile().getId();
+        if (id == 13 || id == 21 || id == 22 || id == 49 || id == 50 || id == 51 || id == 52)
+            return ConveyorMovementTypes.move;
+        else if (id == 28 || id == 33 || id == 36 || id == 77)
+            return ConveyorMovementTypes.turn;
+        else
+            return null;
+    }
+
+
+    public void runBelt(ConveyorBelt belt){
+        if (!cantMove(belt)){
+            beltMove(belt);
+            if (nextIsRotating(belt))
+                beltRotate();
+        }else{
+            System.out.println("Can't move because of robot on track");
         }
-        return null;
+    }
+
+    public boolean cantMove(ConveyorBelt belt){
+        if(nextIsBelt(belt))
+            if (nextBeltType(belt).equals(ConveyorMovementTypes.move))
+                return false;
+            else if (nextBeltType(belt).equals(ConveyorMovementTypes.turn))
+                return false;
+            else if (nextBeltType(belt).equals(ConveyorMovementTypes.braidLeft))
+                return impossibleBraidLeft(belt);
+            else if (nextBeltType(belt).equals(ConveyorMovementTypes.braidRight))
+                return impossibleBraidRight(belt);
+            else if (nextBeltType(belt).equals(ConveyorMovementTypes.braidT))
+                return impossibleBraidT(belt);
+        return nextIsFull(belt);
+    }
+
+    public ConveyorMovementTypes nextBeltType(ConveyorBelt belt){ return getConveyor(belt.getNextX(belt.getX()),belt.getNextY(belt.getY())).getBeltType();}
+
+    public boolean nextIsBelt(ConveyorBelt belt){ return containsConveyor(belt.getNextX(belt.getX()),belt.getNextY(belt.getY())); }
+
+    public boolean nextIsFull(ConveyorBelt belt){ return hasRobot(belt.getNextX(belt.getX()),belt.getNextY(belt.getY())); }
+
+    public boolean nextIsRotating(ConveyorBelt belt){
+        ConveyorMovementTypes mt = nextBeltType(belt);
+        return  (mt.equals(ConveyorMovementTypes.turn) ||mt.equals(ConveyorMovementTypes.braidLeft) || mt.equals(ConveyorMovementTypes.braidRight) || mt.equals(ConveyorMovementTypes.braidT));
+    }
+
+    public boolean impossibleBraidLeft(ConveyorBelt belt){
+        ConveyorBelt rBelt = getConveyor(belt.getNextX(belt.getX()),belt.getNextY(belt.getY()));
+        Direction rotateDir = rBelt.getDirection();
+        if (rotateDir.equals(Direction.NORTH)){
+            return (hasRobot(rBelt.getX()-1,rBelt.getY()) && hasRobot(rBelt.getX(), rBelt.getY()-1));
+        }else if (rotateDir.equals(Direction.EAST)){
+            return (hasRobot(rBelt.getX()+1,rBelt.getY()) && hasRobot(rBelt.getX(), rBelt.getY()-1));
+        }else if (rotateDir.equals(Direction.SOUTH)){
+            return (hasRobot(rBelt.getX()+1,rBelt.getY()) && hasRobot(rBelt.getX(), rBelt.getY()+1));
+        }else if (rotateDir.equals(Direction.WEST)){
+            return (hasRobot(rBelt.getX()-1,rBelt.getY()) && hasRobot(rBelt.getX(), rBelt.getY()+1));
+        }
+        else
+            return false;
+    }
+
+    public boolean impossibleBraidRight(ConveyorBelt belt){
+        ConveyorBelt rBelt = getConveyor(belt.getNextX(belt.getX()),belt.getNextY(belt.getY()));
+        Direction rotateDir = rBelt.getDirection();
+        if (rotateDir.equals(Direction.NORTH)){
+            return (hasRobot(rBelt.getX()+1,rBelt.getY()) && hasRobot(rBelt.getX(), rBelt.getY()-1));
+        }else if (rotateDir.equals(Direction.EAST)){
+            return (hasRobot(rBelt.getX()+1,rBelt.getY()) && hasRobot(rBelt.getX(), rBelt.getY()+1));
+        }else if (rotateDir.equals(Direction.SOUTH)){
+            return (hasRobot(rBelt.getX()-1,rBelt.getY()) && hasRobot(rBelt.getX(), rBelt.getY()+1));
+        }else if (rotateDir.equals(Direction.WEST)){
+            return (hasRobot(rBelt.getX()-1,rBelt.getY()) && hasRobot(rBelt.getX(), rBelt.getY()-1));
+        }
+        else
+            return false;
+    }
+
+    public boolean impossibleBraidT(ConveyorBelt belt){
+        ConveyorBelt rBelt = getConveyor(belt.getNextX(belt.getX()),belt.getNextY(belt.getY()));
+        Direction rotateDir = rBelt.getDirection();
+        if (rotateDir.equals(Direction.NORTH)){
+            return (hasRobot(rBelt.getX()+1,rBelt.getY()) && hasRobot(rBelt.getX()-1, rBelt.getY()));
+        }else if (rotateDir.equals(Direction.EAST)){
+            return (hasRobot(rBelt.getX(),rBelt.getY()-1) && hasRobot(rBelt.getX(), rBelt.getY()+1));
+        }
+        else
+            return false;
+    }
+
+    public void beltMove(ConveyorBelt belt) {
+        int dx = belt.getNextX(belt.getX())-belt.getX();
+        int dy = belt.getNextY(belt.getY())-belt.getY();
+        move(belt.getX(), belt.getY(), dx,dy);
+    }
+
+    public void beltRotate(){
+        //Kan låne rotate frå gear
     }
 }
