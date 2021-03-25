@@ -138,7 +138,7 @@ public class GameScreen implements Screen {
 
         // Only update if the player is allowed to move
         if (shouldMove(dx, dy)){
-            board.moveAlternate(player, dx,dy);
+            board.move(player, dx,dy);
             player.getRobot().set(playerX + dx, playerY + dy);
         }
         if (board.getHole(playerX + dx, playerY + dy) != null){

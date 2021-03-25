@@ -203,22 +203,19 @@ public class Board {
         robots[y][x] = null;
     }
 
-    public void moveAlternate(Player player, int dx, int dy) {
-        this.playerLayer.setCell(player.getRobot().getX(), player.getRobot().getY(), null);
-        this.playerLayer.setCell(player.getRobot().getX() + dx, player.getRobot().getY() + dy, this.player);
-    }
 
-    public void move(int x, int y, int dx, int dy) {
+    public void move(Player player, int dx, int dy) {
 
-        robots[y+dy][x+dx] = robots[y][x];
+        int x = player.getRobot().getX();
+        int y = player.getRobot().getY();
 
         if(holes[y+dy][x+dx] != null) {
-           this.playerLayer.setCell(x + dx, y + dy, dieCell);
+           this.playerLayer.setCell(x + dx, y + dy, robotTextures.get(player.getId()));
         }
         else if(flags[y+dy][x+dx] != null)
-            this.playerLayer.setCell(x+dx,y+dy, wonCell);
+            this.playerLayer.setCell(x+dx,y+dy, robotTextures.get(player.getId()));
         else {
-            this.playerLayer.setCell(x + dx, y + dy, player);
+            this.playerLayer.setCell(x + dx, y + dy, robotTextures.get(player.getId()));
         }
         robots[y][x] = null;
         this.playerLayer.setCell(x, y, null);
