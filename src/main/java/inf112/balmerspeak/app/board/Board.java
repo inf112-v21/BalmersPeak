@@ -6,9 +6,9 @@ import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.maps.tiled.tiles.StaticTiledMapTile;
-import inf112.balmerspeak.app.Hole;
-import inf112.balmerspeak.app.Laser;
 import inf112.balmerspeak.app.Player;
+import inf112.balmerspeak.app.board.Hole;
+import inf112.balmerspeak.app.board.Laser;
 import inf112.balmerspeak.app.flag.Flag;
 import inf112.balmerspeak.app.robot.Direction;
 import inf112.balmerspeak.app.robot.Robot;
@@ -37,6 +37,7 @@ public class Board {
     private Flag flags[][];
     private Hole holes[][];
     private Laser lasers[][];
+    private Walls walls[][];
 
     // Robots
     TiledMapTileLayer.Cell robot0;
@@ -51,10 +52,7 @@ public class Board {
     private TiledMapTileLayer hole;
 
     private int flagOrder = 0;
-
     ArrayList<Robot> players;
-
-    private int turn = 0;
 
 
     public Board(String filename){
@@ -80,7 +78,7 @@ public class Board {
         loadRobotTextures();
 
 
-        TiledMapTileLayer board =  (TiledMapTileLayer) map.getLayers().get("Board");
+        TiledMapTileLayer board = (TiledMapTileLayer) map.getLayers().get("Board");
         WIDTH = board.getWidth();
         HEIGHT = board.getHeight();
 
@@ -88,6 +86,7 @@ public class Board {
         flags = new Flag[HEIGHT][WIDTH];
         holes = new Hole[HEIGHT][WIDTH];
         lasers = new Laser[HEIGHT][WIDTH];
+        walls = new Walls[HEIGHT][WIDTH];
 
         players = new ArrayList<>();
         players.add(new Robot(0,0, Direction.NORTH));
@@ -96,6 +95,7 @@ public class Board {
         initHoles();
         initFlag();
         initLaser();
+        initWalls();
     }
 
     public void loadRobotTextures() {
@@ -107,6 +107,7 @@ public class Board {
         Texture robotTexture2 = new Texture("assets/images/robots/robot2.png");
         Texture robotTexture3 = new Texture("assets/images/robots/robot3.png");
         Texture robotTexture4 = new Texture("assets/images/robots/robot4.png");
+
 
         // Set cell textures
         robot0 = new TiledMapTileLayer.Cell().setTile(new StaticTiledMapTile(new TextureRegion(robotTexture0)));
@@ -121,6 +122,10 @@ public class Board {
 
     public TiledMap getMap() {
         return map;
+    }
+
+    public boolean isFacingWall(int x, int y, Direction dir) {
+        return false;
     }
 
     public TiledMapTileLayer getBoard() {
@@ -139,14 +144,12 @@ public class Board {
     }
 
     public void initFlag(){
-        for (int y = 0; y < HEIGHT; y++) {
-            for (int x = 0; x < WIDTH; x++) {
-                if(flag.getCell(x,y) != null)
-                    flags[y][x] = new Flag(flagOrder+=1);
 
-            }
+        flags[1][9] = new Flag(2);
+        flags[5][15] = new Flag(1);
+        flags[10][6] = new Flag(3);
 
-        }
+
     }
 
     public void initLaser(){
@@ -154,7 +157,17 @@ public class Board {
             for (int x = 0; x < WIDTH; x++) {
                 if(laser.getCell(x,y) != null)
                     lasers[y][x] = new Laser(x,y, Direction.NORTH);
+            }
+        }
+    }
 
+    public void initWalls() {
+        for (int y = 0; y < HEIGHT; y++) {
+            for (int x = 0; x < WIDTH; x++) {
+                if (wall.getCell(x,y) != null) {
+                    walls[y][x] = new Walls(x, y,getWallDirection(x,y));
+//                    System.out.println(""+ x + y + getWallDirection(x,y));
+                }
             }
 
         }
@@ -234,5 +247,24 @@ public class Board {
         } catch (ArrayIndexOutOfBoundsException e) {
             return null;
         }
+    }
+
+    public Walls getWalls(int x, int y) {
+        return walls[y][x];
+    }
+
+    public Direction getWallDirection(int x,int y) {
+        int id = wall.getCell(x,y).getTile().getId();
+        switch (id) {
+            case 30:
+                return Direction.WEST;
+            case 31:
+                return Direction.NORTH;
+            case 23:
+                return Direction.EAST;
+            case 29:
+                return Direction.SOUTH;
+        }
+        return null;
     }
 }

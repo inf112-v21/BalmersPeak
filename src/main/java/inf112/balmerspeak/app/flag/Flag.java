@@ -15,4 +15,11 @@ public class Flag {
     public void setOrder(int order) {
         Order = order;
     }
+
+    @Override
+    public String toString() {
+        return "Flag{" +
+                "Order=" + Order +
+                '}';
+    }
 }

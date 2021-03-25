@@ -6,8 +6,10 @@ import inf112.balmerspeak.app.cards.Rotation;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Collections;
 
 
+import inf112.balmerspeak.app.flag.Flag;
 import inf112.balmerspeak.app.robot.Direction;
 
 
@@ -20,6 +22,8 @@ public class Robot implements IRobot, Serializable {
     private int ll = 3;
     private Direction direction;
 
+    private ArrayList<Flag> collected = new ArrayList<>();
+
     private int spawnX;
     private int spawnY;
 
@@ -28,6 +32,24 @@ public class Robot implements IRobot, Serializable {
         y = yCoord;
         direction = dir;
     }
+
+
+    public void addFlag(Flag flag){
+        if(collected.isEmpty() && flag.getOrder() == 1)
+            collected.add(flag);
+        else if (collected.size() == 1 && collected.get(0).getOrder() == 1 && flag.getOrder() == 2)
+            collected.add(flag);
+        else if (collected.size() == 2 && collected.get(0).getOrder() == 1 && collected.get(1).getOrder() == 2 && flag.getOrder() == 3)
+            collected.add(flag);
+        for (Flag flag1 : collected)
+            System.out.println(flag1.toString());
+    }
+
+    public boolean checkWinCondition() {
+        return collected.size() == 3;
+    }
+
+
 
 
     @Override
@@ -70,6 +92,7 @@ public class Robot implements IRobot, Serializable {
     public void setLives(int x) {
         this.ll = x;
     }
+
 
     @Override
     public boolean isAlive() {

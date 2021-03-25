@@ -110,8 +110,10 @@ public class Game {
             // Check if all players are ready
             if (getAllPlayersReady())
                 Gdx.app.postRunnable(this::startRound);
-        } else
+        } else {
+            roundInProgress = true;
             client.alertServerPlayerIsReady(cards);
+        }
     }
 
     public void addPlayer(Player newPlayer) {
