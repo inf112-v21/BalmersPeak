@@ -207,27 +207,28 @@ public class GameScreen implements Screen {
     }
 
     public void showHealthLives(){
-        int xlife = 1300;
-        for (int i = 0; i < board.getActivePlayer().getLives(); i++) {
+        int xlife = Gdx.graphics.getWidth();
+        for (int i = 0 ; i < board.getActivePlayer().getLives(); i++) {
             life = new Texture("images/lifetoken.png");
             Button.ButtonStyle tbs = new Button.ButtonStyle();
             tbs.up = new TextureRegionDrawable(new TextureRegion(life));
             Button b = new Button(tbs);
-            b.setPosition(xlife+=100, 150);
-            b.setSize(50,50);
+            b.setPosition(xlife-=100, Gdx.graphics.getHeight()/5);
+            b.setSize(Gdx.graphics.getWidth()/40, Gdx.graphics.getWidth()/40);
             stage.addActor(b);
+            System.out.println(Gdx.graphics.getWidth());
 
         }
 
         //Adds the health tokes to the GUI
-        int xhealth = 1250;
+        int xhealth = Gdx.graphics.getWidth();
         for (int i = 0; i < board.getActivePlayer().getHealth(); i++) {
             health = new Texture("images/health_token.png");
             Button.ButtonStyle tbs = new Button.ButtonStyle();
             tbs.up = new TextureRegionDrawable(new TextureRegion(health));
             Button b = new Button(tbs);
-            b.setPosition(xhealth+=50, 50);
-            b.setSize(50,50);
+            b.setPosition(xhealth-=Gdx.graphics.getWidth()/35, Gdx.graphics.getHeight()/7);
+            b.setSize(Gdx.graphics.getWidth()/35, Gdx.graphics.getWidth()/35);
             stage.addActor(b);
 
         }
