@@ -57,17 +57,36 @@ public class Game {
     public void startRound() {
         // Set round in progress
         roundInProgress = true;
+
+        // Phase 1: robots move
+        runPhase1();
+
+        // Phase 2: board elements move
+
+
+        // in order: conveyor belts, pushers, gears
+        // Phase 3: lasers fire
+        // Phase 4: touch checkpoints
+
+    }
+
+    // Robots move
+    private void runPhase1() {
         // Get sorted cards for the round
         ArrayList<ProgramCard> sortedCards = getCardOrder();
 
+        // Phase 1: robots move
         for (ProgramCard card : sortedCards) {
             // Send to all clients
             server.sendCardExecuted(card);
             // Execute the movement and send to all clients
             System.out.println("Executing player " + card.getPlayer().getId() + "'s card, " + card);
             gameScreen.executeCard(card, card.getPlayer());
-
         }
+    }
+
+    private void runPhase2() {
+
     }
 
     // Places all players robots at their starting position
