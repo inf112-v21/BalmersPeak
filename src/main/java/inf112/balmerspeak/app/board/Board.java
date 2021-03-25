@@ -15,6 +15,7 @@ import inf112.balmerspeak.app.robot.Robot;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 
 public class Board {
 
@@ -39,6 +40,16 @@ public class Board {
     private Flag flags[][];
     private Hole holes[][];
     private Laser lasers[][];
+
+    // Robots
+    TiledMapTileLayer.Cell robot0;
+    TiledMapTileLayer.Cell robot1;
+    TiledMapTileLayer.Cell robot2;
+    TiledMapTileLayer.Cell robot3;
+    TiledMapTileLayer.Cell robot4;
+
+    ArrayList<TiledMapTileLayer.Cell> robotTextures;
+
 
     private TiledMapTileLayer hole;
 
@@ -78,6 +89,10 @@ public class Board {
         wonCell = new TiledMapTileLayer.Cell().setTile(playerWonTexture);
         dieCell = new TiledMapTileLayer.Cell().setTile(playerDiedTexture);
 
+        // Load robot cells
+        loadRobotTextures();
+
+
         TiledMapTileLayer board =  (TiledMapTileLayer) map.getLayers().get("Board");
         WIDTH = board.getWidth();
         HEIGHT = board.getHeight();
@@ -94,24 +109,27 @@ public class Board {
         initHoles();
         initFlag();
         initLaser();
-
-
-
     }
 
-    public int switchTurn(){
-        if (turn == 0)
-            return turn = 1;
-        else
-            return turn = 0;
-    }
+    public void loadRobotTextures() {
+        // Create list
+        robotTextures = new ArrayList<>();
+        // Load textures
+        Texture robotTexture0 = new Texture("assets/images/robots/robot0.png");
+        Texture robotTexture1 = new Texture("assets/images/robots/robot1.png");
+        Texture robotTexture2 = new Texture("assets/images/robots/robot2.png");
+        Texture robotTexture3 = new Texture("assets/images/robots/robot3.png");
+        Texture robotTexture4 = new Texture("assets/images/robots/robot4.png");
 
-    public ArrayList<Robot> getPlayers() {
-        return players;
-    }
+        // Set cell textures
+        robot0 = new TiledMapTileLayer.Cell().setTile(new StaticTiledMapTile(new TextureRegion(robotTexture0)));
+        robot1 = new TiledMapTileLayer.Cell().setTile(new StaticTiledMapTile(new TextureRegion(robotTexture1)));
+        robot2 = new TiledMapTileLayer.Cell().setTile(new StaticTiledMapTile(new TextureRegion(robotTexture2)));
+        robot3 = new TiledMapTileLayer.Cell().setTile(new StaticTiledMapTile(new TextureRegion(robotTexture3)));
+        robot4 = new TiledMapTileLayer.Cell().setTile(new StaticTiledMapTile(new TextureRegion(robotTexture4)));
 
-    public Robot getActivePlayer(){
-        return players.get(turn);
+        // Add to list
+        robotTextures.addAll(Arrays.asList(robot0, robot1, robot2, robot3, robot4));
     }
 
     public TiledMap getMap() {
@@ -167,10 +185,15 @@ public class Board {
         return WIDTH;
     }
 
-    public Robot placeRobot(int x, int y){
-        playerLayer.setCell(x,y, player);
+    public Robot placeRobot(Player player){
+
+        int x = player.getRobot().getX();
+        int y = player.getRobot().getY();
+        playerLayer.setCell(x, y, robotTextures.get(player.getId()));
         return robots[y][x] = new Robot(x,y, Direction.NORTH);
     }
+
+
 
 
     public boolean hasRobot(int x, int y){

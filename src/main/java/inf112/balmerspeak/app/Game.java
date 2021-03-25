@@ -72,10 +72,10 @@ public class Game {
     // Places all players robots at their starting position
     public void placeRobotsAtStart() {
         // Place own robot
-        gameScreen.getBoard().placeRobot(myPlayer.getRobot().getX(), myPlayer.getRobot().getY());
+        gameScreen.getBoard().placeRobot(myPlayer);
         // Place everyone else's
         for (Player player : players) {
-            gameScreen.getBoard().placeRobot(player.getRobot().getX(), player.getRobot().getY());
+            gameScreen.getBoard().placeRobot(player);
         }
     }
 

@@ -208,7 +208,7 @@ public class GameScreen implements Screen {
 
         //Adds the life tokens to the GUI
         int xlife = 1300;
-        for (int i = 0; i < board.getActivePlayer().getLives(); i++) {
+        for (int i = 0; i < myPlayer.getRobot().getLives(); i++) {
             life = new Texture("images/lifetoken.png");
             Button.ButtonStyle tbs = new Button.ButtonStyle();
             tbs.up = new TextureRegionDrawable(new TextureRegion(life));
@@ -220,7 +220,7 @@ public class GameScreen implements Screen {
 
         //Adds the health tokes to the GUI
         int xhealth = 1250;
-        for (int i = 0; i < board.getActivePlayer().getHealth(); i++) {
+        for (int i = 0; i < myPlayer.getRobot().getHealth(); i++) {
             health = new Texture("images/health_token.png");
             Button.ButtonStyle tbs = new Button.ButtonStyle();
             tbs.up = new TextureRegionDrawable(new TextureRegion(health));
