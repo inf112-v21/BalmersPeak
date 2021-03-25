@@ -39,6 +39,8 @@ public class Board {
     private Hole holes[][];
     private Laser lasers[][];
     private Walls walls[][];
+    private Wrench wrenches[][];
+    private ConveyorBelt conveyors[][];
 
     private TiledMapTileLayer hole;
 
@@ -86,6 +88,8 @@ public class Board {
         holes = new Hole[HEIGHT][WIDTH];
         lasers = new Laser[HEIGHT][WIDTH];
         walls = new Walls[HEIGHT][WIDTH];
+        wrenches = new Wrench[HEIGHT][WIDTH];
+        conveyors = new ConveyorBelt[HEIGHT][WIDTH];
 
         players = new ArrayList<>();
         players.add(new Robot(0,0, Direction.NORTH));
@@ -95,7 +99,7 @@ public class Board {
         initFlag();
         initLaser();
         initWalls();
-
+        initWrenches();
     }
 
     public int switchTurn(){
@@ -160,6 +164,28 @@ public class Board {
             for (int x = 0; x < WIDTH; x++) {
                 if (wall.getCell(x,y) != null) {
                     walls[y][x] = new Walls(x, y,getWallDirection(x,y));
+//                    System.out.println(""+ x + y + getWallDirection(x,y));
+                }
+            }
+
+        }
+    }
+
+    public void initWrenches(){
+        for (int y = 0; y < HEIGHT; y++) {
+            for (int x = 0; x < WIDTH; x++) {
+                if (wrench.getCell(x, y) != null) {
+                    wrenches[y][x] = new Wrench(x, y, 1);
+                }
+            }
+        }
+    }
+
+    public void initConveyor() {
+        for (int y = 0; y < HEIGHT; y++) {
+            for (int x = 0; x < WIDTH; x++) {
+                if (conveyor.getCell(x,y) != null) {
+                    conveyors[y][x] = new ConveyorBelt(x, y,);
 //                    System.out.println(""+ x + y + getWallDirection(x,y));
                 }
             }
@@ -235,6 +261,21 @@ public class Board {
 
     public Direction getWallDirection(int x,int y) {
         int id = wall.getCell(x,y).getTile().getId();
+        switch (id) {
+            case 30:
+                return Direction.WEST;
+            case 31:
+                return Direction.NORTH;
+            case 23:
+                return Direction.EAST;
+            case 29:
+                return Direction.SOUTH;
+        }
+        return null;
+    }
+
+    public Direction getConveyorDirection(int x,int y) {
+        int id = conveyor.getCell(x,y).getTile().getId();
         switch (id) {
             case 30:
                 return Direction.WEST;

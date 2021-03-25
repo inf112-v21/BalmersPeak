@@ -9,15 +9,14 @@ public class ConveyorBelt {
     private int x;
     private int y;
     private Direction direction;
-    private MapHandler map;
     private MovementType beltType;
 
-    public ConveyorBelt(int x, int y, Direction direction, MovementType beltType, MapHandler map){
+
+    public ConveyorBelt(int x, int y, Direction direction, MovementType beltType){
         this.x = x;
         this.y = y;
         this.direction = direction;
         this.beltType = beltType;
-        this.map = map;
     }
 
     public void runBelt(Robot player){
