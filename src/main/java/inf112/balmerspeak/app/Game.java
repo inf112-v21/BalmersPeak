@@ -61,11 +61,12 @@ public class Game {
         ArrayList<ProgramCard> sortedCards = getCardOrder();
 
         for (ProgramCard card : sortedCards) {
+            // Send to all clients
+            server.sendCardExecuted(card);
             // Execute the movement and send to all clients
             System.out.println("Executing player " + card.getPlayer().getId() + "'s card, " + card);
             gameScreen.executeCard(card, card.getPlayer());
-            // Send to all clients
-            server.sendCardExecuted(card);
+
         }
     }
 

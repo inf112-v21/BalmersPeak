@@ -221,10 +221,18 @@ public class Board {
     }
 
     public Hole getHole(int x, int y) {
-        return holes[y][x];
+        try {
+            return holes[y][x];
+        } catch (ArrayIndexOutOfBoundsException e) {
+            return null;
+        }
     }
 
     public Laser getLaser(int x ,int y){
-        return lasers[y][x];
+        try {
+            return lasers[y][x];
+        } catch (ArrayIndexOutOfBoundsException e) {
+            return null;
+        }
     }
 }

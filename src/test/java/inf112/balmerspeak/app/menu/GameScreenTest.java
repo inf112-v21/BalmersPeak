@@ -38,13 +38,13 @@ public class GameScreenTest {
     @Test
     public void playerCanNotMoveOutOfBounds(){
         setup();
-        assertFalse(g.shouldMove(0,-1));
+        assertFalse(g.shouldMove(g.getMyPlayer(), 0,-1));
     }
 
     @Test
     public void playerCanMoveOneUp(){
         setup();
-        assertTrue(g.shouldMove(0,1));
+        assertTrue(g.shouldMove(g.getMyPlayer(), 0,1));
     }
 
 

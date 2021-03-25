@@ -24,7 +24,7 @@ public class Player implements Serializable {
         this.username = username;
         this.ipAddress = ipAddress;
         this.id = id;
-        this.robot = new Robot(robotCoords.getValue0(), robotCoords.getValue1(), Direction.NORTH);
+        this.robot = new Robot(robotCoords.getValue0(), robotCoords.getValue1(), Direction.EAST);
         this.handReady = false;
         hand = new ArrayList<>();
     }

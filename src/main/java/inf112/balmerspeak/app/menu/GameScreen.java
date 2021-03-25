@@ -91,19 +91,19 @@ public class GameScreen implements Screen {
         return this.myPlayer;
     }
 
-    public boolean shouldMove(int dx, int dy) {
+    public boolean shouldMove(Player player, int dx, int dy) {
         // Return false if dx and dy are zero
-//        if (dx == 0 && dy == 0)
-//            return false;
-//
-//        // These return true if the resulting playerVec are out of bounds
-//        boolean outsideX = board.getActivePlayer().getX() + dx > board.getBoard().getWidth()-1 || board.getActivePlayer().getX() + dx < 0;
-//        boolean outsideY = board.getActivePlayer().getY() + dy > board.getBoard().getHeight()-1 || board.getActivePlayer().getY() + dy < 0;
-//        boolean isPlayer = board.getRobot(board.getActivePlayer().getX() + dx, board.getActivePlayer().getY() + dy) != null;
-//
-//        return !(outsideX || outsideY || isPlayer);
-        // TODO: commented out for testing purposes
-        return true;
+        if (dx == 0 && dy == 0)
+            return false;
+
+        int x = player.getRobot().getX();
+        int y = player.getRobot().getY();
+
+        // These return true if the resulting playerVec are out of bounds
+        boolean outsideX = x + dx > board.getBoard().getWidth()-1 || x + dx < 0;
+        boolean outsideY = y + dy > board.getBoard().getHeight()-1 || y + dy < 0;
+
+        return !(outsideX || outsideY);
     }
 
 
@@ -137,7 +137,7 @@ public class GameScreen implements Screen {
         int playerY = player.getRobot().getY();
 
         // Only update if the player is allowed to move
-        if (shouldMove(dx, dy)){
+        if (shouldMove(player, dx, dy)){
             board.move(player, dx,dy);
             player.getRobot().set(playerX + dx, playerY + dy);
         }
