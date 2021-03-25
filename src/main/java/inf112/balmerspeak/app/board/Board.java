@@ -307,7 +307,6 @@ public class Board {
             return null;
     }
 
-
     public void runBelt(ConveyorBelt belt){
         if (!cantMove(belt)){
             beltMove(belt);
@@ -318,6 +317,16 @@ public class Board {
         }
     }
 
+    public void beltMove(ConveyorBelt belt) {
+        int dx = belt.getNextX(belt.getX())-belt.getX();
+        int dy = belt.getNextY(belt.getY())-belt.getY();
+        move(belt.getX(), belt.getY(), dx,dy);
+    }
+
+    public void beltRotate(){
+        //Kan låne rotate frå gear
+    }
+
     public boolean cantMove(ConveyorBelt belt){
         if(nextIsBelt(belt))
             if (nextBeltType(belt).equals(ConveyorMovementTypes.move))
@@ -325,11 +334,11 @@ public class Board {
             else if (nextBeltType(belt).equals(ConveyorMovementTypes.turn))
                 return false;
             else if (nextBeltType(belt).equals(ConveyorMovementTypes.braidLeft))
-                return impossibleBraidLeft(belt);
+                return checkBraidLeft(belt);
             else if (nextBeltType(belt).equals(ConveyorMovementTypes.braidRight))
-                return impossibleBraidRight(belt);
+                return checkBraidRight(belt);
             else if (nextBeltType(belt).equals(ConveyorMovementTypes.braidT))
-                return impossibleBraidT(belt);
+                return checkBraidT(belt);
         return nextIsFull(belt);
     }
 
@@ -339,12 +348,15 @@ public class Board {
 
     public boolean nextIsFull(ConveyorBelt belt){ return hasRobot(belt.getNextX(belt.getX()),belt.getNextY(belt.getY())); }
 
-    public boolean nextIsRotating(ConveyorBelt belt){
-        ConveyorMovementTypes mt = nextBeltType(belt);
-        return  (mt.equals(ConveyorMovementTypes.turn) ||mt.equals(ConveyorMovementTypes.braidLeft) || mt.equals(ConveyorMovementTypes.braidRight) || mt.equals(ConveyorMovementTypes.braidT));
+    public boolean nextIsRotating(ConveyorBelt belt) {
+        if (nextIsBelt(belt)) {
+            ConveyorMovementTypes mt = nextBeltType(belt);
+            return (mt.equals(ConveyorMovementTypes.turn) || mt.equals(ConveyorMovementTypes.braidLeft) || mt.equals(ConveyorMovementTypes.braidRight) || mt.equals(ConveyorMovementTypes.braidT));
+        }else
+            return false;
     }
 
-    public boolean impossibleBraidLeft(ConveyorBelt belt){
+    public boolean checkBraidLeft(ConveyorBelt belt){
         ConveyorBelt rBelt = getConveyor(belt.getNextX(belt.getX()),belt.getNextY(belt.getY()));
         Direction rotateDir = rBelt.getDirection();
         if (rotateDir.equals(Direction.NORTH)){
@@ -360,7 +372,7 @@ public class Board {
             return false;
     }
 
-    public boolean impossibleBraidRight(ConveyorBelt belt){
+    public boolean checkBraidRight(ConveyorBelt belt){
         ConveyorBelt rBelt = getConveyor(belt.getNextX(belt.getX()),belt.getNextY(belt.getY()));
         Direction rotateDir = rBelt.getDirection();
         if (rotateDir.equals(Direction.NORTH)){
@@ -376,7 +388,7 @@ public class Board {
             return false;
     }
 
-    public boolean impossibleBraidT(ConveyorBelt belt){
+    public boolean checkBraidT(ConveyorBelt belt){
         ConveyorBelt rBelt = getConveyor(belt.getNextX(belt.getX()),belt.getNextY(belt.getY()));
         Direction rotateDir = rBelt.getDirection();
         if (rotateDir.equals(Direction.NORTH)){
@@ -386,15 +398,5 @@ public class Board {
         }
         else
             return false;
-    }
-
-    public void beltMove(ConveyorBelt belt) {
-        int dx = belt.getNextX(belt.getX())-belt.getX();
-        int dy = belt.getNextY(belt.getY())-belt.getY();
-        move(belt.getX(), belt.getY(), dx,dy);
-    }
-
-    public void beltRotate(){
-        //Kan låne rotate frå gear
     }
 }
