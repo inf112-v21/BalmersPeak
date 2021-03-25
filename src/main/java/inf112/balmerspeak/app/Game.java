@@ -17,6 +17,7 @@ public class Game {
     private GameScreen gameScreen;
     private GameClient client;
     private GameServer server;
+    private boolean roundInProgress;
 
 
     public Game(Player player, GameScreen gameScreen, GameServer server) {
@@ -26,7 +27,7 @@ public class Game {
         this.server = server;
         gameScreen.setGame(this);
         gameScreen.setMyPlayer(myPlayer);
-
+        roundInProgress = false;
     }
 
     public Game(GameScreen screen) {
@@ -37,6 +38,10 @@ public class Game {
 
     public GameScreen getGameScreen() {
         return this.gameScreen;
+    }
+
+    public boolean isRoundInProgress() {
+        return this.roundInProgress;
     }
 
 
@@ -50,9 +55,10 @@ public class Game {
 
     // All hands are ready, sort after priority and execute them
     public void startRound() {
+        // Set round in progress
+        roundInProgress = true;
         // Get sorted cards for the round
         ArrayList<ProgramCard> sortedCards = getCardOrder();
-
 
         for (ProgramCard card : sortedCards) {
             // Execute the movement and send to all clients
@@ -60,7 +66,6 @@ public class Game {
             gameScreen.executeCard(card, card.getPlayer());
             // Send to all clients
             server.sendCardExecuted(card);
-            break; //TODO: for testing pruposes
         }
     }
 

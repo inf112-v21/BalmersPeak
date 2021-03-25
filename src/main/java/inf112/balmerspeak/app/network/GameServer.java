@@ -17,6 +17,7 @@ import inf112.balmerspeak.app.network.messages.InitMsg;
 import inf112.balmerspeak.app.network.messages.NumPlayers;
 import inf112.balmerspeak.app.network.tools.CoordsResolver;
 import inf112.balmerspeak.app.network.tools.IPFinder;
+import org.javatuples.Pair;
 
 import java.io.IOException;
 import java.util.HashMap;
@@ -30,6 +31,7 @@ public class GameServer extends Server {
     private Map<Connection, InitMsg> clients;
     private Game game;
     private GameScreen gameScreen;
+
 
 
     public GameServer(String username) throws IOException {
@@ -105,8 +107,10 @@ public class GameServer extends Server {
         }
         // Coords resolver
         CoordsResolver resolver = new CoordsResolver();
+        Pair<Integer, Integer> start = resolver.getCoordsPair();
+        System.out.println("Putting host at: " + start);
         // Instantiate game with own player object
-        Player myPlayer = new Player(resolver.getCoordsPair(), username, ipAddress, 0); // host is always id 0
+        Player myPlayer = new Player(start, username, ipAddress, 0); // host is always id 0
         game = new Game(myPlayer, this.gameScreen, this);
 
         // Construct player object for every client and add to game

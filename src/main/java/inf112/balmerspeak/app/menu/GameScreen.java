@@ -175,7 +175,9 @@ public class GameScreen implements Screen {
         button.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent changeEvent, Actor actor) {
-                game.handIsReady(queueList);
+                // block action if round is in progress
+                if (!game.isRoundInProgress())
+                    game.handIsReady(queueList);
                 show();
             }
         });
