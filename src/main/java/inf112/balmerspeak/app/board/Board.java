@@ -31,9 +31,6 @@ public class Board {
     private final TiledMapTileLayer wall;
     private final TiledMapTileLayer conveyor;
     private final TiledMapTileLayer board;
-    private final TiledMapTileLayer.Cell player;
-    private final TiledMapTileLayer.Cell wonCell;
-    private final TiledMapTileLayer.Cell dieCell;
     private int WIDTH;
     private int HEIGHT;
     private Robot robots[][];
@@ -78,16 +75,6 @@ public class Board {
         flag = (TiledMapTileLayer) map.getLayers().get("Flag");
         board = (TiledMapTileLayer) map.getLayers().get("Board");
 
-        // Instantiate player texture
-        Texture playerTexture = new Texture("assets/images/player.png");
-        TextureRegion[][] playerTextureRegion = TextureRegion.split(playerTexture, 300, 300);
-
-        StaticTiledMapTile normalPlayerTexture = new StaticTiledMapTile(playerTextureRegion[0][0]);
-        StaticTiledMapTile playerDiedTexture = new StaticTiledMapTile(playerTextureRegion[0][1]);
-        StaticTiledMapTile playerWonTexture = new StaticTiledMapTile(playerTextureRegion[0][2]);
-        player = new TiledMapTileLayer.Cell().setTile(normalPlayerTexture);
-        wonCell = new TiledMapTileLayer.Cell().setTile(playerWonTexture);
-        dieCell = new TiledMapTileLayer.Cell().setTile(playerDiedTexture);
 
         // Load robot cells
         loadRobotTextures();
@@ -185,12 +172,11 @@ public class Board {
         return WIDTH;
     }
 
-    public Robot placeRobot(Player player){
+    public void placeRobot(Player player){
 
         int x = player.getRobot().getX();
         int y = player.getRobot().getY();
         playerLayer.setCell(x, y, robotTextures.get(player.getId()));
-        return robots[y][x] = new Robot(x,y, Direction.NORTH);
     }
 
 
