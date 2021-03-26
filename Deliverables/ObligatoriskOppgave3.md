@@ -1,6 +1,9 @@
 
 #Deloppgave 1 - Prosjekt og prosjektstruktur
 
+###NB!
+Go to game funker ikke lengre, for å spille trykker du på play, så kan du enten hoste eller joine lobby, for å spille singleplayer, bare trykker du host så start game
+
 ###Hvordan fungerer rollene i teamet?
 Vi synes rollene fungerer fint. Vi er fornøyde med både teamleder og kundekontakt sin innsats. Ingen oppdateringer av roller er nødvendig.
 
