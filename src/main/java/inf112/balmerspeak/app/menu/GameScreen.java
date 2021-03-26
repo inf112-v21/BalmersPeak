@@ -18,11 +18,6 @@ import inf112.balmerspeak.app.Player;
 import inf112.balmerspeak.app.board.Board;
 import inf112.balmerspeak.app.cards.*;
 import inf112.balmerspeak.app.robot.Direction;
-import javax.swing.*;
-import inf112.balmerspeak.app.board.Board;
-import inf112.balmerspeak.app.cards.*;
-import inf112.balmerspeak.app.robot.Direction;
-import inf112.balmerspeak.app.robot.Robot;
 
 
 import java.util.ArrayList;
@@ -33,8 +28,6 @@ public class GameScreen implements Screen {
 
     private Stage stage;
     private OrthogonalTiledMapRenderer rend;
-    private InputHandler input;
-    private OrthographicCamera cam;
 
     private ArrayList<ProgramCard> queueList = new ArrayList<>();
 
@@ -56,7 +49,7 @@ public class GameScreen implements Screen {
 
 
         // Create input handler
-        input = new InputHandler();
+        InputHandler input = new InputHandler();
         Gdx.input.setInputProcessor(input);
 
 
@@ -66,7 +59,7 @@ public class GameScreen implements Screen {
         // Create board
         board = new Board("assets/map/map.tmx");
 
-        cam = new OrthographicCamera();
+        OrthographicCamera cam = new OrthographicCamera();
         rend = new OrthogonalTiledMapRenderer(board.getMap(), (float) 1 / 300);
 
         cam.setToOrtho(false, 16, 16);

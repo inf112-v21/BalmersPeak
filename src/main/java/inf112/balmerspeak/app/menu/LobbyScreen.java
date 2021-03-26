@@ -1,6 +1,5 @@
 package inf112.balmerspeak.app.menu;
 
-import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
@@ -12,9 +11,6 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import inf112.balmerspeak.app.GUI;
-import org.javatuples.Pair;
-
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 

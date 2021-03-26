@@ -1,7 +1,6 @@
 package inf112.balmerspeak.app.cards;
 
 import inf112.balmerspeak.app.Player;
-import inf112.balmerspeak.app.robot.Robot;
 
 import java.io.Serializable;
 
