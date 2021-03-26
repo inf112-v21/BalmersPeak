@@ -4,11 +4,8 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.Sprite;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
-import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
@@ -16,14 +13,11 @@ import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import inf112.balmerspeak.app.InputHandler;
-import inf112.balmerspeak.app.MapHandler;
 import inf112.balmerspeak.app.board.Board;
-import inf112.balmerspeak.app.board.Walls;
 import inf112.balmerspeak.app.cards.*;
 import inf112.balmerspeak.app.robot.Direction;
 import inf112.balmerspeak.app.robot.Robot;
 
-import javax.swing.*;
 import java.util.ArrayList;
 
 
@@ -39,12 +33,10 @@ public class GameScreen implements Screen {
     private ArrayList<ProgramCard> hand;
 
     private InputHandler input;
-    private MapHandler mapHandler;
     private OrthographicCamera cam;
 
     private ArrayList<ProgramCard> queueList = new ArrayList<>();
 
-    private Robot robot;
 
     private Skin skin1;
 
@@ -54,7 +46,7 @@ public class GameScreen implements Screen {
     private Texture life;
     private Texture health;
     Board board;
-    int turn = 0;
+
 
     public GameScreen() {
 
@@ -67,9 +59,8 @@ public class GameScreen implements Screen {
         skin1 = new Skin(Gdx.files.internal("assets/default/skin/uiskin.json"));
         hand = new ArrayList<>();
 
-        // Create map handler
+        // Create board
         board = new Board("assets/map/map.tmx");
-        //mapHandler = new MapHandler();
 
         cam = new OrthographicCamera();
         rend = new OrthogonalTiledMapRenderer(board.getMap(), (float) 1 / 300);
@@ -86,8 +77,8 @@ public class GameScreen implements Screen {
         }
     }
 
-    public Robot getRobot() {
-        return robot;
+    public Board getBoard() {
+        return board;
     }
 
     public boolean shouldMove(int dx, int dy) {
@@ -131,19 +122,23 @@ public class GameScreen implements Screen {
             board.move(playerX, playerY, dx, dy);
             board.getActivePlayer().set(playerX + dx, playerY + dy);
 
+            //check for hole
             if (board.getHole(playerX + dx, playerY + dy) != null) {
                 board.getActivePlayer().setLives(board.getActivePlayer().getLives() - 1);
                 System.out.println("lost life");
                 show();
             }
+            //check for laser
             if (board.getLaser(playerX + dx, playerY + dy) != null) {
                 board.getActivePlayer().setHealth(board.getActivePlayer().getHealth() - 1);
                 System.out.println("Lost health");
                 show();
             }
+            //check for flag
             if (board.getFlag(playerX + dx, playerY + dy) != null) {
                 board.getActivePlayer().addFlag(board.getFlag(playerX + dx, playerY + dy));
             }
+            //check for wincondition
             if (board.getActivePlayer().checkWinCondition())
                 System.out.println("Player" + board.getActivePlayer() + " won");
 
@@ -169,10 +164,6 @@ public class GameScreen implements Screen {
                 board.getActivePlayer().setLives(board.getActivePlayer().getLives() - 1);
                 show();
             }
-            if (board.getLaser(playerX + dx, playerY + dy) != null) {
-                board.getActivePlayer().setHealth(board.getActivePlayer().getHealth() - 1);
-                show();
-            }
 
 
             // Update player coordinates
@@ -180,10 +171,6 @@ public class GameScreen implements Screen {
         }
     }
 
-    public void winFrame(){
-        JFrame f = new JFrame();
-        JOptionPane.showMessageDialog(f, "Player " + board.getActivePlayer().toString() + " won");
-    }
 
     public void handleMoveCard(MovementCard card) {
         // Changes in the x coordinate
@@ -212,14 +199,17 @@ public class GameScreen implements Screen {
             board.move(playerX,playerY, dx,dy);
             board.getActivePlayer().set(playerX + dx, playerY + dy);
 
+            //check for hole
             if (board.getHole(playerX + dx, playerY + dy) != null) {
                 board.getActivePlayer().setLives(board.getActivePlayer().getLives() - 1);
-                showHealthLives();
+                show();
             }
+            //check for laser
             if (board.getLaser(playerX + dx, playerY + dy) != null) {
                 board.getActivePlayer().setHealth(board.getActivePlayer().getHealth() - 1);
-                showHealthLives();
+                show();
             }
+
             if (board.getWrench(playerX + dx, playerY + dy) != null) {
                 if (board.getActivePlayer().getHealth() < 9) {
                     board.getActivePlayer().setHealth(board.getActivePlayer().getHealth() + 1);
@@ -232,6 +222,8 @@ public class GameScreen implements Screen {
             if (board.getConveyor(playerX + dx, playerY + dy) != null){
                 board.runBelt(board.getConveyor(playerX + dx, playerY + dy));
             }
+          
+            //check for flag
             if (board.getFlag(playerX + dx, playerY + dy) != null){
                 board.getActivePlayer().addFlag(board.getFlag(playerX +dx, playerY+dy));
             }
@@ -329,10 +321,9 @@ public class GameScreen implements Screen {
         //Adds the cards to the GUI
         int x = 100;
         for (ProgramCard cards : board.getActivePlayer().getHand()) {
-            card = new Texture("assets/images/cards/" + cards.toString() + ".png");
+            card = new Texture("assets/cards/" + cards.getName() + "/" + cards.toString() + ".jpg");
             Button.ButtonStyle tbs = new Button.ButtonStyle();
             tbs.up = new TextureRegionDrawable(new TextureRegion(card));
-
             Button b = new Button(tbs);
             b.addListener(new ChangeListener() {
                 @Override
@@ -345,10 +336,12 @@ public class GameScreen implements Screen {
                     }
                 }
             });
+            b.setSize(91,123);
             b.setPosition(x+=100, 50);
-
             stage.addActor(b);
+
         }
+
 
         //Adds the life tokens to the GUI
         showHealthLives();
@@ -381,8 +374,8 @@ public class GameScreen implements Screen {
 
         //Adds the queue list to the GUI
         TextField field = new TextField("Queue: " + queueList, skin1);
-        field.setPosition(Gdx.graphics.getWidth()/4, 200);
-        field.setSize(queueList.size()+400, field.getHeight());
+        field.setPosition(Gdx.graphics.getWidth()/5, 210);
+        field.setSize(queueList.size()+600, field.getHeight());
         stage.addActor(field);
 
         stage.act(Gdx.graphics.getDeltaTime());
@@ -417,4 +410,5 @@ public class GameScreen implements Screen {
     public void dispose() {
         // Called when this screen should release all resources.
     }
+
 }
