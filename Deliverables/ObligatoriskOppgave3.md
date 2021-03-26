@@ -167,16 +167,6 @@ Med noen skjermer, så vil GUIen sine elementer bli plassert feil. Det fins fort
 Veggene funker bare dersom man står i tilen veggen er i. Hvis en vegg står i North vil man kunne flytte inn i den tilen fra North.
 
 
-
-
-###Manual testing
-Skriv handlemove() i render og ta vekk Gdx.input.setInputProcessor(stage) i show(), da kan du bevege spiller men WSAD.
-
-
-
-
-
-
 #Deloppgave 3: Produktleveranse og kodekvalitet
 
 se kode :)
