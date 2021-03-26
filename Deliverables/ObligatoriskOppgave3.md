@@ -166,6 +166,9 @@ Med noen skjermer, så vil GUIen sine elementer bli plassert feil. Det fins fort
 
 Veggene funker bare dersom man står i tilen veggen er i. Hvis en vegg står i North vil man kunne flytte inn i den tilen fra North.
 
+###Manuel testing
+Kommenter ut Gdx.input.setInputProcessor(stage); nederst i show() i gamescreen klassen, og skriv handlemove() i render() i gamescreen klassen
+
 
 #Deloppgave 3: Produktleveranse og kodekvalitet
 
