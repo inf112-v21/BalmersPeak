@@ -1,8 +1,9 @@
 package inf112.balmerspeak.app.cards;
 
+import java.io.Serializable;
 import java.util.*;
 
-public class Deck {
+public class Deck implements Serializable {
 
     public static final int hand_size = 9;
 
@@ -33,6 +34,7 @@ public class Deck {
             priorityRotateLeft+=20;
         }
         for (int i = 0; i < 12; i++) {
+
             deckInUse.add(new MovementCard(priorityMove2,2,"2move"));
             priorityMove2+=10;
         }
@@ -43,6 +45,7 @@ public class Deck {
             priorityMove3+=10;
             priorityBackup+=10;
             priorityUturn+=10;
+
 
         }
     }

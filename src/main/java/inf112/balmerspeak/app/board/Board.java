@@ -6,12 +6,10 @@ import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.maps.tiled.tiles.StaticTiledMapTile;
-import inf112.balmerspeak.app.board.Hole;
-import inf112.balmerspeak.app.board.Laser;
+import inf112.balmerspeak.app.Player;
 import inf112.balmerspeak.app.flag.Flag;
 import inf112.balmerspeak.app.robot.Direction;
 import inf112.balmerspeak.app.robot.Robot;
-
 import java.util.ArrayList;
 import java.util.Arrays;
 
@@ -29,9 +27,6 @@ public class Board {
     private final TiledMapTileLayer wall;
     private final TiledMapTileLayer conveyor;
     private final TiledMapTileLayer board;
-    private final TiledMapTileLayer.Cell player;
-    private final TiledMapTileLayer.Cell wonCell;
-    private final TiledMapTileLayer.Cell dieCell;
     private int WIDTH;
     private int HEIGHT;
     private Robot robots[][];
@@ -42,15 +37,20 @@ public class Board {
     private Wrench wrenches[][];
     private ConveyorBelt conveyors[][];
 
+    // Robots
+    TiledMapTileLayer.Cell robot0;
+    TiledMapTileLayer.Cell robot1;
+    TiledMapTileLayer.Cell robot2;
+    TiledMapTileLayer.Cell robot3;
+    TiledMapTileLayer.Cell robot4;
+
+    ArrayList<TiledMapTileLayer.Cell> robotTextures;
+
+
     private TiledMapTileLayer hole;
 
-    private int flagOrder = 0;
-    ArrayList<Robot> players;
 
-    private int turn = 0;
-
-
-    public Board(String filename){
+    public Board(String filename) {
 
         TmxMapLoader mapLoader = new TmxMapLoader();
         map = mapLoader.load(filename);
@@ -68,23 +68,16 @@ public class Board {
         flag = (TiledMapTileLayer) map.getLayers().get("Flag");
         board = (TiledMapTileLayer) map.getLayers().get("Board");
 
-        // Instantiate player texture
-        Texture playerTexture = new Texture("assets/images/player.png");
-        TextureRegion[][] playerTextureRegion = TextureRegion.split(playerTexture, 300, 300);
 
-        StaticTiledMapTile normalPlayerTexture = new StaticTiledMapTile(playerTextureRegion[0][0]);
-        StaticTiledMapTile playerDiedTexture = new StaticTiledMapTile(playerTextureRegion[0][1]);
-        StaticTiledMapTile playerWonTexture = new StaticTiledMapTile(playerTextureRegion[0][2]);
-        player = new TiledMapTileLayer.Cell().setTile(normalPlayerTexture);
-        wonCell = new TiledMapTileLayer.Cell().setTile(playerWonTexture);
-        dieCell = new TiledMapTileLayer.Cell().setTile(playerDiedTexture);
+        // Load robot cells
+        loadRobotTextures();
+
 
         TiledMapTileLayer board = (TiledMapTileLayer) map.getLayers().get("Board");
         WIDTH = board.getWidth();
         HEIGHT = board.getHeight();
 
         //set up the matrices for the board
-        robots = new Robot[HEIGHT][WIDTH];
         flags = new Flag[HEIGHT][WIDTH];
         holes = new Hole[HEIGHT][WIDTH];
         lasers = new Laser[HEIGHT][WIDTH];
@@ -92,122 +85,91 @@ public class Board {
         wrenches = new Wrench[HEIGHT][WIDTH];
         conveyors = new ConveyorBelt[HEIGHT][WIDTH];
 
-        players = new ArrayList<>();
-        players.add(new Robot(0,0, Direction.NORTH));
-
-        //inititalise the tiles
-        initHoles();
+        // Init board elements
         initFlag();
-        initLaser();
-        initWalls();
-        initWrenches();
-        initConveyor();
+        initBoardElements();
     }
 
-    public int switchTurn(){
-        if (turn == 0)
-            return turn = 1;
-        else
-            return turn = 0;
-    }
+    public void loadRobotTextures() {
+        // Create list
+        robotTextures = new ArrayList<>();
+        // Load textures
+        Texture robotTexture0 = new Texture("assets/images/robots/robot0.png");
+        Texture robotTexture1 = new Texture("assets/images/robots/robot1.png");
+        Texture robotTexture2 = new Texture("assets/images/robots/robot2.png");
+        Texture robotTexture3 = new Texture("assets/images/robots/robot3.png");
+        Texture robotTexture4 = new Texture("assets/images/robots/robot4.png");
 
 
-    public ArrayList<Robot> getPlayers() {
-        return players;
-    }
+        // Set cell textures
+        robot0 = new TiledMapTileLayer.Cell().setTile(new StaticTiledMapTile(new TextureRegion(robotTexture0)));
+        robot1 = new TiledMapTileLayer.Cell().setTile(new StaticTiledMapTile(new TextureRegion(robotTexture1)));
+        robot2 = new TiledMapTileLayer.Cell().setTile(new StaticTiledMapTile(new TextureRegion(robotTexture2)));
+        robot3 = new TiledMapTileLayer.Cell().setTile(new StaticTiledMapTile(new TextureRegion(robotTexture3)));
+        robot4 = new TiledMapTileLayer.Cell().setTile(new StaticTiledMapTile(new TextureRegion(robotTexture4)));
 
-    public Robot getActivePlayer(){
-        return players.get(turn);
+        // Add to list
+        robotTextures.addAll(Arrays.asList(robot0, robot1, robot2, robot3, robot4));
     }
 
     public TiledMap getMap() {
         return map;
     }
 
-    public boolean isFacingWall(int x, int y, Direction dir) {
-        return false;
-    }
-
     public TiledMapTileLayer getBoard() {
         return board;
     }
 
-    public void initHoles(){
+    public void initBoardElements() {
         for (int y = 0; y < HEIGHT; y++) {
             for (int x = 0; x < WIDTH; x++) {
-                if(hole.getCell(x,y) != null) {
+                if (hole.getCell(x,y) != null)
                     holes[y][x] = new Hole(x,y);
-                }
-
+                else if (laser.getCell(x,y) != null)
+                    lasers[y][x] = new Laser(x,y, Direction.NORTH);
+                else if (wall.getCell(x,y) != null)
+                    walls[y][x] = new Walls(x,y, getWallDirection(x,y));
+                else if (conveyor.getCell(x,y) != null)
+                    conveyors[y][x] = new ConveyorBelt(x,y,getConveyorDirection(x,y), getConveyorMovementType(x,y));
+                else if (wrench.getCell(x,y) != null)
+                    wrenches[y][x] = new Wrench(x,y,1);
             }
         }
     }
 
-    public void initFlag(){
 
+    public void initFlag(){
         flags[1][9] = new Flag(2);
         flags[5][15] = new Flag(1);
         flags[10][6] = new Flag(3);
-
-
     }
 
-    public void initLaser(){
-        for (int y = 0; y < HEIGHT; y++) {
-            for (int x = 0; x < WIDTH; x++) {
-                if(laser.getCell(x,y) != null)
-                    lasers[y][x] = new Laser(x,y, Direction.NORTH);
-            }
+
+
+    public void placeRobot(Player player){
+        int x = player.getRobot().getX();
+        int y = player.getRobot().getY();
+
+        playerLayer.setCell(x, y, robotTextures.get(player.getId()).setRotation(1)); //rotate to face the correct way
+    }
+
+    public void rotateRobot(Player player, int degrees) {
+        TiledMapTileLayer.Cell robot = robotTextures.get(player.getId()).setRotation(degrees % 90);
+        playerLayer.setCell(player.getRobot().getX(), player.getRobot().getY(),robot);
+    }
+
+    public void runBoardElements(Player player) {
+        int playerX = player.getRobot().getX();
+        int playerY = player.getRobot().getY();
+
+        if (isRobotOnBelt(playerX,playerY)) {
+            // execute belt
+            //conveyors[playerX][playerY].runBelt(player.getRobot());
         }
     }
 
-    public void initWalls() {
-        for (int y = 0; y < HEIGHT; y++) {
-            for (int x = 0; x < WIDTH; x++) {
-                if (wall.getCell(x,y) != null) {
-                    walls[y][x] = new Walls(x, y,getWallDirection(x,y));
-//                    System.out.println(""+ x + y + getWallDirection(x,y));
-                }
-            }
-
-        }
-    }
-
-    public void initWrenches(){
-        for (int y = 0; y < HEIGHT; y++) {
-            for (int x = 0; x < WIDTH; x++) {
-                if (wrench.getCell(x, y) != null) {
-                    wrenches[y][x] = new Wrench(x, y, 1);
-                }
-            }
-        }
-    }
-
-    public void initConveyor(){
-        for (int y = 0; y < HEIGHT; y++) {
-            for (int x = 0; x < WIDTH; x++) {
-                if (conveyor.getCell(x, y) != null) {
-                    conveyors[y][x] = new ConveyorBelt(x,y,getConveyorDirection(x,y),getConveyorMovementType(x,y));
-                }
-            }
-        }
-    }
-
-    public Robot[][] getRobots() {
-        return robots;
-    }
-
-    public int getHEIGHT() {
-        return HEIGHT;
-    }
-
-    public int getWIDTH() {
-        return WIDTH;
-    }
-
-    public Robot placeRobot(int x, int y){
-        playerLayer.setCell(x,y, player);
-        return robots[y][x] = new Robot(x,y, Direction.NORTH);
+    public boolean isRobotOnBelt(int x, int y) {
+        return conveyor.getCell(x,y) != null;
     }
 
 
@@ -232,27 +194,32 @@ public class Board {
         robots[y][x] = null;
     }
 
-    public void move(int x, int y, int dx, int dy){
-        robots[y+dy][x+dx] = robots[y][x];
-        if(holes[y+dy][x+dx] != null) {
-           this.playerLayer.setCell(x + dx, y + dy, dieCell);
-        }
-        else if(flags[y+dy][x+dx] != null)
-            this.playerLayer.setCell(x+dx,y+dy, wonCell);
-        else {
-            this.playerLayer.setCell(x + dx, y + dy, player);
-        }
-        robots[y][x] = null;
-        this.playerLayer.setCell(x, y, null);
 
+    public void move(Player player, int dx, int dy) {
+
+        int x = player.getRobot().getX();
+        int y = player.getRobot().getY();
+
+
+        this.playerLayer.setCell(x + dx, y + dy, robotTextures.get(player.getId()));
+        //robots[y][x] = null;
+        this.playerLayer.setCell(x, y, null);
     }
 
     public Hole getHole(int x, int y) {
-        return holes[y][x];
+        try {
+            return holes[y][x];
+        } catch (ArrayIndexOutOfBoundsException e) {
+            return null;
+        }
     }
 
     public Laser getLaser(int x ,int y){
-        return lasers[y][x];
+        try {
+            return lasers[y][x];
+        } catch (ArrayIndexOutOfBoundsException e) {
+            return null;
+        }
     }
 
     public Walls getWalls(int x, int y) {
@@ -286,6 +253,7 @@ public class Board {
 
     public Direction getConveyorDirection(int x,int y) {
         int id = conveyor.getCell(x,y).getTile().getId();
+
         if (id == 13 || id == 49 || id == 77)
             return Direction.NORTH;
         else if (id == 52)
@@ -308,9 +276,9 @@ public class Board {
             return null;
     }
 
-    public void runBelt(ConveyorBelt belt){
+    public void runBelt(Player player, ConveyorBelt belt){
         if (!cantMove(belt)){
-            beltMove(belt);
+            beltMove(player, belt);
             if (nextIsRotating(belt))
                 beltRotate();
         }else{
@@ -318,10 +286,10 @@ public class Board {
         }
     }
 
-    public void beltMove(ConveyorBelt belt) {
+    public void beltMove(Player player, ConveyorBelt belt) {
         int dx = belt.getNextX(belt.getX())-belt.getX();
         int dy = belt.getNextY(belt.getY())-belt.getY();
-        move(belt.getX(), belt.getY(), dx,dy);
+        move(player, dx,dy);
     }
 
     public void beltRotate(){

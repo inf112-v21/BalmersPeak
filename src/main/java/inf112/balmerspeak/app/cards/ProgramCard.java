@@ -7,5 +7,4 @@ public class ProgramCard extends GeneralCard {
 
     }
 
-
 }

@@ -1,13 +1,18 @@
 package inf112.balmerspeak.app.menu;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 
 
+import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import inf112.balmerspeak.app.GUI;
+import java.util.HashMap;
+import java.util.Map;
 
 
 public class LobbyScreen extends MainScreen implements Screen {
@@ -16,20 +21,20 @@ public class LobbyScreen extends MainScreen implements Screen {
     private GUI game;
 
     // Whether the person is host of the game
-    private boolean isHost;
+    private final boolean isHost;
 
     // ip address
     private String ipAddress;
 
 
-
     // table of connected clients
     private Table connectedClients;
+    private Map<String,Label> clientsLabels = new HashMap<>();
 
     // skin
     public Skin skin;
 
-    private String hostName;
+
 
     public String statusIP;
 
@@ -60,11 +65,11 @@ public class LobbyScreen extends MainScreen implements Screen {
 
         // Get buttons label
         Label backBtnLabel = super.getBtnLabel("Back");
+        Label startGameLbl = super.getBtnLabel("Start game");
 
-
-        // Decide title text
-        statusIP = isHost ? "Your IP (host): "  + ipAddress : "You are connected to: " + hostName; // TODO: FETCH IP address from host
-
+        // set status text if host
+        if (isHost)
+            statusIP = "You are hosting this game at " + ipAddress;
 
         // Add IP label
         ipLabel = super.getBtnLabel(statusIP);
@@ -75,8 +80,20 @@ public class LobbyScreen extends MainScreen implements Screen {
         // Get title
         Label title = super.getTitleLabel("Robo Rally");
 
+        // Create back button
         TextButton backToMenu = new TextButton("Back", skin);
         backToMenu.setLabel(backBtnLabel);
+        // Add navigation listener
+        addNavListener(backToMenu);
+
+        // Create play button
+        TextButton startButton = new TextButton("Start game", skin);
+        startButton.setLabel(startGameLbl);
+        addHoverListeners(startButton, game);
+        // only host should be able to start game
+        if (isHost)
+            addStartGameListener(startButton);
+
 
 
         // Add game title
@@ -89,26 +106,77 @@ public class LobbyScreen extends MainScreen implements Screen {
         root.add(connectedClients).prefWidth(400.0f).prefHeight(300.0f);
         root.row();
         root.add(backToMenu).prefWidth(200.0f).prefHeight(100.0f);
+        // only host should see start button
+        if (isHost)
+            root.add(startButton).prefWidth(200.0f).prefHeight(100.0f);
+    }
+
+    public GameScreen startGame() {
+        GameScreen screen = new GameScreen();
+        Gdx.app.postRunnable(() -> game.changeScreen(screen));
+        return screen;
+    }
+
+    public void addStartGameListener(TextButton btn) {
+        // Go to game screen
+        btn.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                super.clicked(event, x, y);
+                // Create game screen
+                GameScreen screen = new GameScreen();
+                game.server.setGameScreen(screen);
+                // Create game object and pass to server
+                game.server.sendStartMessage();
+                game.changeScreen(screen);
+            }
+        });
+    }
+
+    public void addNavListener(TextButton btn) {
+        super.addHoverListeners(btn, game);
+        btn.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                super.clicked(event, x, y);
+                // if host, stop the server
+                if (isHost)
+                    game.stopServer();
+                else
+                    game.stopClient();
+                // Now navigate back to start screen
+                game.changeScreen(new StartScreen(game));
+            }
+        });
     }
 
 
 
-    public void hostNameChanged(String hostName) {
-        this.hostName = hostName;
-        statusIP = "You are connected to: " + hostName;
+    public void setStatusLabel(String hostName, String hostIP) {
+        this.statusIP = "You are connected to: " + hostName + " at " + hostIP;
     }
 
 
     public void addConnectedClient(String ipAddress, String username) {
+        // Add label to list
+        clientsLabels.put(ipAddress, new Label(username + " - " + ipAddress,skin));
+
+        // Add to GUI
         connectedClients.row();
-        connectedClients.add(new Label(username + " - " + ipAddress, skin));
+        connectedClients.add(clientsLabels.get(ipAddress));
+    }
+
+    public void removeConnectedClient(String ipAddress) {
+        // Find the corresponding entry and remove it
+        connectedClients.removeActor(clientsLabels.get(ipAddress));
+        // Remove from label and ip map
+        clientsLabels.remove(ipAddress);
     }
 
 
     @Override
     public void render(float v) {
         super.render(v);
-        ipLabel.setText(statusIP);
     }
 
     @Override

@@ -8,7 +8,9 @@ public class ConveyorBelt {
     private Direction direction;
     private ConveyorMovementTypes beltType;
 
+
     public ConveyorBelt(int x, int y, Direction direction, ConveyorMovementTypes beltType){
+
         this.x = x;
         this.y = y;
         this.direction = direction;

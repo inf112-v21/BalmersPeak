@@ -1,13 +1,15 @@
 package inf112.balmerspeak.app.cards;
 
-import inf112.balmerspeak.app.robot.Robot;
+import inf112.balmerspeak.app.Player;
 
-public class GeneralCard implements ICards {
+import java.io.Serializable;
+
+public class GeneralCard implements ICards, Serializable, Comparable<GeneralCard> {
 
     private MovementType type;
     private int priority;
     private String name;
-    private Robot robot;
+    private Player player;
 
     public GeneralCard(MovementType type, int priority, String name) {
         this.type = type;
@@ -26,8 +28,18 @@ public class GeneralCard implements ICards {
         return type;
     }
 
-    public Robot getRobot() {
-        return robot;
+    public void setPlayer(Player player) {
+        this.player = player;
     }
 
+    public Player getPlayer() {
+        return this.player;
+    }
+
+
+    // Reverse order with highest priority first, therefore the reverse operation below
+    @Override
+    public int compareTo(GeneralCard other) {
+        return other.getPriority() - this.getPriority();
+    }
 }

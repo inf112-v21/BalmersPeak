@@ -1,19 +1,18 @@
 package inf112.balmerspeak.app.robot;
 
-import inf112.balmerspeak.app.cards.Deck;
-import inf112.balmerspeak.app.cards.ProgramCard;
+
 import inf112.balmerspeak.app.cards.Rotation;
 
+import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.Collections;
+
 
 
 import inf112.balmerspeak.app.flag.Flag;
-import inf112.balmerspeak.app.robot.Direction;
 
 
 
-public class Robot implements IRobot{
+public class Robot implements IRobot, Serializable {
 
     private int x;
     private int y;
@@ -21,9 +20,8 @@ public class Robot implements IRobot{
     private int ll = 3;
     private Direction direction;
 
-    private ArrayList<ProgramCard> hand = new ArrayList<>();
     private ArrayList<Flag> collected = new ArrayList<>();
-    private Deck deck = new Deck();
+
     private int spawnX;
     private int spawnY;
 
@@ -33,9 +31,6 @@ public class Robot implements IRobot{
         direction = dir;
     }
 
-    public ArrayList<ProgramCard> getHand() {
-        return hand;
-    }
 
     public void addFlag(Flag flag){
         if(collected.isEmpty() && flag.getOrder() == 1)
@@ -51,6 +46,7 @@ public class Robot implements IRobot{
     public boolean checkWinCondition() {
         return collected.size() == 3;
     }
+
 
 
 
@@ -101,19 +97,11 @@ public class Robot implements IRobot{
         return (getHealth() == 0 || getLives() == 0);
     }
 
-    public void giveCard(ProgramCard card) {
-        hand.add(card);
-    }
 
     public void setDirection(Direction dir){
         this.direction = dir;
     }
 
-    public ArrayList<ProgramCard> giveHand(int amount){
-        for (ProgramCard cards : deck.getCards(amount))
-            hand.add(cards);
-        return hand;
-    }
 
     public Direction turn(Rotation rotation, Direction direction) {
         switch (direction) {

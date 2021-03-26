@@ -8,13 +8,15 @@
   <artifactId>BalmersPeak</artifactId>
   <version>1.0-SNAPSHOT</version>
 
+
   <name>BalmersPeak</name>
   <url>https://github.com/inf112-v21/BalmersPeak</url>
 
   <repositories>
     <repository>
-      <id>clojars</id>
-      <url>http://clojars.org/repo/</url>
+      <id>in-project-repo</id>
+      <name>In Project Repo</name>
+      <url>file:///${project.basedir}/in-project-repo</url>
     </repository>
   </repositories>
 
@@ -45,28 +47,6 @@
       <version>1.9.10</version>
     </dependency>
 
-    <!-- https://mvnrepository.com/artifact/com.badlogicgames.gdx/gdx-freetype-platform -->
-    <dependency>
-      <groupId>com.badlogicgames.gdx</groupId>
-      <artifactId>gdx-freetype</artifactId>
-      <version>1.9.13</version>
-    </dependency>
-
-    <dependency>
-      <groupId>kryonet</groupId>
-      <artifactId>kryonet</artifactId>
-      <version>2.21</version>
-    </dependency>
-
-
-    <!-- https://mvnrepository.com/artifact/com.badlogicgames.gdx/gdx-freetype-platform -->
-    <dependency>
-      <groupId>com.badlogicgames.gdx</groupId>
-      <artifactId>gdx-freetype-platform</artifactId>
-      <version>1.9.13</version>
-      <classifier>natives-desktop</classifier>
-    </dependency>
-
     <dependency>
       <groupId>junit</groupId>
       <artifactId>junit</artifactId>
@@ -80,12 +60,27 @@
       <artifactId>kryonet</artifactId>
       <version>2.22.0-RC1</version>
     </dependency>
-      <dependency>
-          <groupId>org.junit.jupiter</groupId>
-          <artifactId>junit-jupiter</artifactId>
-          <version>RELEASE</version>
-          <scope>test</scope>
-      </dependency>
+
+    <dependency>
+        <groupId>org.junit.jupiter</groupId>
+        <artifactId>junit-jupiter</artifactId>
+        <version>RELEASE</version>
+        <scope>test</scope>
+    </dependency>
+
+    <dependency>
+      <groupId>com.dosse</groupId>
+      <artifactId>WaifUPnP</artifactId>
+      <version>1.0</version>
+    </dependency>
+
+    <dependency>
+      <groupId>org.javatuples</groupId>
+      <artifactId>javatuples</artifactId>
+      <version>1.2</version>
+    </dependency>
+
+
   </dependencies>
 
   <build>
