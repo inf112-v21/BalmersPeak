@@ -50,13 +50,10 @@ public class Board {
     ArrayList<TiledMapTileLayer.Cell> robotTextures;
 
 
-
-
-
     private TiledMapTileLayer hole;
 
 
-    public Board(String filename){
+    public Board(String filename) {
 
         TmxMapLoader mapLoader = new TmxMapLoader();
         map = mapLoader.load(filename);
@@ -91,9 +88,6 @@ public class Board {
         wrenches = new Wrench[HEIGHT][WIDTH];
         conveyors = new ConveyorBelt[HEIGHT][WIDTH];
 
-        System.out.println("Width: " + WIDTH + ". Heught: " + HEIGHT);
-        System.out.println("Size of conveyors: " + conveyors.length + " by " + conveyors[0].length);
-
         // Init board elements
         initFlag();
         initBoardElements();
@@ -123,10 +117,6 @@ public class Board {
 
     public TiledMap getMap() {
         return map;
-    }
-
-    public boolean isFacingWall(int x, int y, Direction dir) {
-        return false;
     }
 
     public TiledMapTileLayer getBoard() {

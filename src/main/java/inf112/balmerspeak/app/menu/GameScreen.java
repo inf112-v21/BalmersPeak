@@ -149,7 +149,6 @@ public class GameScreen implements Screen {
         // Only update if the player is allowed to move
 
         if (shouldMove(player, dx, dy)){
-            player.getRobot().set(playerX + dx, playerY + dy);
             board.move(player, dx,dy);
             player.getRobot().set(playerX + dx, playerY + dy);
 
@@ -172,10 +171,10 @@ public class GameScreen implements Screen {
                 player.getRobot().setSpawnCoordinates(playerX + dx,playerY + dy);
                 show();
             }
-
-            if (board.getConveyor(playerX + dx, playerY + dy) != null){
-                board.runBelt(player, board.getConveyor(playerX + dx, playerY + dy));
-            }
+//
+//            if (board.getConveyor(playerX + dx, playerY + dy) != null){
+//                board.runBelt(player, board.getConveyor(playerX + dx, playerY + dy));
+//            }
           
             //check for flag
             if (board.getFlag(playerX + dx, playerY + dy) != null){
