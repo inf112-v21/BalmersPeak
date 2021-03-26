@@ -103,6 +103,7 @@ Rydde opp litt i oblig dokumenter vårt.
 Møtereferat:
 Vi fikk merget sammen det vi skulle, og fikk gjort koden klar for innlevering. Alle møtte opp
 
+
  
 #### Bli enige om maks tre forbedringspunkter fra retrospektivet, som skal følges opp under neste sprint.
 - Del opp oppgavene i mindre deler. På den måten enklere å fordele oppgaver.

@@ -6,6 +6,7 @@ import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.maps.tiled.tiles.StaticTiledMapTile;
+import inf112.balmerspeak.app.robot.Robot;
 
 
 public class MapHandler {
@@ -60,6 +61,7 @@ public class MapHandler {
         wonCell = new TiledMapTileLayer.Cell().setTile(playerWonTexture);
         dieCell = new TiledMapTileLayer.Cell().setTile(playerDiedTexture);
 
+
         // Place player at (0,0)
         playerLayer.setCell(0, 0, player);
     }
@@ -90,7 +92,6 @@ public class MapHandler {
         return this.playerLayer;
     }
 
-
     public void movePlayer(int xCoord, int yCoord, int dx, int dy) {
         // Set new cell to the player texture
         this.playerLayer.setCell(xCoord + dx, yCoord + dy, this.player);
@@ -107,6 +108,10 @@ public class MapHandler {
         return this.hole.getCell(xCoord, yCoord) != null;
     }
 
+    public boolean checkPlayer(int xCoord, int yCoord) { return this.playerLayer.getCell(xCoord, yCoord) != null;}
+
+    public boolean checkBelt(int xCoord, int yCoord) { return this.conveyor.getCell(xCoord, yCoord) != null;}
+
     public void changePlayerTextureWin(int xCoord, int yCoord) {
         this.playerLayer.setCell(xCoord, yCoord, wonCell);
     }
@@ -115,5 +120,9 @@ public class MapHandler {
         this.playerLayer.setCell(xCoord, yCoord, dieCell);
     }
 
-    
+    public static Object checkGears(Robot robot) { return null;}
+
+
+
+
 }

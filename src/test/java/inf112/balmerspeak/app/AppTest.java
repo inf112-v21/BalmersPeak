@@ -1,4 +1,4 @@
-package inf112.balmerspeak.app;
+package inf112.BalmersPeak.app;
 
 import static org.junit.Assert.assertTrue;
 import org.junit.Test;

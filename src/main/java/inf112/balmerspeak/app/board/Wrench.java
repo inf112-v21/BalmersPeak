@@ -3,20 +3,20 @@ package inf112.balmerspeak.app.board;
 import inf112.balmerspeak.app.robot.Robot;
 
 public class Wrench {
+    public int x;
+    public int y;
     public int numberOfWrenches;
-    public Wrench(int numberOfWrenches) {
+
+    public Wrench(int x, int y, int numberOfWrenches) {
+        this.x = x;
+        this.y = y;
         this.numberOfWrenches = numberOfWrenches;
     }
-    public void fixDmg(Robot robot){
-        if (robot.getHealth()<10) {
-            robot.setHealth(robot.getHealth() + 1);
-            System.out.println("You healed 1dmg");
 
-        }else{
-            System.out.println("Your Hp is full");
-        }
-    }
+    public int getX() {return x;}
 
+    public int getY() {return y;}
 
+    public int getNumberOfWrenches(){return numberOfWrenches;}
 
 }

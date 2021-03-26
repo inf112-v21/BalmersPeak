@@ -8,7 +8,6 @@ import inf112.balmerspeak.app.cards.MovementCard;
 import inf112.balmerspeak.app.cards.Rotation;
 import inf112.balmerspeak.app.cards.RotationCard;
 import inf112.balmerspeak.app.robot.Direction;
-import inf112.balmerspeak.app.robot.Robot;
 import org.junit.Test;
 import org.junit.jupiter.api.BeforeAll;
 
@@ -30,7 +29,7 @@ public class GameScreenTest {
         new Lwjgl3Application(new GUI() {
             @Override
             public void create() {
-                changeScreen(g = new GameScreen());
+                changeScreen(g = new GameScreen()); //TODO: fix this null
                 Gdx.app.exit();
             }
         }, cfg);
@@ -39,13 +38,13 @@ public class GameScreenTest {
     @Test
     public void playerCanNotMoveOutOfBounds(){
         setup();
-        assertFalse(g.shouldMove(0,-1));
+        assertFalse(g.shouldMove(g.getMyPlayer(), 0,-1));
     }
 
     @Test
     public void playerCanMoveOneUp(){
         setup();
-        assertTrue(g.shouldMove(0,1));
+        assertTrue(g.shouldMove(g.getMyPlayer(), 0,1));
     }
 
 
@@ -53,8 +52,8 @@ public class GameScreenTest {
     public void playerMovesFromCard(){
         setup();
         MovementCard card = new MovementCard(1,1,"Movement 1");
-        g.handleMoveCard(card);
-        assertTrue(g.getRobot().getY() == 1);
+        g.handleMoveCard(card, card.getPlayer());
+        assertTrue(g.getMyPlayer().getRobot().getY() == 1);
 
     }
 
@@ -62,8 +61,9 @@ public class GameScreenTest {
     public void playerRotatesFromCard(){
         setup();
         RotationCard card = new RotationCard(1, Rotation.right, "Rotate right");
-        g.handleRotation(card);
-        assertTrue(g.getRobot().getDirection().equals(Direction.EAST));
+
+        g.handleRotation(card, card.getPlayer());
+        assertTrue(card.getPlayer().getRobot().getDirection().equals(Direction.EAST));
     }
 
 }

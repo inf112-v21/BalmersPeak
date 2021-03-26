@@ -3,19 +3,23 @@ package inf112.balmerspeak.app.menu;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
-import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
-import com.badlogic.gdx.utils.Array;
+import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
+import inf112.balmerspeak.app.Game;
 import inf112.balmerspeak.app.InputHandler;
-import inf112.balmerspeak.app.MapHandler;
+import inf112.balmerspeak.app.Player;
+import inf112.balmerspeak.app.board.Board;
 import inf112.balmerspeak.app.cards.*;
 import inf112.balmerspeak.app.robot.Direction;
-import inf112.balmerspeak.app.robot.Robot;
+
+
 import java.util.ArrayList;
 
 
@@ -23,112 +27,98 @@ import java.util.ArrayList;
 public class GameScreen implements Screen {
 
     private Stage stage;
-    // Background image
-
     private OrthogonalTiledMapRenderer rend;
-
-
-    private ArrayList<ProgramCard> hand;
-
-    private InputHandler input;
-    private MapHandler mapHandler;
-    private OrthographicCamera cam;
 
     private ArrayList<ProgramCard> queueList = new ArrayList<>();
 
-    private Robot robot;
+
+    private Player myPlayer;
+    private Game game;
+
+
 
     private Skin skin1;
+    private Texture card;
+    private Texture backgroundImage;
+    private Texture life;
+    private Texture health;
+    Board board;
+
 
     public GameScreen() {
 
+
         // Create input handler
-        input = new InputHandler();
+        InputHandler input = new InputHandler();
         Gdx.input.setInputProcessor(input);
+
 
         //load skins
         skin1 = new Skin(Gdx.files.internal("assets/default/skin/uiskin.json"));
-        hand = new ArrayList<>();
 
-        // Create map handler
-        mapHandler = new MapHandler();
+        // Create board
+        board = new Board("assets/map/map.tmx");
 
-        cam = new OrthographicCamera();
-        rend = new OrthogonalTiledMapRenderer(mapHandler.getMap(), (float) 1 / 300);
+        OrthographicCamera cam = new OrthographicCamera();
+        rend = new OrthogonalTiledMapRenderer(board.getMap(), (float) 1 / 300);
 
         cam.setToOrtho(false, 16, 16);
         cam.position.set((cam.viewportWidth / 2), (cam.viewportHeight / 2) - 4, 0);
         cam.update();
 
         rend.setView(cam);
-
-        //set player at (0,0)
-        robot = new Robot(0,0, Direction.NORTH);
     }
 
-    public Robot getRobot() {
-        return robot;
+    public Board getBoard() {
+        return this.board;
     }
 
-    public boolean shouldMove(int dx, int dy) {
+
+    public Game getGame() {
+        return this.game;
+    }
+
+
+    public void setGame(Game game) {
+        this.game = game;
+    }
+
+    public void setMyPlayer(Player myPlayer) {
+        this.myPlayer = myPlayer;
+    }
+
+    public Player getMyPlayer() {
+        return this.myPlayer;
+    }
+
+    public boolean shouldMove(Player player, int dx, int dy) {
         // Return false if dx and dy are zero
         if (dx == 0 && dy == 0)
             return false;
 
+        int x = player.getRobot().getX();
+        int y = player.getRobot().getY();
+
+
         // These return true if the resulting playerVec are out of bounds
-        boolean outsideX = robot.getX() + dx > mapHandler.getBoard().getWidth()-1 || robot.getX() + dx < 0;
-        boolean outsideY = robot.getY() + dy > mapHandler.getBoard().getHeight()-1 || robot.getY() + dy < 0;
+        boolean outsideX = x + dx > board.getBoard().getWidth()-1 || x + dx < 0;
+        boolean outsideY = y + dy > board.getBoard().getHeight()-1 || y + dy < 0;
 
         return !(outsideX || outsideY);
     }
 
-    //Unused, but still usable for testing
-    public void handleMove() {
-        // Changes in the x coordinate
-        int dx = 0;
-        // Changes in the y coordinate
-        int dy = 0;
 
-        if (input.wPressed)
-            dy += 1;
-        else if (input.aPressed)
-            dx -= 1;
-        else if(input.sPressed)
-            dy -=1;
-        else if (input.dPressed)
-            dx += 1;
-
-        // Player x and y coordinates
-        int playerX = robot.getX();
-        int playerY = robot.getY();
-
-
-        // Only update if the player is allowed to move
-        if (shouldMove(dx, dy)) {
-            // Move player textures
-            mapHandler.movePlayer(playerX, playerY, dx, dy);
-            robot.set(playerX + dx, playerY + dy);
-        }
-
-        // Check if player won
-        if (mapHandler.checkWin(playerX + dx, playerY + dy)) {
-            System.out.println("You won!");
-            mapHandler.changePlayerTextureWin(playerX + dx, playerY + dy);
-            robot.set(playerX + dx, playerY + dy);
-        }
-
-        // Check if player died
-        if (mapHandler.checkDeath(playerX + dx, playerY + dy)) {
-            System.out.println("You died :(");
-            mapHandler.changePlayerTextureDeath(playerX + dx, playerY + dy);
-            robot.set(playerX + dx, playerY + dy);
-        }
-
-        // Update player coordinates
-        input.clear();
+    public void executeCard(GeneralCard card, Player player) {
+        // Call appropriate method
+        if (card instanceof  MovementCard)
+            handleMoveCard((MovementCard) card, player);
+        else
+            handleRotation((RotationCard) card, player);
     }
 
-    public void handleMoveCard(MovementCard card){
+
+    public void handleMoveCard(MovementCard card, Player player) {
+
         // Changes in the x coordinate
         int dx = 0;
 
@@ -136,48 +126,84 @@ public class GameScreen implements Screen {
         int dy = 0;
 
         //Check for direction
-        if (robot.getDirection().equals(Direction.NORTH))
+        if (player.getRobot().getDirection().equals(Direction.NORTH))
             dy += card.getDistance();
-        else if (robot.getDirection().equals(Direction.SOUTH))
+        else if (player.getRobot().getDirection().equals(Direction.SOUTH))
             dy -= card.getDistance();
-        else if (robot.getDirection().equals(Direction.EAST))
+        else if (player.getRobot().getDirection().equals(Direction.EAST))
             dx += card.getDistance();
-        else if (robot.getDirection().equals(Direction.WEST))
+        else if (player.getRobot().getDirection().equals(Direction.WEST))
             dx -= card.getDistance();
 
         // Player x and y coordinates
-        int playerX = robot.getX();
-        int playerY = robot.getY();
+        int playerX = player.getRobot().getX();
+        int playerY = player.getRobot().getY();
 
         // Only update if the player is allowed to move
-        if (shouldMove(dx, dy)){
-            mapHandler.movePlayer(playerX, playerY, dx, dy);
-            robot.set(playerX + dx, playerY + dy);
-        }
-        // Check if player won
-        if (mapHandler.checkWin(playerX + dx, playerY + dy)) {
-            System.out.println("You won!");
-            mapHandler.changePlayerTextureWin(playerX + dx, playerY + dy);
-            robot.set(playerX + dx, playerY + dy);
-        }
 
-        // Check if player died
-        if (mapHandler.checkDeath(playerX + dx, playerY + dy)) {
-            System.out.println("You died :(");
-            mapHandler.changePlayerTextureDeath(playerX + dx, playerY + dy);
-            robot.set(playerX + dx, playerY + dy);
+        if (shouldMove(player, dx, dy)){
+            board.move(player, dx,dy);
+            player.getRobot().set(playerX + dx, playerY + dy);
+
+            //check for hole
+            if (board.getHole(playerX + dx, playerY + dy) != null) {
+                player.getRobot().setLives(player.getRobot().getLives() - 1);
+                show();
+            }
+            //check for laser
+            if (board.getLaser(playerX + dx, playerY + dy) != null) {
+                player.getRobot().setHealth(player.getRobot().getHealth() - 1);
+                show();
+            }
+
+            if (board.getWrench(playerX + dx, playerY + dy) != null) {
+                if (player.getRobot().getHealth() < 9) {
+                    player.getRobot().setHealth(player.getRobot().getHealth() + 1);
+                    System.out.println("Gained health");
+                }
+                player.getRobot().setSpawnCoordinates(playerX + dx,playerY + dy);
+                show();
+            }
+//
+//            if (board.getConveyor(playerX + dx, playerY + dy) != null){
+//                board.runBelt(player, board.getConveyor(playerX + dx, playerY + dy));
+//            }
+          
+            //check for flag
+            if (board.getFlag(playerX + dx, playerY + dy) != null){
+                player.getRobot().addFlag(board.getFlag(playerX +dx, playerY+dy));
+            }
+            if (player.getRobot().checkWinCondition())
+                System.out.println("Player" + player.getId() + " won");
+
         }
+        if (board.getLaser(playerX + dx, playerY + dy) != null) {
+            player.getRobot().setHealth(player.getRobot().getHealth() - 1);
+            showHealthLives();
+        }
+        if (board.getFlag(playerX + dx, playerY + dy) != null){
+            player.getRobot().addFlag(board.getFlag(playerX +dx, playerY+dy));
+        }
+        if (player.getRobot().checkWinCondition())
+            System.out.println("Player" + player + " won");
 
     }
-    public void handleRotation(RotationCard card){
-        if (card.getRotation().equals(Rotation.left))
-            robot.setDirection(turn(Rotation.left, robot.getDirection()));
-        if (card.getRotation().equals(Rotation.right))
-            robot.setDirection(turn(Rotation.right, robot.getDirection()));
-        if (card.getRotation().equals(Rotation.uturn))
-            robot.setDirection(turn(Rotation.uturn, robot.getDirection()));
 
+
+    //Handles rotation cards
+    public void handleRotation(RotationCard card, Player player){
+        if (card.getRotation().equals(Rotation.left)) {
+            player.getRobot().setDirection(player.getRobot().turn(Rotation.left, player.getRobot().getDirection()));
+            board.rotateRobot(player, 90);
+        } else if (card.getRotation().equals(Rotation.right)) {
+            player.getRobot().setDirection(player.getRobot().turn(Rotation.right, player.getRobot().getDirection()));
+            board.rotateRobot(player, -90);
+        } else if (card.getRotation().equals(Rotation.uturn)) {
+            player.getRobot().setDirection(player.getRobot().turn(Rotation.uturn, player.getRobot().getDirection()));
+            board.rotateRobot(player, 180);
+        }
     }
+
     public Direction turn(Rotation rotation, Direction direction) {
         switch (direction) {
             case NORTH:
@@ -201,75 +227,145 @@ public class GameScreen implements Screen {
         }
     }
 
+    public void showHealthLives() {
+        int xlife = 1300;
+        for (int i = 0; i < myPlayer.getRobot().getLives(); i++) {
+            life = new Texture("images/lifetoken.png");
+            Button.ButtonStyle tbs = new Button.ButtonStyle();
+            tbs.up = new TextureRegionDrawable(new TextureRegion(life));
+            Button b = new Button(tbs);
+            b.setPosition(xlife+=100, 150);
+            b.setSize(50,50);
+            stage.addActor(b);
+
+        }
+
+        //Adds the health tokes to the GUI
+        int xhealth = 1250;
+        for (int i = 0; i < myPlayer.getRobot().getHealth(); i++) {
+            health = new Texture("images/health_token.png");
+            Button.ButtonStyle tbs = new Button.ButtonStyle();
+            tbs.up = new TextureRegionDrawable(new TextureRegion(health));
+            Button b = new Button(tbs);
+            b.setPosition(xhealth+=50, 50);
+            b.setSize(50,50);
+            stage.addActor(b);
+        }
+    }
+
     @Override
     public void show() {
         // Called when this screen becomes the current screen for the Game.
-        hand = robot.giveHand(5);
         stage = new Stage(new ScreenViewport());
         Table register = new Table();
         register.setHeight(270);
         register.setWidth(Gdx.graphics.getWidth());
-        register.bottom().debug();
-
-
-        //set up the menu box
-        Dialog dialog = new Dialog("Card menu", skin1);
-        dialog.setSize(Gdx.graphics.getWidth()/2, 160);
-        dialog.setPosition(0,100);
-
-        //add the drop down box
-        SelectBox<ProgramCard> selectBox = new SelectBox<>(skin1);
-        Array<ProgramCard> a = new Array<>();
-        for (ProgramCard card : hand)
-            a.add(card);
-        selectBox.setItems(a);
 
         //add the button to start the sequence of moves
         TextButton button = new TextButton("Start round", skin1);
+        button.setPosition(1100,100);
         button.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent changeEvent, Actor actor) {
-                //moves the robot for each card in list
-                for (ProgramCard card : queueList){
-                    if (card.getType().equals(MovementType.movement)) {
-                        handleMoveCard((MovementCard) card);
+                // block action if round is in progress
+                System.out.println("Is round in progress: " + game.isRoundInProgress());
+                if (!game.isRoundInProgress())
+                    game.handIsReady(queueList);
+                show();
+            }
+        });
+
+        //Adds the cards to the GUI
+        int x = 100;
+
+        for (ProgramCard cards : myPlayer.getHand()) {
+            card = new Texture("assets/cards/" + cards.getName() + "/" + cards.toString() + ".jpg");
+
+            Button.ButtonStyle tbs = new Button.ButtonStyle();
+            tbs.up = new TextureRegionDrawable(new TextureRegion(card));
+            Button b = new Button(tbs);
+            b.addListener(new ChangeListener() {
+                @Override
+                public void changed(ChangeEvent changeEvent, Actor actor) {
+                    if(!queueList.contains(cards) && queueList.size()<5) {
+                        queueList.add(cards);
                     }
                     else {
-                        handleRotation((RotationCard) card);
+                        queueList.remove(cards);
                     }
                 }
-            }
-        });
+            });
+            b.setSize(91,123);
+            b.setPosition(x+=100, 50);
+            stage.addActor(b);
 
-        selectBox.addListener(new ChangeListener() {
-
-        @Override
-        public void changed(ChangeEvent changeEvent, Actor actor) {
-            if (queueList.size() < 5) {
-                queueList.add(selectBox.getSelected());
-            }
         }
-        });
-        dialog.getContentTable().defaults().pad(10);
-        dialog.getContentTable().add(selectBox);
-        dialog.add(button);
 
-        stage.addActor(dialog);
+
+        //Adds the life tokens to the GUI
+        int xlife = 1300;
+        for (int i = 0; i < myPlayer.getRobot().getLives(); i++) {
+            life = new Texture("images/lifetoken.png");
+            Button.ButtonStyle tbs = new Button.ButtonStyle();
+            tbs.up = new TextureRegionDrawable(new TextureRegion(life));
+            Button b = new Button(tbs);
+            b.setPosition(xlife+=100, 150);
+            b.setSize(50,50);
+            stage.addActor(b);
+        }
+
+        //Adds the health tokes to the GUI
+        int xhealth = 1250;
+        for (int i = 0; i < myPlayer.getRobot().getHealth(); i++) {
+            health = new Texture("images/health_token.png");
+            Button.ButtonStyle tbs = new Button.ButtonStyle();
+            tbs.up = new TextureRegionDrawable(new TextureRegion(health));
+            Button b = new Button(tbs);
+            b.setPosition(xhealth+=50, 50);
+            b.setSize(50,50);
+            stage.addActor(b);
+        }
+        showHealthLives();
+
+
+        //Adds text field for lives
+        TextField life = new TextField("Lives", skin1);
+        life.setPosition(1500, 210);
+        life.setSize(50,life.getHeight());
+
+        //Adds text field for health
+        TextField health = new TextField("Health", skin1);
+        health.setPosition(1495, 110);
+        health.setSize(60,health.getHeight());
+
+        stage.addActor(life);
+        stage.addActor(health);
+
+
+
+        backgroundImage = new Texture("images/background.png");
+
+        stage.addActor(button);
         stage.addActor(register);
         Gdx.input.setInputProcessor(stage);
     }
 
-
     @Override
     public void render(float v) {
         rend.render();
-        Label label = new Label("Queue: " + queueList, skin1);
-        label.setPosition(Gdx.graphics.getWidth()/2+10, 200);
-        stage.addActor(label);
+
+        //Adds the queue list to the GUI
+        TextField field = new TextField("Queue: " + queueList, skin1);
+        field.setPosition(Gdx.graphics.getWidth()/5, 210);
+        field.setSize(queueList.size()+600, field.getHeight());
+        stage.addActor(field);
+
         stage.act(Gdx.graphics.getDeltaTime());
+        stage.getBatch().begin();
+        stage.getBatch().draw(backgroundImage, 0, 0, stage.getWidth(), 270);
+        stage.getBatch().end();
         stage.draw();
         //handleMove();
-
     }
 
     @Override
@@ -296,4 +392,5 @@ public class GameScreen implements Screen {
     public void dispose() {
         // Called when this screen should release all resources.
     }
+
 }
