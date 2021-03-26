@@ -152,6 +152,14 @@ public class GameScreen implements Screen {
             if (board.getFlag(playerX + dx, playerY + dy) != null){
                 myPlayer.getRobot().addFlag(board.getFlag(playerX +dx, playerY+dy));
             }
+            if (board.getWrench(playerX + dx, playerY + dy) != null) {
+                if (myPlayer.getRobot().getHealth() < 9) {
+                    myPlayer.getRobot().setHealth(myPlayer.getRobot().getHealth() + 1);
+                    System.out.println("Gained health");
+                }
+                myPlayer.getRobot().setSpawnCoordinates(playerX + dx,playerY + dy);
+                show();
+            }
         }
 
 
