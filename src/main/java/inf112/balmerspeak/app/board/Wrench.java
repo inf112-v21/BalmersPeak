@@ -13,15 +13,10 @@ public class Wrench {
         this.numberOfWrenches = numberOfWrenches;
     }
 
-    public void fixDmg(Robot player){
-        if (player.getHealth()<10)
-            player.setHealth(player.getHealth() + 1);
-        setNewSpawn(player);
-    }
-
-    public void setNewSpawn(Robot player){ player.setSpawnCoordinates(x,y); }
-
     public int getX() {return x;}
 
     public int getY() {return y;}
+
+    public int getNumberOfWrenches(){return numberOfWrenches;}
+
 }

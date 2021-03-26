@@ -142,6 +142,19 @@ public class GameScreen implements Screen {
             if (board.getActivePlayer().checkWinCondition())
                 System.out.println("Player" + board.getActivePlayer() + " won");
 
+            if (board.getWrench(playerX + dx, playerY + dy) != null) {
+                if (board.getActivePlayer().getHealth() < 9) {
+                    board.getActivePlayer().setHealth(board.getActivePlayer().getHealth() + 1);
+                    System.out.println("Gained health");
+                }
+                board.getActivePlayer().setSpawnCoordinates(playerX + dx,playerY + dy);
+                show();
+            }
+
+            if (board.getConveyor(playerX + dx, playerY + dy) != null){
+                board.runBelt(board.getConveyor(playerX + dx, playerY + dy));
+            }
+
             // Check if player died
             if (shouldMove(dx, dy)) {
                 board.getActivePlayer().set(playerX + dx, playerY + dy);
@@ -196,6 +209,20 @@ public class GameScreen implements Screen {
                 board.getActivePlayer().setHealth(board.getActivePlayer().getHealth() - 1);
                 show();
             }
+
+            if (board.getWrench(playerX + dx, playerY + dy) != null) {
+                if (board.getActivePlayer().getHealth() < 9) {
+                    board.getActivePlayer().setHealth(board.getActivePlayer().getHealth() + 1);
+                    System.out.println("Gained health");
+                }
+                board.getActivePlayer().setSpawnCoordinates(playerX + dx,playerY + dy);
+                show();
+            }
+
+            if (board.getConveyor(playerX + dx, playerY + dy) != null){
+                board.runBelt(board.getConveyor(playerX + dx, playerY + dy));
+            }
+          
             //check for flag
             if (board.getFlag(playerX + dx, playerY + dy) != null){
                 board.getActivePlayer().addFlag(board.getFlag(playerX +dx, playerY+dy));
@@ -356,6 +383,7 @@ public class GameScreen implements Screen {
         stage.getBatch().draw(backgroundImage, 0, 0, stage.getWidth(), 270);
         stage.getBatch().end();
         stage.draw();
+        //handleMove();
     }
 
     @Override
