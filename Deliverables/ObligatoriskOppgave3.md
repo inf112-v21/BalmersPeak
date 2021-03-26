@@ -164,7 +164,8 @@ I GameScreen er det en shouldMove metode som sjekker om Direction til player og 
 Har vi noen bugs vi kjenner til?
 Med noen skjermer, så vil GUIen sine elementer bli plassert feil. Det fins fortsatt tilfeller der veggene kan blir gått gjennom, eller spilleren sitter seg fast. Når spilleren går går på en conveyor og den flytter deg, vil den bare oppdatere spilleren på GUI-en, og ikke (x,y) verdiene
 
-Veggene funker bare dersom man står i tilen veggen er i. Hvis en vegg står i North vil man kunne flytte inn i den tilen fra North.
+Veggene funker bare dersom man står i tilen veggen er i. Hvis en vegg står i North vil man kunne flytte inn i den tilen fra North. Når du spiller alene, så vill kortene dine
+bli fjernet uten at du får nye. 
 
 ###Manuel testing
 Kommenter ut Gdx.input.setInputProcessor(stage); nederst i show() i gamescreen klassen, og skriv handlemove() i render() i gamescreen klassen
