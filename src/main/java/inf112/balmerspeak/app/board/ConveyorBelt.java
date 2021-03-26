@@ -1,71 +1,28 @@
 package inf112.balmerspeak.app.board;
 
-import inf112.balmerspeak.app.MapHandler;
-import inf112.balmerspeak.app.cards.MovementType;
 import inf112.balmerspeak.app.robot.Direction;
-import inf112.balmerspeak.app.robot.Robot;
 
 public class ConveyorBelt {
     private int x;
     private int y;
     private Direction direction;
-    private MapHandler map;
-    private MovementType beltType;
+    private ConveyorMovementTypes beltType;
 
-    public ConveyorBelt(int x, int y, Direction direction, MovementType beltType){
+
+    public ConveyorBelt(int x, int y, Direction direction, ConveyorMovementTypes beltType){
+
         this.x = x;
         this.y = y;
         this.direction = direction;
         this.beltType = beltType;
-        this.map = new MapHandler();
     }
+    public int getX(){return x;}
 
-    public void runBelt(Robot player){
-        if (canMove()){
-            beltMove(player);
-            if (isRotatingBelt())
-                beltRotate();
-        }else{
-            System.out.println("Can't move because of robot on track");
-        }
-    }
+    public int getY(){return y;}
 
-    public boolean canMove(){
-        if((!isRotatingBelt() && !nextIsFull())) {
-            System.out.println("Test 1");
-            return true;
-        }else if (isRotatingBelt() && !nextNextIsFull()) {
-            System.out.println("Test 2");
-            return true;
-        }
-        return false;
-    }
+    public Direction getDirection(){return direction;}
 
-    public boolean isRotatingBelt(){
-        return (beltType == MovementType.rotation);
-    }
-
-    public boolean nextNextIsFull(){
-        if (map.checkBelt(getNextX(getNextX(x)),getNextY(getNextY(y))))
-            return map.checkPlayer(getNextX(getNextX(x)),getNextY(getNextY(y)));
-        else
-            return false;
-    }
-
-    public boolean nextIsFull(){
-        if (!map.checkBelt(getNextX(x),getNextY(y)))
-            return map.checkPlayer(getNextX(x),getNextY(y));
-        else
-            return false;
-    }
-
-    public void beltMove(Robot player) {
-        player.set(getNextX(x),getNextY(y));
-    }
-
-    public void beltRotate(){
-        //Kan låne rotate frå gear
-    }
+    public ConveyorMovementTypes getBeltType(){return beltType;}
 
     public int getNextX(int x){
         if (direction.equals(Direction.EAST))

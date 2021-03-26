@@ -4,6 +4,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.backends.lwjgl3.Lwjgl3Application;
 import com.badlogic.gdx.backends.lwjgl3.Lwjgl3ApplicationConfiguration;
 import inf112.balmerspeak.app.GUI;
+import inf112.balmerspeak.app.board.Board;
 import inf112.balmerspeak.app.cards.MovementCard;
 import inf112.balmerspeak.app.cards.Rotation;
 import inf112.balmerspeak.app.cards.RotationCard;
@@ -61,8 +62,9 @@ public class GameScreenTest {
     public void playerRotatesFromCard(){
         setup();
         RotationCard card = new RotationCard(1, Rotation.right, "Rotate right");
+
         g.handleRotation(card, card.getPlayer());
-        assertTrue(g.getMyPlayer().getRobot().getDirection().equals(Direction.EAST));
+        assertTrue(card.getPlayer().getRobot().getDirection().equals(Direction.EAST));
     }
 
 }

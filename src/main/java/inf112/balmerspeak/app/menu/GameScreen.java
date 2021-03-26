@@ -19,6 +19,12 @@ import inf112.balmerspeak.app.board.Board;
 import inf112.balmerspeak.app.cards.*;
 import inf112.balmerspeak.app.robot.Direction;
 import javax.swing.*;
+import inf112.balmerspeak.app.board.Board;
+import inf112.balmerspeak.app.cards.*;
+import inf112.balmerspeak.app.robot.Direction;
+import inf112.balmerspeak.app.robot.Robot;
+
+
 import java.util.ArrayList;
 
 
@@ -32,8 +38,10 @@ public class GameScreen implements Screen {
 
     private ArrayList<ProgramCard> queueList = new ArrayList<>();
 
+
     private Player myPlayer;
     private Game game;
+
 
 
     private Skin skin1;
@@ -55,9 +63,8 @@ public class GameScreen implements Screen {
         //load skins
         skin1 = new Skin(Gdx.files.internal("assets/default/skin/uiskin.json"));
 
-        // Create map handler
+        // Create board
         board = new Board("assets/map/map.tmx");
-        //mapHandler = new MapHandler();
 
         cam = new OrthographicCamera();
         rend = new OrthogonalTiledMapRenderer(board.getMap(), (float) 1 / 300);
@@ -99,6 +106,7 @@ public class GameScreen implements Screen {
         int x = player.getRobot().getX();
         int y = player.getRobot().getY();
 
+
         // These return true if the resulting playerVec are out of bounds
         boolean outsideX = x + dx > board.getBoard().getWidth()-1 || x + dx < 0;
         boolean outsideY = y + dy > board.getBoard().getHeight()-1 || y + dy < 0;
@@ -115,11 +123,6 @@ public class GameScreen implements Screen {
             handleRotation((RotationCard) card, player);
     }
 
-
-    public void winFrame(){
-        JFrame f = new JFrame();
-        JOptionPane.showMessageDialog(f, "Player " + myPlayer.toString() + " won");
-    }
 
     public void handleMoveCard(MovementCard card, Player player) {
 
@@ -144,13 +147,43 @@ public class GameScreen implements Screen {
         int playerY = player.getRobot().getY();
 
         // Only update if the player is allowed to move
+
         if (shouldMove(player, dx, dy)){
+            player.getRobot().set(playerX + dx, playerY + dy);
             board.move(player, dx,dy);
             player.getRobot().set(playerX + dx, playerY + dy);
 
-        if (board.getHole(playerX + dx, playerY + dy) != null) {
-            player.getRobot().setLives(player.getRobot().getLives() - 1);
-            showHealthLives();
+            //check for hole
+            if (board.getHole(playerX + dx, playerY + dy) != null) {
+                player.getRobot().setLives(player.getRobot().getLives() - 1);
+                show();
+            }
+            //check for laser
+            if (board.getLaser(playerX + dx, playerY + dy) != null) {
+                player.getRobot().setHealth(player.getRobot().getHealth() - 1);
+                show();
+            }
+
+            if (board.getWrench(playerX + dx, playerY + dy) != null) {
+                if (player.getRobot().getHealth() < 9) {
+                    player.getRobot().setHealth(player.getRobot().getHealth() + 1);
+                    System.out.println("Gained health");
+                }
+                player.getRobot().setSpawnCoordinates(playerX + dx,playerY + dy);
+                show();
+            }
+
+            if (board.getConveyor(playerX + dx, playerY + dy) != null){
+                board.runBelt(player, board.getConveyor(playerX + dx, playerY + dy));
+            }
+          
+            //check for flag
+            if (board.getFlag(playerX + dx, playerY + dy) != null){
+                player.getRobot().addFlag(board.getFlag(playerX +dx, playerY+dy));
+            }
+            if (player.getRobot().checkWinCondition())
+                System.out.println("Player" + player.getId() + " won");
+
         }
         if (board.getLaser(playerX + dx, playerY + dy) != null) {
             player.getRobot().setHealth(player.getRobot().getHealth() - 1);
@@ -162,8 +195,8 @@ public class GameScreen implements Screen {
         if (player.getRobot().checkWinCondition())
             System.out.println("Player" + player + " won");
 
-        }
     }
+
 
     //Handles rotation cards
     public void handleRotation(RotationCard card, Player player){
@@ -252,11 +285,12 @@ public class GameScreen implements Screen {
 
         //Adds the cards to the GUI
         int x = 100;
+
         for (ProgramCard cards : myPlayer.getHand()) {
-            card = new Texture("assets/images/cards/" + cards.toString() + ".png");
+            card = new Texture("assets/cards/" + cards.getName() + "/" + cards.toString() + ".jpg");
+
             Button.ButtonStyle tbs = new Button.ButtonStyle();
             tbs.up = new TextureRegionDrawable(new TextureRegion(card));
-
             Button b = new Button(tbs);
             b.addListener(new ChangeListener() {
                 @Override
@@ -269,10 +303,12 @@ public class GameScreen implements Screen {
                     }
                 }
             });
+            b.setSize(91,123);
             b.setPosition(x+=100, 50);
-
             stage.addActor(b);
+
         }
+
 
         //Adds the life tokens to the GUI
         int xlife = 1300;
@@ -328,8 +364,8 @@ public class GameScreen implements Screen {
 
         //Adds the queue list to the GUI
         TextField field = new TextField("Queue: " + queueList, skin1);
-        field.setPosition(Gdx.graphics.getWidth()/4, 200);
-        field.setSize(queueList.size()+400, field.getHeight());
+        field.setPosition(Gdx.graphics.getWidth()/5, 210);
+        field.setSize(queueList.size()+600, field.getHeight());
         stage.addActor(field);
 
         stage.act(Gdx.graphics.getDeltaTime());
@@ -337,6 +373,7 @@ public class GameScreen implements Screen {
         stage.getBatch().draw(backgroundImage, 0, 0, stage.getWidth(), 270);
         stage.getBatch().end();
         stage.draw();
+        //handleMove();
     }
 
     @Override
@@ -363,4 +400,5 @@ public class GameScreen implements Screen {
     public void dispose() {
         // Called when this screen should release all resources.
     }
+
 }
