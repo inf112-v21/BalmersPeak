@@ -43,13 +43,14 @@ public class GameScreen implements Screen {
     private Texture life;
     private Texture health;
     Board board;
+    InputHandler input;
 
 
     public GameScreen() {
 
 
         // Create input handler
-        InputHandler input = new InputHandler();
+        input = new InputHandler();
         Gdx.input.setInputProcessor(input);
 
 
@@ -115,6 +116,49 @@ public class GameScreen implements Screen {
         else
             handleRotation((RotationCard) card, player);
     }
+
+    public void handleMove() {
+        // Changes in the x coordinate
+        int dx = 0;
+        // Changes in the y coordinate
+        int dy = 0;
+
+        if (input.wPressed)
+            dy += 1;
+        else if (input.aPressed)
+            dx -= 1;
+        else if(input.sPressed)
+            dy -=1;
+        else if (input.dPressed)
+            dx += 1;
+
+        // Player x and y coordinates
+        int playerX = myPlayer.getRobot().getX();
+        int playerY = myPlayer.getRobot().getY();
+
+        // Only update if the player is allowed to move
+        if (shouldMove(myPlayer, dx, dy)){
+            board.move(myPlayer, dx,dy);
+            myPlayer.getRobot().set(playerX + dx, playerY + dy);
+
+            if (board.getHole(playerX + dx, playerY + dy) != null) {
+                myPlayer.getRobot().setLives(myPlayer.getRobot().getLives() - 1);
+                show();
+            }
+            if (board.getLaser(playerX + dx, playerY + dy) != null) {
+                myPlayer.getRobot().setHealth(myPlayer.getRobot().getHealth() - 1);
+                show();
+            }
+            if (board.getFlag(playerX + dx, playerY + dy) != null){
+                myPlayer.getRobot().addFlag(board.getFlag(playerX +dx, playerY+dy));
+            }
+        }
+
+
+        // Update player coordinates
+        input.clear();
+    }
+
 
 
     public void handleMoveCard(MovementCard card, Player player) {
