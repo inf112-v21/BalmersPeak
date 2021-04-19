@@ -75,6 +75,10 @@ public class Robot implements IRobot, Serializable {
         return this.direction;
     }
 
+    public Direction uTurn() {
+        return uTurnDirection(direction);
+    }
+
     @Override
     public void set(int x, int y) {
         this.x = x;
@@ -123,6 +127,22 @@ public class Robot implements IRobot, Serializable {
                 else return Direction.NORTH;
             default:
                 return null;
+        }
+    }
+
+    public Direction uTurnDirection(Direction direction) {
+        switch (direction) {
+            case NORTH:
+                return Direction.SOUTH;
+            case WEST:
+                return Direction.EAST;
+            case SOUTH:
+                return Direction.NORTH;
+            case EAST:
+                return Direction.WEST;
+            default:
+                return null;
+
         }
     }
   
