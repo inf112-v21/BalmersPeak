@@ -150,7 +150,7 @@ public class Board {
         for (int y = 0; y < HEIGHT; y++) {
             for (int x = 0; x < WIDTH; x++) {
                 if(laser.getCell(x,y) != null)
-                    lasers[y][x] = new Laser(x,y, Direction.NORTH);
+                    lasers[y][x] = new Laser(x,y,getLaserDirection(x,y));
             }
         }
     }
@@ -160,7 +160,6 @@ public class Board {
             for (int x = 0; x < WIDTH; x++) {
                 if (wall.getCell(x,y) != null) {
                     walls[y][x] = new Walls(x, y,getWallDirection(x,y));
-//                    System.out.println(""+ x + y + getWallDirection(x,y));
                 }
             }
 
@@ -243,6 +242,21 @@ public class Board {
             case 23:
                 return Direction.EAST;
             case 29:
+                return Direction.SOUTH;
+        }
+        return null;
+    }
+
+    public Direction getLaserDirection(int x,int y) {
+        int id = laser.getCell(x,y).getTile().getId();
+        switch (id) {
+            case 38:
+                return Direction.WEST;
+            case 46:
+                return Direction.EAST;
+            case 95:
+                return Direction.EAST;
+            case 37:
                 return Direction.SOUTH;
         }
         return null;

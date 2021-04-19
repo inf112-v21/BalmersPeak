@@ -98,6 +98,16 @@ public class GameScreen implements Screen {
         if ((board.getWalls(board.getActivePlayer().getX(), board.getActivePlayer().getY()) != null) && (board.getActivePlayer().getDirection() == board.getWalls(board.getActivePlayer().getX(),board.getActivePlayer().getY()).getDirection())) {
             return false;
         }
+        if ((board.getWalls(board.getActivePlayer().getX()+dx, board.getActivePlayer().getY()+dy) != null) && (board.getActivePlayer().uTurn() == board.getWalls(board.getActivePlayer().getX()+dx,board.getActivePlayer().getY()+dy).getDirection())) {
+            return false;
+        }
+
+        if ((board.getLaser(board.getActivePlayer().getX(), board.getActivePlayer().getY()) != null) && (board.getActivePlayer().getDirection() == board.getLaser(board.getActivePlayer().getX(),board.getActivePlayer().getY()).getDirection())) {
+            return false;
+        }
+        if ((board.getLaser(board.getActivePlayer().getX()+dx, board.getActivePlayer().getY()+dy) != null) && (board.getActivePlayer().uTurn() == board.getLaser(board.getActivePlayer().getX()+dx,board.getActivePlayer().getY()+dy).getDirection())) {
+            return false;
+        }
 
         // These return true if the resulting playerVec are out of bounds
         boolean outsideX = board.getActivePlayer().getX() + dx > board.getBoard().getWidth()-1 || board.getActivePlayer().getX() + dx < 0;
@@ -212,6 +222,7 @@ public class GameScreen implements Screen {
             }
             if (board.getActivePlayer().checkWinCondition())
                 System.out.println("Player" + board.getActivePlayer() + " won");
+
         }
 
     }
@@ -225,6 +236,7 @@ public class GameScreen implements Screen {
         if (card.getRotation().equals(Rotation.uturn))
             board.getActivePlayer().setDirection(board.getActivePlayer().turn(Rotation.uturn, board.getActivePlayer().getDirection()));
     }
+
 
     public Direction turn(Rotation rotation, Direction direction) {
         switch (direction) {
