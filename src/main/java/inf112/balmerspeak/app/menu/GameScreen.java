@@ -18,6 +18,8 @@ import inf112.balmerspeak.app.Player;
 import inf112.balmerspeak.app.board.Board;
 import inf112.balmerspeak.app.cards.*;
 import inf112.balmerspeak.app.robot.Direction;
+import org.javatuples.Pair;
+import org.lwjgl.system.CallbackI;
 
 
 import java.util.ArrayList;
@@ -105,19 +107,21 @@ public class GameScreen implements Screen {
         boolean outsideX = x + dx > board.getBoard().getWidth()-1 || x + dx < 0;
         boolean outsideY = y + dy > board.getBoard().getHeight()-1 || y + dy < 0;
 
+
         return !(outsideX || outsideY);
+
     }
 
 
-    public void executeCard(GeneralCard card, Player player) {
+    public void executeCard(GeneralCard card, Player player, ArrayList<Player> players) {
         // Call appropriate method
         if (card instanceof  MovementCard)
-            handleMoveCard((MovementCard) card, player);
+            handleMoveCard((MovementCard) card, player, players);
         else
             handleRotation((RotationCard) card, player);
     }
 
-    public void handleMove() {
+    public void handleMove(Player player, ArrayList<Player> players) {
         // Changes in the x coordinate
         int dx = 0;
         // Changes in the y coordinate
@@ -133,31 +137,31 @@ public class GameScreen implements Screen {
             dx += 1;
 
         // Player x and y coordinates
-        int playerX = myPlayer.getRobot().getX();
-        int playerY = myPlayer.getRobot().getY();
+        int playerX = player.getRobot().getX();
+        int playerY = player.getRobot().getY();
 
         // Only update if the player is allowed to move
-        if (shouldMove(myPlayer, dx, dy)){
-            board.move(myPlayer, dx,dy);
-            myPlayer.getRobot().set(playerX + dx, playerY + dy);
+        if (shouldMove(player, dx, dy)){
+            board.move(player,players, dx,dy);
+            player.getRobot().set(playerX + dx, playerY + dy);
 
             if (board.getHole(playerX + dx, playerY + dy) != null) {
-                myPlayer.getRobot().setLives(myPlayer.getRobot().getLives() - 1);
+                player.getRobot().setLives(player.getRobot().getLives() - 1);
                 show();
             }
             if (board.getLaser(playerX + dx, playerY + dy) != null) {
-                myPlayer.getRobot().setHealth(myPlayer.getRobot().getHealth() - 1);
+                player.getRobot().setHealth(player.getRobot().getHealth() - 1);
                 show();
             }
             if (board.getFlag(playerX + dx, playerY + dy) != null){
-                myPlayer.getRobot().addFlag(board.getFlag(playerX +dx, playerY+dy));
+                player.getRobot().addFlag(board.getFlag(playerX +dx, playerY+dy));
             }
             if (board.getWrench(playerX + dx, playerY + dy) != null) {
-                if (myPlayer.getRobot().getHealth() < 9) {
-                    myPlayer.getRobot().setHealth(myPlayer.getRobot().getHealth() + 1);
+                if (player.getRobot().getHealth() < 9) {
+                    player.getRobot().setHealth(player.getRobot().getHealth() + 1);
                     System.out.println("Gained health");
                 }
-                myPlayer.getRobot().setSpawnCoordinates(playerX + dx,playerY + dy);
+                player.getRobot().setSpawnCoordinates(playerX + dx,playerY + dy);
                 show();
             }
         }
@@ -169,7 +173,7 @@ public class GameScreen implements Screen {
 
 
 
-    public void handleMoveCard(MovementCard card, Player player) {
+    public void handleMoveCard(MovementCard card, Player player, ArrayList<Player> players) {
 
         // Changes in the x coordinate
         int dx = 0;
@@ -193,8 +197,9 @@ public class GameScreen implements Screen {
 
         // Only update if the player is allowed to move
 
+
         if (shouldMove(player, dx, dy)){
-            board.move(player, dx,dy);
+            board.move(player,players, dx,dy);
             player.getRobot().set(playerX + dx, playerY + dy);
 
             //check for hole
@@ -417,7 +422,7 @@ public class GameScreen implements Screen {
         stage.getBatch().draw(backgroundImage, 0, 0, stage.getWidth(), 270);
         stage.getBatch().end();
         stage.draw();
-        //handleMove();
+        //handleMove(myPlayer);
     }
 
     @Override
