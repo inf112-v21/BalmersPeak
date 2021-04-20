@@ -357,33 +357,7 @@ public class GameScreen implements Screen {
             stage.addActor(b);
 
         }
-
-
-        //Adds the life tokens to the GUI
-        int xlife = 1300;
-        for (int i = 0; i < myPlayer.getRobot().getLives(); i++) {
-            life = new Texture("images/lifetoken.png");
-            Button.ButtonStyle tbs = new Button.ButtonStyle();
-            tbs.up = new TextureRegionDrawable(new TextureRegion(life));
-            Button b = new Button(tbs);
-            b.setPosition(xlife+=100, 150);
-            b.setSize(50,50);
-            stage.addActor(b);
-        }
-
-        //Adds the health tokes to the GUI
-        int xhealth = 1250;
-        for (int i = 0; i < myPlayer.getRobot().getHealth(); i++) {
-            health = new Texture("images/health_token.png");
-            Button.ButtonStyle tbs = new Button.ButtonStyle();
-            tbs.up = new TextureRegionDrawable(new TextureRegion(health));
-            Button b = new Button(tbs);
-            b.setPosition(xhealth+=50, 50);
-            b.setSize(50,50);
-            stage.addActor(b);
-        }
         showHealthLives();
-
 
         //Adds text field for lives
         TextField life = new TextField("Lives", skin1);

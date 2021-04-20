@@ -46,12 +46,12 @@ public class GameScreenTest {
                 g = new GameScreen();
                 g.setMyPlayer(player);
                 g.getBoard().placeRobot(player);
+                g.getBoard().placeRobot(player1);
                 Gdx.app.postRunnable(() -> changeScreen(g)); //TODO: fix this null
                 Gdx.app.exit();
             }
         }, cfg);
 
-        players.add(player);
         players.add(player1);
 
     }
@@ -78,6 +78,23 @@ public class GameScreenTest {
         RotationCard card = new RotationCard(1, Rotation.right, "Rotate right");
         g.handleRotation(card, g.getMyPlayer());
         assertTrue(g.getMyPlayer().getRobot().getDirection().equals(Direction.SOUTH));
+    }
+
+    @Test
+    public void collisionTestX(){
+        setup();
+        System.out.println(players.get(0).getRobot().getX() + " " + g.getMyPlayer().getRobot().getX());
+        g.getBoard().move(g.getMyPlayer(), players, 1,0);
+        System.out.println(players.get(0).getRobot().getX() + " " + g.getMyPlayer().getRobot().getX());
+        assertTrue(players.get(0).getRobot().getX() == 2 && g.getMyPlayer().getRobot().getX() == 1);
+    }
+
+    @Test
+    public void collisionTestY(){
+        setup();
+        g.getBoard().move(players.get(0), players, -1, 1);
+        g.getBoard().move(g.getMyPlayer(), players, 0, 1);
+        assertTrue(players.get(0).getRobot().getY() == 2 && g.getMyPlayer().getRobot().getY() == 1);
     }
 
 }

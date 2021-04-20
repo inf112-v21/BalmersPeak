@@ -219,7 +219,7 @@ public class Board {
             }
         }
 
-
+        hostPlayer.getRobot().set(x+dx,y+dy);
         this.playerLayer.setCell(x + dx, y + dy, robotTextures.get(hostPlayer.getId()));
         //robots[y][x] = null;
         this.playerLayer.setCell(x, y, null);
