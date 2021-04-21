@@ -140,6 +140,8 @@ public class Board {
                     conveyors[y][x] = new ConveyorBelt(x,y,getConveyorDirection(x,y), getConveyorMovementType(x,y));
                 else if (wrench.getCell(x,y) != null)
                     wrenches[y][x] = new Wrench(x,y,1);
+                else if (pusher.getCell(x,y) != null)
+                    pushers[y][x] = new Pusher(x,y,getPusherDirection(x,y), getRoundType(x,y));
             }
         }
     }
@@ -254,12 +256,24 @@ public class Board {
 
     public Wrench getWrench(int x, int y) {return wrenches[y][x];}
 
+    public Pusher getPusher(int x, int y) {return pushers[y][x];}
+
     public ConveyorBelt getConveyor(int x, int y) {
         return conveyors[y][x];
     }
 
     public boolean containsConveyor(int x, int y){
         return conveyors[y][x] != null;
+    }
+
+    public RoundType getRoundType(int x, int y){
+        int id = pusher.getCell(x,y).getTile().getId();
+        if (id == 1 || id == 2 || id == 11 || id == 4)
+            return RoundType.EVEN;
+        else if (id == 9 || id == 10 || id == 3 || id == 12)
+            return RoundType.ODD;
+        else
+            return null;
     }
 
     public Direction getWallDirection(int x,int y) {
@@ -292,6 +306,20 @@ public class Board {
         return null;
     }
 
+    public Direction getPusherDirection(int x,int y) {
+        int id = pusher.getCell(x,y).getTile().getId();
+        if (id == 1 || id == 9)
+            return Direction.SOUTH;
+        else if (id == 2 || id == 10)
+            return Direction.WEST;
+        else if (id == 3 || id == 11)
+            return Direction.NORTH;
+        else if (id == 4 || id == 12)
+            return Direction.EAST;
+        else
+            return null;
+    }
+
     public Direction getConveyorDirection(int x,int y) {
         int id = conveyor.getCell(x,y).getTile().getId();
 
@@ -316,6 +344,12 @@ public class Board {
         else
             return null;
     }
+    public void pusherMove(Player hostPlayer,ArrayList<Player> players, Pusher push) {
+        int dx = push.getNextX(push.getX())-push.getX();
+        int dy = push.getNextY(push.getY())-push.getY();
+        move(hostPlayer,players, dx,dy);
+    }
+
 
     public void runBelt(Player player,ArrayList<Player> players, ConveyorBelt belt){
         if (!cantMove(belt)){

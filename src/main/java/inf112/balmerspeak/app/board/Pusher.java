@@ -16,6 +16,10 @@ public class Pusher {
         this.direction = direction;
         this.roundType = roundType;
     }
+    public int getX() {return x;}
+
+    public int getY() {return y;}
+
 
     public void pushRobot(Robot player, RoundType thisRoundType){
         if (roundType.equals(thisRoundType)){
@@ -40,8 +44,4 @@ public class Pusher {
         else
             return y;
     }
-
-    public int getX() {return x;}
-
-    public int getY() {return y;}
 }
