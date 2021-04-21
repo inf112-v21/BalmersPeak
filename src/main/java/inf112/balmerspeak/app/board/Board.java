@@ -22,11 +22,13 @@ public class Board {
     private final TiledMapTileLayer laserPath;
     private final TiledMapTileLayer wrench;
     private final TiledMapTileLayer gear;
+    private final TiledMapTileLayer pusher;
     private final TiledMapTileLayer start;
     private final TiledMapTileLayer laser;
     private final TiledMapTileLayer wall;
     private final TiledMapTileLayer conveyor;
     private final TiledMapTileLayer board;
+
     private int WIDTH;
     private int HEIGHT;
     private Robot robots[][];
@@ -36,6 +38,8 @@ public class Board {
     private Walls walls[][];
     private Wrench wrenches[][];
     private ConveyorBelt conveyors[][];
+    private Pusher pushers[][];
+
 
     // Robots
     TiledMapTileLayer.Cell robot0;
@@ -61,12 +65,14 @@ public class Board {
         wrench = (TiledMapTileLayer) map.getLayers().get("Wrench");
         hole = (TiledMapTileLayer) map.getLayers().get("Hole");
         gear = (TiledMapTileLayer) map.getLayers().get("Gear");
+        pusher = (TiledMapTileLayer) map.getLayers().get("Pusher");
         start = (TiledMapTileLayer) map.getLayers().get("Start");
         laser = (TiledMapTileLayer) map.getLayers().get("Laser");
         wall = (TiledMapTileLayer) map.getLayers().get("Wall");
         conveyor = (TiledMapTileLayer) map.getLayers().get("Conveyor");
         flag = (TiledMapTileLayer) map.getLayers().get("Flag");
         board = (TiledMapTileLayer) map.getLayers().get("Board");
+
 
 
         // Load robot cells
@@ -84,6 +90,7 @@ public class Board {
         walls = new Walls[HEIGHT][WIDTH];
         wrenches = new Wrench[HEIGHT][WIDTH];
         conveyors = new ConveyorBelt[HEIGHT][WIDTH];
+        pushers = new Pusher[HEIGHT][WIDTH];
 
         // Init board elements
         initFlag();
