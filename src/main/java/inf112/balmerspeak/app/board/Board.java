@@ -9,6 +9,7 @@ import com.badlogic.gdx.maps.tiled.tiles.StaticTiledMapTile;
 import inf112.balmerspeak.app.Player;
 import inf112.balmerspeak.app.flag.Flag;
 import inf112.balmerspeak.app.robot.Direction;
+import inf112.balmerspeak.app.cards.Rotation;
 import inf112.balmerspeak.app.robot.Robot;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -36,6 +37,7 @@ public class Board {
     private Walls walls[][];
     private Wrench wrenches[][];
     private ConveyorBelt conveyors[][];
+    private Gear gears[][];
 
     // Robots
     TiledMapTileLayer.Cell robot0;
@@ -84,6 +86,7 @@ public class Board {
         walls = new Walls[HEIGHT][WIDTH];
         wrenches = new Wrench[HEIGHT][WIDTH];
         conveyors = new ConveyorBelt[HEIGHT][WIDTH];
+        gears = new Gear[HEIGHT][WIDTH];
 
         // Init board elements
         initFlag();
@@ -133,6 +136,8 @@ public class Board {
                     conveyors[y][x] = new ConveyorBelt(x,y,getConveyorDirection(x,y), getConveyorMovementType(x,y));
                 else if (wrench.getCell(x,y) != null)
                     wrenches[y][x] = new Wrench(x,y,1);
+                else if (gear.getCell(x,y) != null)
+                    gears[y][x] = new Gear(x,y, getGearRotation(x, y));
             }
         }
     }
@@ -168,6 +173,22 @@ public class Board {
         }
     }
 
+
+    public Rotation getGearRotation(int x, int y) {
+        int id = gear.getCell(x, y).getTile().getId();
+        switch (id) {
+            case 53:
+                return Rotation.right;
+            case 54:
+                return Rotation.left;
+
+
+
+
+        }
+        return null;
+    }
+
     public void placeRobot(int x, int y){
         robots[y][x] = new Robot(x,y,Direction.NORTH);
     }
@@ -188,6 +209,8 @@ public class Board {
     public Flag getFlag(int x, int y){
         return flags[y][x];
     }
+
+    public Gear getGear(int x, int y) { return gears[y][x]; }
 
     public void setFlag(int x, int y) {
         flags[y][x] = new Flag(1);
