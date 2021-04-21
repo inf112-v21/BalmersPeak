@@ -18,6 +18,8 @@ import inf112.balmerspeak.app.Player;
 import inf112.balmerspeak.app.board.Board;
 import inf112.balmerspeak.app.cards.*;
 import inf112.balmerspeak.app.robot.Direction;
+import org.javatuples.Pair;
+import org.lwjgl.system.CallbackI;
 
 
 import java.util.ArrayList;
@@ -42,13 +44,14 @@ public class GameScreen implements Screen {
     private Texture life;
     private Texture health;
     Board board;
+    InputHandler input;
 
 
     public GameScreen() {
 
 
         // Create input handler
-        InputHandler input = new InputHandler();
+        input = new InputHandler();
         Gdx.input.setInputProcessor(input);
 
 
@@ -117,19 +120,73 @@ public class GameScreen implements Screen {
         boolean outsideX = x + dx > board.getBoard().getWidth()-1 || x + dx < 0;
         boolean outsideY = y + dy > board.getBoard().getHeight()-1 || y + dy < 0;
 
+
         return !(outsideX || outsideY);
+
     }
 
 
-    public void executeCard(GeneralCard card, Player player) {
+    public void executeCard(GeneralCard card, Player player, ArrayList<Player> players) {
         // Call appropriate method
         if (card instanceof  MovementCard)
-            handleMoveCard((MovementCard) card, player);
+            handleMoveCard((MovementCard) card, player, players);
         else
             handleRotation((RotationCard) card, player);
     }
 
-    public void handleMoveCard(MovementCard card, Player player) {
+    public void handleMove(Player player, ArrayList<Player> players) {
+        // Changes in the x coordinate
+        int dx = 0;
+        // Changes in the y coordinate
+        int dy = 0;
+
+        if (input.wPressed)
+            dy += 1;
+        else if (input.aPressed)
+            dx -= 1;
+        else if(input.sPressed)
+            dy -=1;
+        else if (input.dPressed)
+            dx += 1;
+
+        // Player x and y coordinates
+        int playerX = player.getRobot().getX();
+        int playerY = player.getRobot().getY();
+
+        // Only update if the player is allowed to move
+        if (shouldMove(player, dx, dy)){
+            board.move(player,players, dx,dy);
+            player.getRobot().set(playerX + dx, playerY + dy);
+
+            if (board.getHole(playerX + dx, playerY + dy) != null) {
+                player.getRobot().setLives(player.getRobot().getLives() - 1);
+                show();
+            }
+            if (board.getLaser(playerX + dx, playerY + dy) != null) {
+                player.getRobot().setHealth(player.getRobot().getHealth() - 1);
+                show();
+            }
+            if (board.getFlag(playerX + dx, playerY + dy) != null){
+                player.getRobot().addFlag(board.getFlag(playerX +dx, playerY+dy));
+            }
+            if (board.getWrench(playerX + dx, playerY + dy) != null) {
+                if (player.getRobot().getHealth() < 9) {
+                    player.getRobot().setHealth(player.getRobot().getHealth() + 1);
+                    System.out.println("Gained health");
+                }
+                player.getRobot().setSpawnCoordinates(playerX + dx,playerY + dy);
+                show();
+            }
+        }
+
+
+        // Update player coordinates
+        input.clear();
+    }
+
+
+
+    public void handleMoveCard(MovementCard card, Player player, ArrayList<Player> players) {
 
         // Changes in the x coordinate
         int dx = 0;
@@ -153,8 +210,9 @@ public class GameScreen implements Screen {
 
         // Only update if the player is allowed to move
 
+
         if (shouldMove(player, dx, dy)){
-            board.move(player, dx,dy);
+            board.move(player,players, dx,dy);
             player.getRobot().set(playerX + dx, playerY + dy);
 
             //check for hole
@@ -312,33 +370,7 @@ public class GameScreen implements Screen {
             stage.addActor(b);
 
         }
-
-
-        //Adds the life tokens to the GUI
-        int xlife = 1300;
-        for (int i = 0; i < myPlayer.getRobot().getLives(); i++) {
-            life = new Texture("images/lifetoken.png");
-            Button.ButtonStyle tbs = new Button.ButtonStyle();
-            tbs.up = new TextureRegionDrawable(new TextureRegion(life));
-            Button b = new Button(tbs);
-            b.setPosition(xlife+=100, 150);
-            b.setSize(50,50);
-            stage.addActor(b);
-        }
-
-        //Adds the health tokes to the GUI
-        int xhealth = 1250;
-        for (int i = 0; i < myPlayer.getRobot().getHealth(); i++) {
-            health = new Texture("images/health_token.png");
-            Button.ButtonStyle tbs = new Button.ButtonStyle();
-            tbs.up = new TextureRegionDrawable(new TextureRegion(health));
-            Button b = new Button(tbs);
-            b.setPosition(xhealth+=50, 50);
-            b.setSize(50,50);
-            stage.addActor(b);
-        }
         showHealthLives();
-
 
         //Adds text field for lives
         TextField life = new TextField("Lives", skin1);
@@ -377,7 +409,7 @@ public class GameScreen implements Screen {
         stage.getBatch().draw(backgroundImage, 0, 0, stage.getWidth(), 270);
         stage.getBatch().end();
         stage.draw();
-        //handleMove();
+        //handleMove(myPlayer);
     }
 
     @Override

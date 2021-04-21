@@ -80,7 +80,7 @@ public class Game {
             // Send to all clients
             server.sendCardExecuted(card);
             // Execute the movement and send to all clients
-            gameScreen.executeCard(card, card.getPlayer());
+            gameScreen.executeCard(card, card.getPlayer(), players);
         }
     }
 

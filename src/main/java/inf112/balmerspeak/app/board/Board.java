@@ -168,13 +168,17 @@ public class Board {
         }
     }
 
+    public void placeRobot(int x, int y){
+        robots[y][x] = new Robot(x,y,Direction.NORTH);
+    }
+
     public boolean isRobotOnBelt(int x, int y) {
         return conveyor.getCell(x,y) != null;
     }
 
 
     public boolean hasRobot(int x, int y){
-        return robots[y][x] != null;
+        return playerLayer.getCell(x,y) != null;
     }
 
     public Robot getRobot(int x, int y){
@@ -195,13 +199,28 @@ public class Board {
     }
 
 
-    public void move(Player player, int dx, int dy) {
+    public void move(Player hostPlayer, ArrayList<Player> players,  int dx, int dy) {
 
-        int x = player.getRobot().getX();
-        int y = player.getRobot().getY();
+        int x = hostPlayer.getRobot().getX();
+        int y = hostPlayer.getRobot().getY();
 
+        int pdx = dx;
+        int pdy = dy;
 
-        this.playerLayer.setCell(x + dx, y + dy, robotTextures.get(player.getId()));
+        for (Player p : players){
+            if (p.getRobot().getX() == x+dx && p.getRobot().getY() == y+dy){
+                if (dx < 0) pdx-=1;
+                if (dx > 0) pdx+=1;
+                if (dy < 0) pdy-=1;
+                if (dy > 0) pdy+=1;
+                p.getRobot().set(x+pdx,y+pdy);
+                this.playerLayer.setCell(x+pdx,y+pdy, robotTextures.get(p.getId()));
+                this.playerLayer.setCell(x+dx,y+dy, null);
+            }
+        }
+
+        hostPlayer.getRobot().set(x+dx,y+dy);
+        this.playerLayer.setCell(x + dx, y + dy, robotTextures.get(hostPlayer.getId()));
         //robots[y][x] = null;
         this.playerLayer.setCell(x, y, null);
     }
@@ -291,9 +310,9 @@ public class Board {
             return null;
     }
 
-    public void runBelt(Player player, ConveyorBelt belt){
+    public void runBelt(Player player,ArrayList<Player> players, ConveyorBelt belt){
         if (!cantMove(belt)){
-            beltMove(player, belt);
+            beltMove(player,players, belt);
             if (nextIsRotating(belt))
                 beltRotate();
         }else{
@@ -301,10 +320,11 @@ public class Board {
         }
     }
 
-    public void beltMove(Player player, ConveyorBelt belt) {
+
+    public void beltMove(Player hostPlayer,ArrayList<Player> players, ConveyorBelt belt) {
         int dx = belt.getNextX(belt.getX())-belt.getX();
         int dy = belt.getNextY(belt.getY())-belt.getY();
-        move(player, dx,dy);
+        move(hostPlayer,players, dx,dy);
     }
 
     public void beltRotate(){

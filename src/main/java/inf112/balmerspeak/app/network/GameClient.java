@@ -70,7 +70,7 @@ public class GameClient extends Client {
                 else if (object instanceof CardExecutedMsg) {
                     CardExecutedMsg msg = (CardExecutedMsg) object;
                     System.out.println("Executing player " + msg.getPlayerId() + "'s card, " + msg.getCard());
-                    Gdx.app.postRunnable(() -> game.getGameScreen().executeCard(msg.getCard(), msg.getCard().getPlayer()));
+                    Gdx.app.postRunnable(() -> game.getGameScreen().executeCard(msg.getCard(), msg.getCard().getPlayer(), game.getPlayers()));
                 }
             }
         });
