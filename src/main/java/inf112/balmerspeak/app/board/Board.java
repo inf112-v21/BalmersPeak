@@ -126,7 +126,7 @@ public class Board {
                 if (hole.getCell(x,y) != null)
                     holes[y][x] = new Hole(x,y);
                 else if (laser.getCell(x,y) != null)
-                    lasers[y][x] = new Laser(x,y, Direction.NORTH);
+                    lasers[y][x] = new Laser(x,y, getLaserDirection(x,y));
                 else if (wall.getCell(x,y) != null)
                     walls[y][x] = new Walls(x,y, getWallDirection(x,y));
                 else if (conveyor.getCell(x,y) != null)
@@ -265,6 +265,21 @@ public class Board {
             case 23:
                 return Direction.EAST;
             case 29:
+                return Direction.SOUTH;
+        }
+        return null;
+    }
+
+    public Direction getLaserDirection(int x,int y) {
+        int id = laser.getCell(x,y).getTile().getId();
+        switch (id) {
+            case 38:
+                return Direction.WEST;
+            case 46:
+                return Direction.EAST;
+            case 95:
+                return Direction.EAST;
+            case 37:
                 return Direction.SOUTH;
         }
         return null;

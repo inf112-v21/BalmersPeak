@@ -25,7 +25,6 @@ import org.lwjgl.system.CallbackI;
 import java.util.ArrayList;
 
 
-
 public class GameScreen implements Screen {
 
     private Stage stage;
@@ -98,6 +97,20 @@ public class GameScreen implements Screen {
         // Return false if dx and dy are zero
         if (dx == 0 && dy == 0)
             return false;
+
+        if ((board.getWalls(player.getRobot().getX(), player.getRobot().getY()) != null) && (player.getRobot().getDirection() == board.getWalls(player.getRobot().getX(),player.getRobot().getY()).getDirection())) {
+            return false;
+        }
+        if ((board.getWalls(player.getRobot().getX()+dx, player.getRobot().getY()+dy) != null) && (player.getRobot().uTurn() == board.getWalls(player.getRobot().getX()+dx,player.getRobot().getY()+dy).getDirection())) {
+            return false;
+        }
+
+        if ((board.getLaser(player.getRobot().getX(), player.getRobot().getY()) != null) && (player.getRobot().getDirection() == board.getLaser(player.getRobot().getX(),player.getRobot().getY()).getDirection())) {
+            return false;
+        }
+        if ((board.getLaser(player.getRobot().getX()+dx, player.getRobot().getY()+dy) != null) && (player.getRobot().uTurn() == board.getLaser(player.getRobot().getX()+dx,player.getRobot().getY()+dy).getDirection())) {
+            return false;
+        }
 
         int x = player.getRobot().getX();
         int y = player.getRobot().getY();
