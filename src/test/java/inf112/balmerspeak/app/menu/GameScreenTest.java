@@ -81,7 +81,7 @@ public class GameScreenTest {
     }
 
     @Test
-    public void collisionTestX(){
+    public void collisionTestPositiveX(){
         setup();
         System.out.println(players.get(0).getRobot().getX() + " " + g.getMyPlayer().getRobot().getX());
         g.getBoard().move(g.getMyPlayer(), players, 1,0);
@@ -90,11 +90,11 @@ public class GameScreenTest {
     }
 
     @Test
-    public void collisionTestY(){
+    public void collisionTestPositiveY(){
         setup();
         g.getBoard().move(players.get(0), players, -1, 1);
         g.getBoard().move(g.getMyPlayer(), players, 0, 1);
         assertTrue(players.get(0).getRobot().getY() == 2 && g.getMyPlayer().getRobot().getY() == 1);
     }
-
+    
 }
