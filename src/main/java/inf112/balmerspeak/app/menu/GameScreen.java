@@ -16,15 +16,8 @@ import inf112.balmerspeak.app.Game;
 import inf112.balmerspeak.app.InputHandler;
 import inf112.balmerspeak.app.Player;
 import inf112.balmerspeak.app.board.Board;
-import inf112.balmerspeak.app.board.ConveyorColor;
-import inf112.balmerspeak.app.board.RoundType;
 import inf112.balmerspeak.app.cards.*;
 import inf112.balmerspeak.app.robot.Direction;
-import inf112.balmerspeak.app.board.Gear;
-import org.javatuples.Pair;
-import org.lwjgl.system.CallbackI;
-
-
 import java.util.ArrayList;
 
 
@@ -38,7 +31,6 @@ public class GameScreen implements Screen {
 
     private Player myPlayer;
     private Game game;
-    //private ArrayList<Player> players = new ArrayList<Player>();
 
 
 
@@ -49,7 +41,6 @@ public class GameScreen implements Screen {
     private Texture health;
     Board board;
     InputHandler input;
-    private ArrayList<Player> test = new ArrayList();
 
 
     public GameScreen() {
@@ -181,19 +172,6 @@ public class GameScreen implements Screen {
         System.out.println("Direction to turn: " + turn(card.getRotation(), player.getRobot().getDirection()));
         player.getRobot().setDirection(player.getRobot().turn(card.getRotation(), player.getRobot().getDirection()));
         board.rotateRobot(player, player.getRobot().getDirection());
-    }
-
-    public void handleGearRotation(Gear gear,Player player){
-        if (gear.getRotation().equals(Rotation.left)) {
-            player.getRobot().setDirection(player.getRobot().turn(Rotation.left, player.getRobot().getDirection()));
-            board.rotateRobot(player, 90);
-            System.out.println("rotate left");
-        }
-        if (gear.getRotation().equals(Rotation.right)) {
-            player.getRobot().setDirection(player.getRobot().turn(Rotation.right, player.getRobot().getDirection()));
-            board.rotateRobot(player, -90);
-            System.out.println("rotate right");
-        }
     }
 
     public Direction turn(Rotation rotation, Direction direction) {

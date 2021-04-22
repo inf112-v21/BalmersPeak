@@ -104,7 +104,7 @@ public class Game {
         // Phase 1: robots move
         for (ProgramCard card : sortedCards) {
             // Send to all clients
-            //server.sendCardExecuted(card);
+            server.sendCardExecuted(card);
             // Execute the movement and send to all clients
             gameScreen.executeCard(card, card.getPlayer());
 
