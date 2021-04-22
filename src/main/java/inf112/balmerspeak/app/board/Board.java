@@ -9,6 +9,7 @@ import com.badlogic.gdx.maps.tiled.tiles.StaticTiledMapTile;
 import inf112.balmerspeak.app.Player;
 import inf112.balmerspeak.app.flag.Flag;
 import inf112.balmerspeak.app.robot.Direction;
+import inf112.balmerspeak.app.cards.Rotation;
 import inf112.balmerspeak.app.robot.Robot;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -39,7 +40,7 @@ public class Board {
     private Wrench wrenches[][];
     private ConveyorBelt conveyors[][];
     private Pusher pushers[][];
-
+    private Gear gears[][];
 
     // Robots
     TiledMapTileLayer.Cell robot0;
@@ -91,6 +92,8 @@ public class Board {
         wrenches = new Wrench[HEIGHT][WIDTH];
         conveyors = new ConveyorBelt[HEIGHT][WIDTH];
         pushers = new Pusher[HEIGHT][WIDTH];
+        gears = new Gear[HEIGHT][WIDTH];
+
 
         // Init board elements
         initFlag();
@@ -142,6 +145,8 @@ public class Board {
                     wrenches[y][x] = new Wrench(x,y,1);
                 else if (pusher.getCell(x,y) != null)
                     pushers[y][x] = new Pusher(x,y,getPusherDirection(x,y), getRoundType(x,y));
+                else if (gear.getCell(x,y) != null)
+                    gears[y][x] = new Gear(x,y, getGearRotation(x, y));
             }
         }
     }
@@ -159,11 +164,17 @@ public class Board {
         int x = player.getRobot().getX();
         int y = player.getRobot().getY();
 
-        playerLayer.setCell(x, y, robotTextures.get(player.getId()).setRotation(1)); //rotate to face the correct way
+        player.getRobot().set(x,y);
+        playerLayer.setCell(x,y,robotTextures.get(player.getId()).setRotation(1));
     }
 
+    public int getDegrees(Player player){
+        return robotTextures.get(player.getId()).getRotation();
+    }
+
+
     public void rotateRobot(Player player, int degrees) {
-        TiledMapTileLayer.Cell robot = robotTextures.get(player.getId()).setRotation(degrees % 90);
+        TiledMapTileLayer.Cell robot = robotTextures.get(player.getId()).setRotation(degrees);
         playerLayer.setCell(player.getRobot().getX(), player.getRobot().getY(),robot);
     }
 
@@ -175,6 +186,22 @@ public class Board {
             // execute belt
             //conveyors[playerX][playerY].runBelt(player.getRobot());
         }
+    }
+
+
+    public Rotation getGearRotation(int x, int y) {
+        int id = gear.getCell(x, y).getTile().getId();
+        switch (id) {
+            case 54:
+                return Rotation.right;
+            case 53:
+                return Rotation.left;
+
+
+
+
+        }
+        return null;
     }
 
     public void placeRobot(int x, int y){
@@ -198,6 +225,8 @@ public class Board {
         return flags[y][x];
     }
 
+    public Gear getGear(int x, int y) { return gears[y][x]; }
+
     public void setFlag(int x, int y) {
         flags[y][x] = new Flag(1);
 
@@ -205,6 +234,57 @@ public class Board {
 
     public void removeRobot(int x, int y){
         robots[y][x] = null;
+    }
+
+    public void runGear(Player player){
+
+        int x = player.getRobot().getX();
+        int y = player.getRobot().getY();
+
+        if (gears[y][x] != null){
+            if (gears[y][x].getRotation() == Rotation.right && player.getRobot().getDirection() == Direction.EAST){
+                player.getRobot().setDirection(player.getRobot().turn(Rotation.right, player.getRobot().getDirection()));
+                rotateRobot(player, 4);
+                System.out.println(gears[y][x].getRotation() + " " + player.getRobot().getDirection());
+            }
+            else if (gears[y][x].getRotation() == Rotation.right && player.getRobot().getDirection() == Direction.SOUTH){
+                player.getRobot().setDirection(player.getRobot().turn(Rotation.right, player.getRobot().getDirection()));
+                rotateRobot(player, 3);
+                System.out.println(gears[y][x].getRotation() + " " + player.getRobot().getDirection());
+            }
+            else if (gears[y][x].getRotation() == Rotation.right && player.getRobot().getDirection() == Direction.WEST){
+                player.getRobot().setDirection(player.getRobot().turn(Rotation.right, player.getRobot().getDirection()));
+                rotateRobot(player, 2);
+                System.out.println(gears[y][x].getRotation() + " " + player.getRobot().getDirection());
+            }
+            else if (gears[y][x].getRotation() == Rotation.right && player.getRobot().getDirection() == Direction.NORTH){
+                player.getRobot().setDirection(player.getRobot().turn(Rotation.right, player.getRobot().getDirection()));
+                rotateRobot(player, 1);
+                System.out.println(gears[y][x].getRotation() + " " + player.getRobot().getDirection());
+            }
+            else if (gears[y][x].getRotation() == Rotation.left && player.getRobot().getDirection() == Direction.EAST){
+                player.getRobot().setDirection(player.getRobot().turn(Rotation.left, player.getRobot().getDirection()));
+                rotateRobot(player, 2);
+                System.out.println(gears[y][x].getRotation() + " " + player.getRobot().getDirection());
+            }
+            else if (gears[y][x].getRotation() == Rotation.left && player.getRobot().getDirection() == Direction.NORTH) {
+                player.getRobot().setDirection(player.getRobot().turn(Rotation.left, player.getRobot().getDirection()));
+                rotateRobot(player, 3);
+                System.out.println(gears[y][x].getRotation() + " " + player.getRobot().getDirection());
+            }
+            else if (gears[y][x].getRotation() == Rotation.left && player.getRobot().getDirection() == Direction.WEST) {
+                player.getRobot().setDirection(player.getRobot().turn(Rotation.left, player.getRobot().getDirection()));
+                rotateRobot(player, 4);
+                System.out.println(gears[y][x].getRotation() + " " + player.getRobot().getDirection());
+            }
+            else if (gears[y][x].getRotation() == Rotation.left && player.getRobot().getDirection() == Direction.SOUTH) {
+                player.getRobot().setDirection(player.getRobot().turn(Rotation.left, player.getRobot().getDirection()));
+                rotateRobot(player, 1);
+                System.out.println(gears[y][x].getRotation() + " " + player.getRobot().getDirection());
+            }
+        }
+        else
+            return;
     }
 
 
