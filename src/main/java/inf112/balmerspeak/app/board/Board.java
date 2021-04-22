@@ -160,16 +160,25 @@ public class Board {
         flags[10][6] = new Flag(3);
     }
 
+    public int resolveRotation(Direction direction) {
+        if (direction == Direction.SOUTH)
+            return 0;
+        else if (direction == Direction.EAST)
+            return 1;
+        else if (direction == Direction.NORTH)
+            return 2;
+        else
+            return 3;
+    }
+
 
 
     public void placeRobot(Player player){
         int x = player.getRobot().getX();
         int y = player.getRobot().getY();
 
-
         player.getRobot().set(x,y);
         playerLayer.setCell(x,y,robotTextures.get(player.getId()).setRotation(1));
-
     }
 
     public int getDegrees(Player player){
@@ -179,6 +188,11 @@ public class Board {
 
     public void rotateRobot(Player player, int degrees) {
         TiledMapTileLayer.Cell robot = robotTextures.get(player.getId()).setRotation(degrees);
+        playerLayer.setCell(player.getRobot().getX(), player.getRobot().getY(),robot);
+    }
+
+    public void rotateRobot(Player player, Direction direction) {
+        TiledMapTileLayer.Cell robot = robotTextures.get(player.getId()).setRotation(resolveRotation(direction));
         playerLayer.setCell(player.getRobot().getX(), player.getRobot().getY(),robot);
     }
 

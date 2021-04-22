@@ -176,16 +176,11 @@ public class GameScreen implements Screen {
 
     //Handles rotation cards
     public void handleRotation(RotationCard card, Player player){
-        if (card.getRotation().equals(Rotation.left)) {
-            player.getRobot().setDirection(player.getRobot().turn(Rotation.left, player.getRobot().getDirection()));
-            board.rotateRobot(player, 1);
-        } else if (card.getRotation().equals(Rotation.right)) {
-            player.getRobot().setDirection(player.getRobot().turn(Rotation.right, player.getRobot().getDirection()));
-            board.rotateRobot(player, -1);
-        } else if (card.getRotation().equals(Rotation.uturn)) {
-            player.getRobot().setDirection(player.getRobot().turn(Rotation.uturn, player.getRobot().getDirection()));
-            board.rotateRobot(player, 2);
-        }
+        System.out.println("Rotation: " + card.getRotation());
+        System.out.println("Player facing: " + player.getRobot().getDirection());
+        System.out.println("Direction to turn: " + turn(card.getRotation(), player.getRobot().getDirection()));
+        player.getRobot().setDirection(player.getRobot().turn(card.getRotation(), player.getRobot().getDirection()));
+        board.rotateRobot(player, player.getRobot().getDirection());
     }
 
     public void handleGearRotation(Gear gear,Player player){

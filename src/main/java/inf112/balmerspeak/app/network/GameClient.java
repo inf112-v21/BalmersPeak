@@ -9,6 +9,7 @@ import com.esotericsoftware.kryonet.Listener;
 import inf112.balmerspeak.app.Game;
 import inf112.balmerspeak.app.Player;
 import inf112.balmerspeak.app.cards.ProgramCard;
+import inf112.balmerspeak.app.cards.RotationCard;
 import inf112.balmerspeak.app.menu.LobbyScreen;
 import inf112.balmerspeak.app.network.messages.*;
 import inf112.balmerspeak.app.network.tools.IPFinder;
@@ -67,6 +68,13 @@ public class GameClient extends Client {
                 else if (object instanceof AllPlayersMsg) {
                     AllPlayersMsg msg = (AllPlayersMsg) object;
                     handleReceivedAllPlayersMsg(msg);
+                }
+
+                else if (object instanceof CardExecutedMsg) {
+                    CardExecutedMsg msg = (CardExecutedMsg) object;
+                    if (msg.getCard() instanceof RotationCard)
+                        Gdx.app.postRunnable(() -> game.getGameScreen().executeCard(msg.getCard(), msg.getCard().getPlayer()));
+
                 }
 
                 else if (object instanceof RoundOverMsg) {
@@ -129,9 +137,11 @@ public class GameClient extends Client {
             // Check if this player moved
             if (dx != 0 || dy != 0) {
                 Gdx.app.postRunnable(() -> game.getGameScreen().getBoard().moveRobot(oldPlayer, dx, dy));
+
                 // Update this player object
                 game.updatePlayer(player);
             }
+
         }
         //displayPlayers();
     }
