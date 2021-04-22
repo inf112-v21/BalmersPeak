@@ -155,8 +155,22 @@ public class Board {
         int x = player.getRobot().getX();
         int y = player.getRobot().getY();
 
-        playerLayer.setCell(x, y, robotTextures.get(player.getId()).setRotation(1)); //rotate to face the correct way
+        // TODO: REMOVE EVERYTHING INSIDE IF, only for testing
+        if (player.getId() == 0) {
+            player.getRobot().set(6, 5);
+            player.getRobot().setDirection(Direction.NORTH);
+            playerLayer.setCell(6, 5, robotTextures.get(player.getId()).setRotation(1)); //rotate to face the correct way
+
+        } else {
+            player.getRobot().set(x,y);
+            playerLayer.setCell(x,y,robotTextures.get(player.getId()).setRotation(1));
+        }
     }
+
+    public int getDegrees(Player player){
+        return robotTextures.get(player.getId()).getRotation();
+    }
+
 
     public void rotateRobot(Player player, int degrees) {
         TiledMapTileLayer.Cell robot = robotTextures.get(player.getId()).setRotation(degrees % 90);
@@ -219,6 +233,26 @@ public class Board {
 
     public void removeRobot(int x, int y){
         robots[y][x] = null;
+    }
+
+    public void runGear(Player player){
+
+        int x = player.getRobot().getX();
+        int y = player.getRobot().getY();
+
+        if (gears[y][x] != null){
+            System.out.println(gears[y][x].getRotation() + " " + player.getRobot().getDirection());
+            if (gears[y][x].getRotation() == Rotation.right){
+                player.getRobot().setDirection(player.getRobot().turn(Rotation.right, player.getRobot().getDirection()));
+                rotateRobot(player, -90);
+            }
+            else {
+                player.getRobot().setDirection(player.getRobot().turn(Rotation.left, player.getRobot().getDirection()));
+                rotateRobot(player, 90);
+            }
+        }
+        else
+            return;
     }
 
 
