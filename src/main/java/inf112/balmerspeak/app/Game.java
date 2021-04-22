@@ -56,18 +56,16 @@ public class Game {
     // All hands are ready, sort after priority and execute them
     public void startRound() {
         // Set round in progress
-        //roundInProgress = true;
+        roundInProgress = true;
 
         // Phase 1: robots move
-        //runPhase1();
+        runPhase1();
 
         // Phase 2: board elements move
-        //runPhase2();
-
+        runPhase2();
         // in order: conveyor belts, pushers, gears
         // Phase 3: lasers fire
         // Phase 4: touch checkpoints
-        System.out.println(myPlayer.getRobot().getDirection());
         gameScreen.getBoard().runGear(myPlayer);
 
     }

@@ -155,16 +155,8 @@ public class Board {
         int x = player.getRobot().getX();
         int y = player.getRobot().getY();
 
-        // TODO: REMOVE EVERYTHING INSIDE IF, only for testing
-        if (player.getId() == 0) {
-            player.getRobot().set(6, 5);
-            player.getRobot().setDirection(Direction.EAST);
-            playerLayer.setCell(6, 5, robotTextures.get(player.getId()).setRotation(1)); //rotate to face the correct way
-
-        } else {
-            player.getRobot().set(x,y);
-            playerLayer.setCell(x,y,robotTextures.get(player.getId()).setRotation(1));
-        }
+        player.getRobot().set(x,y);
+        playerLayer.setCell(x,y,robotTextures.get(player.getId()).setRotation(1));
     }
 
     public int getDegrees(Player player){
