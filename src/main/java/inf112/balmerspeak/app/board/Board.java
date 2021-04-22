@@ -10,6 +10,8 @@ import inf112.balmerspeak.app.Player;
 import inf112.balmerspeak.app.flag.Flag;
 import inf112.balmerspeak.app.robot.Direction;
 import inf112.balmerspeak.app.robot.Robot;
+import org.javatuples.Pair;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 
@@ -150,7 +152,11 @@ public class Board {
         int x = player.getRobot().getX();
         int y = player.getRobot().getY();
 
-        playerLayer.setCell(x, y, robotTextures.get(player.getId()).setRotation(1)); //rotate to face the correct way
+        // TODO: REMOVE THIS
+        player.getRobot().set(6,7);
+        player.getRobot().setDirection(Direction.NORTH);
+
+        playerLayer.setCell(6,7, robotTextures.get(player.getId()).setRotation(1)); //rotate to face the correct way
     }
 
     public void rotateRobot(Player player, int degrees) {
@@ -158,13 +164,43 @@ public class Board {
         playerLayer.setCell(player.getRobot().getX(), player.getRobot().getY(),robot);
     }
 
-    public void runBoardElements(Player player) {
-        int playerX = player.getRobot().getX();
-        int playerY = player.getRobot().getY();
+    public void runBoardElements(Player hostPlayer, ArrayList<Player> players) {
+        int playerX = hostPlayer.getRobot().getX();
+        int playerY = hostPlayer.getRobot().getY();
 
-        if (isRobotOnBelt(playerX,playerY)) {
-            // execute belt
-            //conveyors[playerX][playerY].runBelt(player.getRobot());
+        // Run belts
+        runBelt(hostPlayer, players, getConveyor(playerX, playerY));
+
+        // Run gears
+
+        // Fire board lasers
+        fireLasers(hostPlayer);
+//
+//        // Fire robot lasers
+//        fireRobotLasers(hostPlayer, players);
+    }
+
+    // Fires board lasers
+    public void fireLasers(Player hostPlayer) {
+        // Check if the robot is on a laser path
+        if (laserPath.getCell(hostPlayer.getRobot().getX(), hostPlayer.getRobot().getY()) != null) {
+            hostPlayer.getRobot().takeDamage();
+            System.out.println("Host player took damage");
+        }
+    }
+
+    public void fireRobotLasers(Player hostPlayer, ArrayList<Player> players) {
+        // Get path of the robot laser first
+        ArrayList<Pair<Integer,Integer>> path = getLaserPath(hostPlayer);
+        for (Player player : players) {
+            for (Pair<Integer, Integer> coords : path) {
+                // Check if any players are in laser path
+                if (coords.getValue0() == player.getRobot().getX() && coords.getValue1() == player.getRobot().getY()) {
+                    // This player takes damage
+                    player.getRobot().takeDamage();
+                    break;
+                }
+            }
         }
     }
 
@@ -174,6 +210,35 @@ public class Board {
 
     public boolean isRobotOnBelt(int x, int y) {
         return conveyor.getCell(x,y) != null;
+    }
+
+    public ArrayList<Pair<Integer,Integer>> getLaserPath(Player player) {
+        // Get coords
+        int playerX = player.getRobot().getX();
+        int playerY = player.getRobot().getY();
+
+        // Get direction
+        Direction dir = player.getRobot().getDirection();
+
+        ArrayList<Pair<Integer,Integer>> path = new ArrayList<>();
+        if (dir == Direction.SOUTH) {
+            for (int y = playerY; y < board.getHeight(); y++) {
+                path.add(new Pair(playerX,y));
+            }
+        } else if (dir == Direction.NORTH) {
+            for (int y = playerY; y >= 0; y--) {
+                path.add(new Pair(playerX, y));
+            }
+        } else if (dir == Direction.EAST) {
+            for (int x = playerX; x < board.getWidth(); x++) {
+                path.add(new Pair(x, playerY));
+            }
+        } else if (dir == Direction.WEST) {
+            for (int x = playerX; x >= 0; x--) {
+                path.add(new Pair(x, playerY));
+            }
+        }
+        return path;
     }
 
 
@@ -310,7 +375,10 @@ public class Board {
             return null;
     }
 
-    public void runBelt(Player player,ArrayList<Player> players, ConveyorBelt belt){
+    public void runBelt(Player player, ArrayList<Player> players, ConveyorBelt belt){
+        if (belt == null) {
+            return;
+        }
         if (!cantMove(belt)){
             beltMove(player,players, belt);
             if (nextIsRotating(belt))

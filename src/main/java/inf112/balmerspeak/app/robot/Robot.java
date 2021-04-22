@@ -9,7 +9,7 @@ import java.util.ArrayList;
 
 
 import inf112.balmerspeak.app.flag.Flag;
-
+import org.javatuples.Pair;
 
 
 public class Robot implements IRobot, Serializable {
@@ -101,6 +101,9 @@ public class Robot implements IRobot, Serializable {
         return (getHealth() == 0 || getLives() == 0);
     }
 
+    public void takeDamage() {
+        this.hp -= 1;
+    }
 
     public void setDirection(Direction dir){
         this.direction = dir;

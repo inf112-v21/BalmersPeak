@@ -59,12 +59,13 @@ public class Game {
         roundInProgress = true;
 
         // Phase 1: robots move
-        runPhase1();
+        //runPhase1();
 
         // Phase 2: board elements move
+        // in order: conveyor belts, pushers, gears
         runPhase2();
 
-        // in order: conveyor belts, pushers, gears
+
         // Phase 3: lasers fire
         // Phase 4: touch checkpoints
 
@@ -84,8 +85,9 @@ public class Game {
         }
     }
 
+    // Execute board elements
     private void runPhase2() {
-
+        gameScreen.getBoard().runBoardElements(myPlayer, players);
     }
 
     // Places all players robots at their starting position

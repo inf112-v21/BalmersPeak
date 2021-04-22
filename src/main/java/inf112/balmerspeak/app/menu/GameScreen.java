@@ -134,58 +134,7 @@ public class GameScreen implements Screen {
             handleRotation((RotationCard) card, player);
     }
 
-    public void handleMove(Player player, ArrayList<Player> players) {
-        // Changes in the x coordinate
-        int dx = 0;
-        // Changes in the y coordinate
-        int dy = 0;
-
-        if (input.wPressed)
-            dy += 1;
-        else if (input.aPressed)
-            dx -= 1;
-        else if(input.sPressed)
-            dy -=1;
-        else if (input.dPressed)
-            dx += 1;
-
-        // Player x and y coordinates
-        int playerX = player.getRobot().getX();
-        int playerY = player.getRobot().getY();
-
-        // Only update if the player is allowed to move
-        if (shouldMove(player, dx, dy)){
-            board.move(player,players, dx,dy);
-            player.getRobot().set(playerX + dx, playerY + dy);
-
-            if (board.getHole(playerX + dx, playerY + dy) != null) {
-                player.getRobot().setLives(player.getRobot().getLives() - 1);
-                show();
-            }
-            if (board.getLaser(playerX + dx, playerY + dy) != null) {
-                player.getRobot().setHealth(player.getRobot().getHealth() - 1);
-                show();
-            }
-            if (board.getFlag(playerX + dx, playerY + dy) != null){
-                player.getRobot().addFlag(board.getFlag(playerX +dx, playerY+dy));
-            }
-            if (board.getWrench(playerX + dx, playerY + dy) != null) {
-                if (player.getRobot().getHealth() < 9) {
-                    player.getRobot().setHealth(player.getRobot().getHealth() + 1);
-                    System.out.println("Gained health");
-                }
-                player.getRobot().setSpawnCoordinates(playerX + dx,playerY + dy);
-                show();
-            }
-        }
-
-
-        // Update player coordinates
-        input.clear();
-    }
-
-
-
+    
     public void handleMoveCard(MovementCard card, Player player, ArrayList<Player> players) {
 
         // Changes in the x coordinate
