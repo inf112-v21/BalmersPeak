@@ -63,10 +63,10 @@ public class Game {
 
         // Phase 2: board elements move
         runPhase2();
-
         // in order: conveyor belts, pushers, gears
         // Phase 3: lasers fire
         // Phase 4: touch checkpoints
+        gameScreen.getBoard().runGear(myPlayer);
 
     }
 

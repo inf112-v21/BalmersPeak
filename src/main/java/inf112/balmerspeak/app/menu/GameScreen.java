@@ -18,6 +18,7 @@ import inf112.balmerspeak.app.Player;
 import inf112.balmerspeak.app.board.Board;
 import inf112.balmerspeak.app.cards.*;
 import inf112.balmerspeak.app.robot.Direction;
+import inf112.balmerspeak.app.board.Gear;
 import org.javatuples.Pair;
 import org.lwjgl.system.CallbackI;
 
@@ -45,6 +46,7 @@ public class GameScreen implements Screen {
     private Texture health;
     Board board;
     InputHandler input;
+    private ArrayList<Player> test = new ArrayList();
 
 
     public GameScreen() {
@@ -153,6 +155,9 @@ public class GameScreen implements Screen {
         int playerX = player.getRobot().getX();
         int playerY = player.getRobot().getY();
 
+        int degrees = board.getDegrees(player);
+
+
         // Only update if the player is allowed to move
         if (shouldMove(player, dx, dy)){
             board.move(player,players, dx,dy);
@@ -177,6 +182,12 @@ public class GameScreen implements Screen {
                 player.getRobot().setSpawnCoordinates(playerX + dx,playerY + dy);
                 show();
             }
+            if (board.getGear(playerX + dx, playerY + dy) != null) {
+                board.runGear(player);
+                show();
+
+            }
+
         }
 
 
@@ -249,13 +260,21 @@ public class GameScreen implements Screen {
         }
         if (board.getLaser(playerX + dx, playerY + dy) != null) {
             player.getRobot().setHealth(player.getRobot().getHealth() - 1);
-            showHealthLives();
+            show();
         }
         if (board.getFlag(playerX + dx, playerY + dy) != null){
             player.getRobot().addFlag(board.getFlag(playerX +dx, playerY+dy));
         }
         if (player.getRobot().checkWinCondition())
             System.out.println("Player" + player + " won");
+
+        if (board.getGear(playerX + dx, playerY + dy) != null) {
+            //board.runGear(player);
+            System.out.println(player.getRobot().getDirection());
+            show();
+            
+
+        }
 
     }
 
@@ -271,6 +290,19 @@ public class GameScreen implements Screen {
         } else if (card.getRotation().equals(Rotation.uturn)) {
             player.getRobot().setDirection(player.getRobot().turn(Rotation.uturn, player.getRobot().getDirection()));
             board.rotateRobot(player, 180);
+        }
+    }
+
+    public void handleGearRotation(Gear gear,Player player){
+        if (gear.getRotation().equals(Rotation.left)) {
+            player.getRobot().setDirection(player.getRobot().turn(Rotation.left, player.getRobot().getDirection()));
+            board.rotateRobot(player, 90);
+            System.out.println("rotate left");
+        }
+        if (gear.getRotation().equals(Rotation.right)) {
+            player.getRobot().setDirection(player.getRobot().turn(Rotation.right, player.getRobot().getDirection()));
+            board.rotateRobot(player, -90);
+            System.out.println("rotate right");
         }
     }
 
@@ -409,7 +441,7 @@ public class GameScreen implements Screen {
         stage.getBatch().draw(backgroundImage, 0, 0, stage.getWidth(), 270);
         stage.getBatch().end();
         stage.draw();
-        //handleMove(myPlayer);
+        //handleMove(myPlayer, test);
     }
 
     @Override
