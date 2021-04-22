@@ -67,6 +67,10 @@ public class GameScreen implements Screen {
         rend.setView(cam);
     }
 
+    public void clearQueuelist(){
+        queueList.clear();
+    }
+
     public Board getBoard() {
         return this.board;
     }
@@ -239,9 +243,9 @@ public class GameScreen implements Screen {
             public void changed(ChangeEvent changeEvent, Actor actor) {
                 // block action if round is in progress
                 System.out.println("Is round in progress: " + game.isRoundInProgress());
+                System.out.println(queueList);
                 if (!game.isRoundInProgress())
                     game.handIsReady(queueList);
-                show();
             }
         });
 
