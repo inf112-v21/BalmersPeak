@@ -1,6 +1,7 @@
 package inf112.balmerspeak.app;
 
 import inf112.balmerspeak.app.board.ConveyorBelt;
+import inf112.balmerspeak.app.board.ConveyorColor;
 import inf112.balmerspeak.app.board.ConveyorMovementTypes;
 import inf112.balmerspeak.app.robot.Direction;
 import org.junit.Test;
@@ -8,10 +9,10 @@ import org.junit.Test;
 import static org.junit.Assert.assertTrue;
 
 public class ConveyorBeltTest {
-    ConveyorBelt belt1 = new ConveyorBelt(4, 1, Direction.NORTH, ConveyorMovementTypes.braidT);
-    ConveyorBelt belt2 = new ConveyorBelt(4, 2, Direction.EAST, ConveyorMovementTypes.braidT);
-    ConveyorBelt belt3 = new ConveyorBelt(4, 3, Direction.SOUTH, ConveyorMovementTypes.braidT);
-    ConveyorBelt belt4 = new ConveyorBelt(4, 4, Direction.WEST, ConveyorMovementTypes.braidT);
+    ConveyorBelt belt1 = new ConveyorBelt(4, 1, Direction.NORTH, ConveyorMovementTypes.MOVE, ConveyorColor.BLUE);
+    ConveyorBelt belt2 = new ConveyorBelt(4, 2, Direction.EAST, ConveyorMovementTypes.MOVE, ConveyorColor.BLUE);
+    ConveyorBelt belt3 = new ConveyorBelt(4, 3, Direction.SOUTH, ConveyorMovementTypes.MOVE, ConveyorColor.BLUE);
+    ConveyorBelt belt4 = new ConveyorBelt(4, 4, Direction.WEST, ConveyorMovementTypes.MOVE, ConveyorColor.BLUE);
 
     @Test
     public void testGetNextX() {
@@ -24,10 +25,10 @@ public class ConveyorBeltTest {
 
     @Test
     public void testGetNextY() {
-        int x1 = belt1.getNextY(belt1.getY());
-        int x2 = belt2.getNextY(belt2.getY());
-        int x3 = belt3.getNextY(belt3.getY());
-        int x4 = belt4.getNextY(belt4.getY());
-        assertTrue(x1 == 2 && x2 == 2 && x3 == 2 && x4 ==  4);
+        int y1 = belt1.getNextY(belt1.getY());
+        int y2 = belt2.getNextY(belt2.getY());
+        int y3 = belt3.getNextY(belt3.getY());
+        int y4 = belt4.getNextY(belt4.getY());
+        assertTrue(y1 == 2 && y2 == 2 && y3 == 2 && y4 ==  4);
     }
 }

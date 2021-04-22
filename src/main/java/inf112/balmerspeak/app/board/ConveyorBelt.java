@@ -7,14 +7,15 @@ public class ConveyorBelt {
     private int y;
     private Direction direction;
     private ConveyorMovementTypes beltType;
+    private ConveyorColor color;
 
 
-    public ConveyorBelt(int x, int y, Direction direction, ConveyorMovementTypes beltType){
-
+    public ConveyorBelt(int x, int y, Direction direction, ConveyorMovementTypes beltType, ConveyorColor color){
         this.x = x;
         this.y = y;
         this.direction = direction;
         this.beltType = beltType;
+        this.color = color;
     }
     public int getX(){return x;}
 
@@ -23,6 +24,8 @@ public class ConveyorBelt {
     public Direction getDirection(){return direction;}
 
     public ConveyorMovementTypes getBeltType(){return beltType;}
+
+    public ConveyorColor getColor(){return color;}
 
     public int getNextX(int x){
         if (direction.equals(Direction.EAST))

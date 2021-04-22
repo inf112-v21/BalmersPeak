@@ -16,6 +16,8 @@ import inf112.balmerspeak.app.Game;
 import inf112.balmerspeak.app.InputHandler;
 import inf112.balmerspeak.app.Player;
 import inf112.balmerspeak.app.board.Board;
+import inf112.balmerspeak.app.board.ConveyorColor;
+import inf112.balmerspeak.app.board.RoundType;
 import inf112.balmerspeak.app.cards.*;
 import inf112.balmerspeak.app.robot.Direction;
 import inf112.balmerspeak.app.board.Gear;
@@ -36,6 +38,7 @@ public class GameScreen implements Screen {
 
     private Player myPlayer;
     private Game game;
+    //private ArrayList<Player> players = new ArrayList<Player>();
 
 
 
@@ -182,6 +185,19 @@ public class GameScreen implements Screen {
                 player.getRobot().setSpawnCoordinates(playerX + dx,playerY + dy);
                 show();
             }
+
+            if (board.getConveyor(playerX + dx, playerY + dy) != null){
+                if (board.getConveyor(playerX + dx, playerY + dy).getColor().equals(ConveyorColor.BLUE))
+                    board.runBelt(player,players, board.getConveyor(playerX + dx, playerY + dy));
+            }
+
+            if (board.getConveyor(playerX + dx, playerY + dy) != null){
+                board.runBelt(player,players, board.getConveyor(playerX + dx, playerY + dy));
+            }
+
+            if (board.getPusher(playerX + dx, playerY + dy) != null) {
+                board.pusherMove(player,players,board.getPusher(playerX + dx, playerY + dy));
+            }
             if (board.getGear(playerX + dx, playerY + dy) != null) {
                 board.runGear(player);
                 show();
@@ -245,10 +261,19 @@ public class GameScreen implements Screen {
                 player.getRobot().setSpawnCoordinates(playerX + dx,playerY + dy);
                 show();
             }
-//
-//            if (board.getConveyor(playerX + dx, playerY + dy) != null){
-//                board.runBelt(player, board.getConveyor(playerX + dx, playerY + dy));
-//            }
+
+            if (board.getConveyor(playerX + dx, playerY + dy) != null){
+                if (board.getConveyor(playerX + dx, playerY + dy).getColor().equals(ConveyorColor.BLUE))
+                    board.runBelt(player,players, board.getConveyor(playerX + dx, playerY + dy));
+            }
+
+            if (board.getConveyor(playerX + dx, playerY + dy) != null){
+                board.runBelt(player,players, board.getConveyor(playerX + dx, playerY + dy));
+            }
+
+            if (board.getPusher(playerX + dx, playerY + dy) != null) {
+                board.pusherMove(player,players,board.getPusher(playerX + dx, playerY + dy));
+            }
           
             //check for flag
             if (board.getFlag(playerX + dx, playerY + dy) != null){
@@ -441,7 +466,6 @@ public class GameScreen implements Screen {
         stage.getBatch().draw(backgroundImage, 0, 0, stage.getWidth(), 270);
         stage.getBatch().end();
         stage.draw();
-        //handleMove(myPlayer, test);
     }
 
     @Override
