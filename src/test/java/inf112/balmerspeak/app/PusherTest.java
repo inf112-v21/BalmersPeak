@@ -10,40 +10,27 @@ import org.junit.Test;
 import static org.junit.Assert.assertTrue;
 
 public class PusherTest {
-    private RoundType roundType = RoundType.ODD;
-    private Robot player = new Robot(5, 5, Direction.NORTH);
-    private Pusher pusherNorth =new Pusher(5,5, Direction.NORTH, roundType);
-    private Pusher pusherEast =new Pusher(5,5, Direction.EAST, roundType);
-    private Pusher pusherSouth =new Pusher(5,5, Direction.SOUTH, roundType);
-    private Pusher pusherWest =new Pusher(5,5, Direction.WEST, roundType);
+    private Pusher pusherNorth =new Pusher(5,5, Direction.NORTH, RoundType.ODD);
+    private Pusher pusherEast =new Pusher(5,5, Direction.EAST, RoundType.ODD);
+    private Pusher pusherSouth =new Pusher(5,5, Direction.SOUTH, RoundType.ODD);
+    private Pusher pusherWest =new Pusher(5,5, Direction.WEST, RoundType.ODD);
 
     @Test
-    public void testPushNorth(){
-        pusherNorth.pushRobot(player, roundType);
-        assertTrue(player.getX() == 5 && player.getY() == 6);
+    public void testGetNextX() {
+        int x1 = pusherNorth.getNextX(pusherNorth.getX());
+        int x2 = pusherEast.getNextX(pusherEast.getX());
+        int x3 = pusherSouth.getNextX(pusherSouth.getX());
+        int x4 = pusherWest.getNextX(pusherWest.getX());
+        assertTrue(x1 == 5 && x2 == 6 && x3 == 5 && x4 == 4);
     }
 
     @Test
-    public void testPushEast(){
-        pusherEast.pushRobot(player, roundType);
-        assertTrue(player.getX() == 6 && player.getY() == 5);
-    }
-
-    @Test
-    public void testPushSouth(){
-        pusherSouth.pushRobot(player, roundType);
-        assertTrue(player.getX() == 5 && player.getY() == 4);
-    }
-
-    @Test
-    public void testPushWest(){
-        pusherWest.pushRobot(player, roundType);
-        assertTrue(player.getX() == 4 && player.getY() == 5);
-    }
-    @Test
-    public void testWontPushOnWrongRound(){
-        pusherNorth.pushRobot(player,RoundType.EVEN);
-        assertTrue(player.getX() == pusherWest.getX() && player.getY() == pusherWest.getY());
+    public void testGetNextY() {
+        int y1 = pusherNorth.getNextY(pusherNorth.getY());
+        int y2 = pusherEast.getNextY(pusherEast.getY());
+        int y3 = pusherSouth.getNextY(pusherSouth.getY());
+        int y4 = pusherWest.getNextY(pusherWest.getY());
+        assertTrue(y1 == 6 && y2 == 5 && y3 == 4 && y4 ==  5);
     }
 
 }

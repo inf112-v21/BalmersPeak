@@ -72,6 +72,7 @@ public class Game {
             // Phase 1: robots move
             runPhase1(playersClone);
 
+
             // Phase 2: board elements move
             // in order: conveyor belts, pushers (missing), gears (missing)
             runPhase2(playersClone);
@@ -80,7 +81,6 @@ public class Game {
         }
 
         handleRoundOver();
-
     }
 
     public void handleRoundOver() {
@@ -121,7 +121,9 @@ public class Game {
 
 
         // Run gears
+        gameScreen.getBoard().runGear(myPlayer);
         // Send updated coords/rotation
+        sendUpdatedPlayers(playersClone);
 
 
         // Run board lasers
