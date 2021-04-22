@@ -16,6 +16,7 @@ import inf112.balmerspeak.app.Game;
 import inf112.balmerspeak.app.InputHandler;
 import inf112.balmerspeak.app.Player;
 import inf112.balmerspeak.app.board.Board;
+import inf112.balmerspeak.app.board.ConveyorColor;
 import inf112.balmerspeak.app.board.RoundType;
 import inf112.balmerspeak.app.cards.*;
 import inf112.balmerspeak.app.robot.Direction;
@@ -179,6 +180,12 @@ public class GameScreen implements Screen {
                 player.getRobot().setSpawnCoordinates(playerX + dx,playerY + dy);
                 show();
             }
+
+            if (board.getConveyor(playerX + dx, playerY + dy) != null){
+                if (board.getConveyor(playerX + dx, playerY + dy).getColor().equals(ConveyorColor.BLUE))
+                    board.runBelt(player,players, board.getConveyor(playerX + dx, playerY + dy));
+            }
+
             if (board.getConveyor(playerX + dx, playerY + dy) != null){
                 board.runBelt(player,players, board.getConveyor(playerX + dx, playerY + dy));
             }
@@ -245,8 +252,10 @@ public class GameScreen implements Screen {
             }
 
             if (board.getConveyor(playerX + dx, playerY + dy) != null){
-                board.runBelt(player,players, board.getConveyor(playerX + dx, playerY + dy));
+                if (board.getConveyor(playerX + dx, playerY + dy).getColor().equals(ConveyorColor.BLUE))
+                    board.runBelt(player,players, board.getConveyor(playerX + dx, playerY + dy));
             }
+
             if (board.getConveyor(playerX + dx, playerY + dy) != null){
                 board.runBelt(player,players, board.getConveyor(playerX + dx, playerY + dy));
             }

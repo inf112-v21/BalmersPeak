@@ -1,7 +1,6 @@
 package inf112.balmerspeak.app.board;
 
 import inf112.balmerspeak.app.robot.Direction;
-import inf112.balmerspeak.app.robot.Robot;
 
 
 public class Pusher {
@@ -19,13 +18,6 @@ public class Pusher {
     public int getX() {return x;}
 
     public int getY() {return y;}
-
-
-    public void pushRobot(Robot player, RoundType thisRoundType){
-        if (roundType.equals(thisRoundType)){
-            player.set(getNextX(x),getNextY(y));
-        }
-    }
 
     public int getNextX(int x){
         if (direction.equals(Direction.EAST))
