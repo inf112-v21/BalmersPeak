@@ -97,7 +97,7 @@ public class Game {
         for (Player player : players) {
             server.sendMessageToClient(player.getId(), new RoundOverMsg());
             player.setHandReady(false);
-//        }
+        }
     }
 
     // Robots move
