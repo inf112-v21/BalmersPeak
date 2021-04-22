@@ -5,6 +5,7 @@ import inf112.balmerspeak.app.cards.ProgramCard;
 import inf112.balmerspeak.app.menu.GameScreen;
 import inf112.balmerspeak.app.network.GameClient;
 import inf112.balmerspeak.app.network.GameServer;
+import inf112.balmerspeak.app.network.messages.AllPlayersMsg;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -87,7 +88,25 @@ public class Game {
 
     // Execute board elements
     private void runPhase2() {
-        gameScreen.getBoard().runBoardElements(myPlayer, players);
+        // Run conveyor belts
+        gameScreen.getBoard().runBelt(myPlayer, players);
+        // Send updated coords to all players
+        sendUpdatedCoords();
+
+
+
+
+
+    }
+
+    public void sendUpdatedCoords() {
+        // Send all player objects to all clients to update coords
+        ArrayList<Player> allPlayers = this.players;
+        allPlayers.add(myPlayer);
+        AllPlayersMsg msg = new AllPlayersMsg(allPlayers);
+        for (Player player : this.players) {
+            server.sendMessageToClient(player.getId(), msg);
+        }
     }
 
     // Places all players robots at their starting position
@@ -125,8 +144,24 @@ public class Game {
         return this.players;
     }
 
+    public void updatePlayer(Player player) {
+        int counter = 0;
+        for (Player oldPlayer : players) {
+            if (oldPlayer.getId() == player.getId()) {
+                this.players.remove(counter);
+                this.players.add(player);
+                break;
+            }
+            counter += 1;
+        }
+    }
+
     public void setMyPlayer(Player myPlayer) {
         this.myPlayer = myPlayer;
+    }
+
+    public Player getMyPlayer() {
+        return this.myPlayer;
     }
 
     public boolean getAllPlayersReady() {

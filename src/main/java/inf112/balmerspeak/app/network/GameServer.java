@@ -11,10 +11,7 @@ import inf112.balmerspeak.app.Player;
 import inf112.balmerspeak.app.cards.ProgramCard;
 import inf112.balmerspeak.app.menu.GameScreen;
 import inf112.balmerspeak.app.menu.LobbyScreen;
-import inf112.balmerspeak.app.network.messages.CardExecutedMsg;
-import inf112.balmerspeak.app.network.messages.HandMsg;
-import inf112.balmerspeak.app.network.messages.InitMsg;
-import inf112.balmerspeak.app.network.messages.NumPlayers;
+import inf112.balmerspeak.app.network.messages.*;
 import inf112.balmerspeak.app.network.tools.CoordsResolver;
 import inf112.balmerspeak.app.network.tools.IPFinder;
 import org.javatuples.Pair;
@@ -114,7 +111,8 @@ public class GameServer extends Server {
 
         // Construct player object for every client and add to game
         for (Connection client : clients.keySet()) {
-            Player clientPlayer = new Player(resolver.getCoordsPair(), clients.get(client).getUsername(), clients.get(client).getIP(), client.getID());
+            // TODO: REMOVE new Pair(5,6): only for testing: resolver.getCoordsPair()
+            Player clientPlayer = new Player(new Pair(5,6), clients.get(client).getUsername(), clients.get(client).getIP(), client.getID());
             // Add to game
             game.addPlayer(clientPlayer);
         }
@@ -132,6 +130,15 @@ public class GameServer extends Server {
         game.gameLoop();
     }
 
+    public void sendMessageToClient(int id, Object msg) {
+        for (Connection conn : this.getConnections()) {
+            if (conn.getID() == id) {
+                conn.sendTCP(msg);
+                break;
+            }
+        }
+    }
+
 
 
     public void registerClasses() {
@@ -141,6 +148,7 @@ public class GameServer extends Server {
         kryo.register(NumPlayers.class, new JavaSerializer());
         kryo.register(HandMsg.class, new JavaSerializer());
         kryo.register(CardExecutedMsg.class, new JavaSerializer());
+        kryo.register(AllPlayersMsg.class, new JavaSerializer());
     }
 
 

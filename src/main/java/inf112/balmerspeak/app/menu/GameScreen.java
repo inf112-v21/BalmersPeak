@@ -134,7 +134,7 @@ public class GameScreen implements Screen {
             handleRotation((RotationCard) card, player);
     }
 
-    
+
     public void handleMoveCard(MovementCard card, Player player, ArrayList<Player> players) {
 
         // Changes in the x coordinate

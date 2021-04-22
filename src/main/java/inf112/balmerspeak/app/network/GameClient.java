@@ -10,10 +10,7 @@ import inf112.balmerspeak.app.Game;
 import inf112.balmerspeak.app.Player;
 import inf112.balmerspeak.app.cards.ProgramCard;
 import inf112.balmerspeak.app.menu.LobbyScreen;
-import inf112.balmerspeak.app.network.messages.CardExecutedMsg;
-import inf112.balmerspeak.app.network.messages.HandMsg;
-import inf112.balmerspeak.app.network.messages.InitMsg;
-import inf112.balmerspeak.app.network.messages.NumPlayers;
+import inf112.balmerspeak.app.network.messages.*;
 import inf112.balmerspeak.app.network.tools.IPFinder;
 
 import java.io.IOException;
@@ -72,6 +69,12 @@ public class GameClient extends Client {
                     System.out.println("Executing player " + msg.getPlayerId() + "'s card, " + msg.getCard());
                     Gdx.app.postRunnable(() -> game.getGameScreen().executeCard(msg.getCard(), msg.getCard().getPlayer(), game.getPlayers()));
                 }
+
+                // check for allplayers msg
+                else if (object instanceof AllPlayersMsg) {
+                    AllPlayersMsg msg = (AllPlayersMsg) object;
+                    handleReceivedAllPlayersMsg(msg);
+                }
             }
         });
     }
@@ -98,6 +101,36 @@ public class GameClient extends Client {
             game.gameLoop();
     }
 
+    // Given updated players, resolve moves
+    private void handleReceivedAllPlayersMsg(AllPlayersMsg msg) {
+        for (Player player : msg.get()) {
+            int dx;
+            int dy;
+            Player oldPlayer;
+
+            // Check if this is "my player"
+            if (player.getId() == game.getMyPlayer().getId()) {
+                oldPlayer = game.getMyPlayer();
+                dx = player.getRobot().getX() - oldPlayer.getRobot().getX();
+                dy = player.getRobot().getY() - oldPlayer.getRobot().getY();
+            } else {
+                oldPlayer = game.getPlayerById(player.getId());
+                dx = player.getRobot().getX() - oldPlayer.getRobot().getX();
+                dy = player.getRobot().getY() - oldPlayer.getRobot().getY();
+            }
+
+            // Check if this player moved
+            if (dx != 0 || dy != 0) {
+                Gdx.app.postRunnable(() -> game.getGameScreen().getBoard().moveRobot(oldPlayer, dx, dy));
+                // Update this player object
+                this.game.updatePlayer(player);
+            }
+        }
+    }
+
+
+
+
     public void alertServerPlayerIsReady(ArrayList<ProgramCard> cards) {
         sendTCP(new HandMsg(cards));
     }
@@ -109,6 +142,7 @@ public class GameClient extends Client {
         kryo.register(NumPlayers.class, new JavaSerializer());
         kryo.register(HandMsg.class, new JavaSerializer());
         kryo.register(CardExecutedMsg.class, new JavaSerializer());
+        kryo.register(AllPlayersMsg.class, new JavaSerializer());
     }
 
     public void setLobby(LobbyScreen screen) {
