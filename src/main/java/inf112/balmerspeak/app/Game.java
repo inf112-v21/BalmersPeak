@@ -94,9 +94,9 @@ public class Game {
         gameScreen.show();
         gameScreen.clearQueuelist();
         // Tell all players to deal hands
-//        for (Player player : players) {
-//            server.sendMessageToClient(player.getId(), new RoundOverMsg());
-//            player.setHandReady(false);
+        for (Player player : players) {
+            server.sendMessageToClient(player.getId(), new RoundOverMsg());
+            player.setHandReady(false);
 //        }
     }
 
