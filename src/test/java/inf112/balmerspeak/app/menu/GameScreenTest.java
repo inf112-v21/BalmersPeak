@@ -67,7 +67,7 @@ public class GameScreenTest {
     public void playerMovesFromCard(){
         setup();
         MovementCard card = new MovementCard(1,1,"Movement 1");
-        g.handleMoveCard(card, g.getMyPlayer(), players);
+        g.handleMoveCard(card, g.getMyPlayer());
         assertTrue(g.getMyPlayer().getRobot().getX() == 1);
 
     }

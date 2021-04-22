@@ -63,17 +63,16 @@ public class GameClient extends Client {
                     Gdx.app.postRunnable(() -> handleReceivedNumPlayers((NumPlayers) object));
                 }
 
-                // check for card executed msg
-                else if (object instanceof CardExecutedMsg) {
-                    CardExecutedMsg msg = (CardExecutedMsg) object;
-                    System.out.println("Executing player " + msg.getPlayerId() + "'s card, " + msg.getCard());
-                    Gdx.app.postRunnable(() -> game.getGameScreen().executeCard(msg.getCard(), msg.getCard().getPlayer(), game.getPlayers()));
-                }
-
                 // check for allplayers msg
                 else if (object instanceof AllPlayersMsg) {
                     AllPlayersMsg msg = (AllPlayersMsg) object;
                     handleReceivedAllPlayersMsg(msg);
+                }
+
+                else if (object instanceof RoundOverMsg) {
+                    // Set round in progress to false
+                    game.setRoundInProgress(false);
+                    game.getMyPlayer().dealHand(9);
                 }
             }
         });
@@ -134,6 +133,16 @@ public class GameClient extends Client {
                 game.updatePlayer(player);
             }
         }
+        //displayPlayers();
+    }
+
+    public void displayPlayers() {
+        // My player first
+        System.out.println("My player is at: " + game.getMyPlayer().getRobot().getX() + "," + game.getMyPlayer().getRobot().getY());
+
+        for (Player player : game.getPlayers()) {
+            System.out.println("Player " + player.getId() + "is at " + player.getRobot().getX() + "," + player.getRobot().getY());
+        }
     }
 
 
@@ -151,6 +160,7 @@ public class GameClient extends Client {
         kryo.register(HandMsg.class, new JavaSerializer());
         kryo.register(CardExecutedMsg.class, new JavaSerializer());
         kryo.register(AllPlayersMsg.class, new JavaSerializer());
+        kryo.register(RoundOverMsg.class, new JavaSerializer());
     }
 
     public void setLobby(LobbyScreen screen) {

@@ -152,17 +152,16 @@ public class Board {
         int x = player.getRobot().getX();
         int y = player.getRobot().getY();
 
-        // TODO: REMOVE EVERYTHING INSIDE IF, only for testing
-        if (player.getId() == 0) {
-            player.getRobot().set(2, 3);
-            player.getRobot().setDirection(Direction.EAST);
-            playerLayer.setCell(2, 3, robotTextures.get(player.getId()).setRotation(1)); //rotate to face the correct way
+//        // TODO: REMOVE EVERYTHING INSIDE IF, only for testing
+//        if (player.getId() == 0) {
+//            player.getRobot().set(2, 3);
+//            player.getRobot().setDirection(Direction.EAST);
+//            playerLayer.setCell(2, 3, robotTextures.get(player.getId()).setRotation(1)); //rotate to face the correct way
 
-        } else {
-            player.getRobot().set(x,y);
-            player.getRobot().setDirection(Direction.WEST); //TODO: remove this
-            playerLayer.setCell(x,y,robotTextures.get(player.getId()).setRotation(3)); //TODO: set rotation to 1
-        }
+
+        player.getRobot().set(x,y);
+        playerLayer.setCell(x,y,robotTextures.get(player.getId()).setRotation(1));
+
     }
 
     public void rotateRobot(Player player, int degrees) {
@@ -251,23 +250,6 @@ public class Board {
 
     public boolean hasRobot(int x, int y){
         return playerLayer.getCell(x,y) != null;
-    }
-
-    public Robot getRobot(int x, int y){
-        return robots[y][x];
-    }
-
-    public Flag getFlag(int x, int y){
-        return flags[y][x];
-    }
-
-    public void setFlag(int x, int y) {
-        flags[y][x] = new Flag(1);
-
-    }
-
-    public void removeRobot(int x, int y){
-        robots[y][x] = null;
     }
 
 

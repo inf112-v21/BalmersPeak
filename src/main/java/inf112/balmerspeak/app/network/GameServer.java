@@ -111,8 +111,7 @@ public class GameServer extends Server {
 
         // Construct player object for every client and add to game
         for (Connection client : clients.keySet()) {
-            // TODO: REMOVE new Pair(5,6): only for testing: resolver.getCoordsPair()
-            Player clientPlayer = new Player(new Pair(7,2), clients.get(client).getUsername(), clients.get(client).getIP(), client.getID());
+            Player clientPlayer = new Player(resolver.getCoordsPair(), clients.get(client).getUsername(), clients.get(client).getIP(), client.getID());
             // Add to game
             game.addPlayer(clientPlayer);
         }
@@ -149,6 +148,7 @@ public class GameServer extends Server {
         kryo.register(HandMsg.class, new JavaSerializer());
         kryo.register(CardExecutedMsg.class, new JavaSerializer());
         kryo.register(AllPlayersMsg.class, new JavaSerializer());
+        kryo.register(RoundOverMsg.class, new JavaSerializer());
     }
 
 
