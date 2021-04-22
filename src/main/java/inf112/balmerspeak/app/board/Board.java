@@ -8,9 +8,12 @@ import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.maps.tiled.tiles.StaticTiledMapTile;
 import inf112.balmerspeak.app.Player;
 import inf112.balmerspeak.app.flag.Flag;
+import inf112.balmerspeak.app.menu.GameScreen;
 import inf112.balmerspeak.app.robot.Direction;
 import inf112.balmerspeak.app.cards.Rotation;
 import inf112.balmerspeak.app.robot.Robot;
+import org.javatuples.Pair;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 
@@ -53,7 +56,6 @@ public class Board {
 
 
     private TiledMapTileLayer hole;
-
 
     public Board(String filename) {
 
@@ -158,6 +160,17 @@ public class Board {
         flags[10][6] = new Flag(3);
     }
 
+    public int resolveRotation(Direction direction) {
+        if (direction == Direction.SOUTH)
+            return 0;
+        else if (direction == Direction.EAST)
+            return 1;
+        else if (direction == Direction.NORTH)
+            return 2;
+        else
+            return 3;
+    }
+
 
 
     public void placeRobot(Player player){
@@ -178,13 +191,49 @@ public class Board {
         playerLayer.setCell(player.getRobot().getX(), player.getRobot().getY(),robot);
     }
 
-    public void runBoardElements(Player player) {
-        int playerX = player.getRobot().getX();
-        int playerY = player.getRobot().getY();
+    public void rotateRobot(Player player, Direction direction) {
+        TiledMapTileLayer.Cell robot = robotTextures.get(player.getId()).setRotation(resolveRotation(direction));
+        playerLayer.setCell(player.getRobot().getX(), player.getRobot().getY(),robot);
+    }
 
-        if (isRobotOnBelt(playerX,playerY)) {
-            // execute belt
-            //conveyors[playerX][playerY].runBelt(player.getRobot());
+
+    // Fires board lasers
+    public void fireBoardLasers(Player hostPlayer, ArrayList<Player> players, GameScreen screen) {
+        // Check host player first
+        if (laserPath.getCell(hostPlayer.getRobot().getX(), hostPlayer.getRobot().getY()) != null) {
+            hostPlayer.getRobot().takeDamage();
+            // Update GUI
+            screen.show();
+
+        }
+        // Check if the robot is on a laser path
+        for (Player player : players) {
+            if (laserPath.getCell(player.getRobot().getX(), player.getRobot().getY()) != null) {
+                player.getRobot().takeDamage();
+            }
+        }
+    }
+
+
+    public void fireRobotLasers(ArrayList<Player> players, GameScreen screen) {
+
+        for (Player player : players) {
+            // Get path of the robot laser first
+            ArrayList<Pair<Integer, Integer>> path = getLaserPath(player);
+
+            for (Player targetPlayer : players) {
+                if (player != targetPlayer) {
+                    // Check if the target player is in path
+                    if (isTargetInRobotLaserPath(path, targetPlayer)) {
+                        // Robot takes damage
+                        targetPlayer.getRobot().takeDamage();
+                        // if host player, update GUI
+                        if (targetPlayer.getId() == 0) {
+                            screen.show();
+                        }
+                    }
+                }
+            }
         }
     }
 
@@ -196,44 +245,63 @@ public class Board {
                 return Rotation.right;
             case 53:
                 return Rotation.left;
-
-
-
-
         }
         return null;
     }
 
     public void placeRobot(int x, int y){
         robots[y][x] = new Robot(x,y,Direction.NORTH);
+
     }
 
-    public boolean isRobotOnBelt(int x, int y) {
-        return conveyor.getCell(x,y) != null;
+    public boolean isTargetInRobotLaserPath(ArrayList<Pair<Integer,Integer>> path, Player targetPlayer) {
+        for (Pair<Integer,Integer> coords : path) {
+            if (coords.getValue0() == targetPlayer.getRobot().getX() && coords.getValue1() == targetPlayer.getRobot().getY()) {
+                return true;
+            }
+        }
+        return false;
     }
 
+    public ArrayList<Pair<Integer,Integer>> getLaserPath(Player player) {
+        // Get coords
+        int playerX = player.getRobot().getX();
+        int playerY = player.getRobot().getY();
 
-    public boolean hasRobot(int x, int y){
-        return playerLayer.getCell(x,y) != null;
+        // Get direction
+        Direction dir = player.getRobot().getDirection();
+
+        ArrayList<Pair<Integer,Integer>> path = new ArrayList<>();
+        if (dir == Direction.SOUTH) {
+            for (int y = playerY-1; y >= 0; y--) {
+                path.add(new Pair(playerX,y));
+            }
+        } else if (dir == Direction.NORTH) {
+            for (int y = playerY+1; y < board.getHeight(); y++) {
+                path.add(new Pair(playerX, y));
+            }
+        } else if (dir == Direction.EAST) {
+            for (int x = playerX+1; x < board.getWidth(); x++) {
+                path.add(new Pair(x, playerY));
+            }
+        } else if (dir == Direction.WEST) {
+            for (int x = playerX-1; x >= 0; x--) {
+                path.add(new Pair(x, playerY));
+            }
+        }
+        return path;
     }
 
-    public Robot getRobot(int x, int y){
-        return robots[y][x];
-    }
-
-    public Flag getFlag(int x, int y){
-        return flags[y][x];
-    }
 
     public Gear getGear(int x, int y) { return gears[y][x]; }
 
     public void setFlag(int x, int y) {
         flags[y][x] = new Flag(1);
-
     }
 
-    public void removeRobot(int x, int y){
-        robots[y][x] = null;
+
+    public boolean hasRobot(int x, int y){
+        return playerLayer.getCell(x,y) != null;
     }
 
     public void runGear(Player player){
@@ -290,28 +358,36 @@ public class Board {
 
     public void move(Player hostPlayer, ArrayList<Player> players,  int dx, int dy) {
 
-        int x = hostPlayer.getRobot().getX();
-        int y = hostPlayer.getRobot().getY();
+//        int x = hostPlayer.getRobot().getX();
+//        int y = hostPlayer.getRobot().getY();
+//
+//        int pdx = dx;
+//        int pdy = dy;
+//
+//        for (Player p : players){
+//            if (p.getRobot().getX() == x+dx && p.getRobot().getY() == y+dy){
+//                if (dx < 0) pdx-=1;
+//                if (dx > 0) pdx+=1;
+//                if (dy < 0) pdy-=1;
+//                if (dy > 0) pdy+=1;
+//                p.getRobot().set(x+pdx,y+pdy);
+//                this.playerLayer.setCell(x+pdx,y+pdy, robotTextures.get(p.getId()));
+//                this.playerLayer.setCell(x+dx,y+dy, null);
+//            }
+//        }
+//
+//        hostPlayer.getRobot().set(x+dx,y+dy);
+//        this.playerLayer.setCell(x + dx, y + dy, robotTextures.get(hostPlayer.getId()));
+//        //robots[y][x] = null;
+//        this.playerLayer.setCell(x, y, null);
+    }
 
-        int pdx = dx;
-        int pdy = dy;
+    public void moveRobot(Player player, int dx, int dy) {
+        int playerX = player.getRobot().getX();
+        int playerY = player.getRobot().getY();
 
-        for (Player p : players){
-            if (p.getRobot().getX() == x+dx && p.getRobot().getY() == y+dy){
-                if (dx < 0) pdx-=1;
-                if (dx > 0) pdx+=1;
-                if (dy < 0) pdy-=1;
-                if (dy > 0) pdy+=1;
-                p.getRobot().set(x+pdx,y+pdy);
-                this.playerLayer.setCell(x+pdx,y+pdy, robotTextures.get(p.getId()));
-                this.playerLayer.setCell(x+dx,y+dy, null);
-            }
-        }
-
-        hostPlayer.getRobot().set(x+dx,y+dy);
-        this.playerLayer.setCell(x + dx, y + dy, robotTextures.get(hostPlayer.getId()));
-        //robots[y][x] = null;
-        this.playerLayer.setCell(x, y, null);
+        this.playerLayer.setCell(playerX + dx, playerY + dy, robotTextures.get(player.getId()));
+        this.playerLayer.setCell(playerX, playerY, null);
     }
 
     public Hole getHole(int x, int y) {
@@ -427,6 +503,46 @@ public class Board {
             return null;
     }
 
+
+    public void runBelt(ArrayList<Player> players) {
+
+
+        for (Player player : players) {
+
+            // Get belt for current player
+            ConveyorBelt belt = getConveyor(player.getRobot().getX(), player.getRobot().getY());
+
+            // Check belts for current player
+            if (belt != null) {
+                // Run belt for host player
+                if (canMove(belt)) {
+                    beltMove(player, belt);
+                }
+            }
+        }
+    }
+
+
+    public void beltMove(Player player, ConveyorBelt belt) {
+        // Get player coords
+        int playerX = player.getRobot().getX();
+        int playerY = player.getRobot().getY();
+
+        // Get change of coords from belts
+        int dx = belt.getNextX(belt.getX())-belt.getX();
+        int dy = belt.getNextY(belt.getY())-belt.getY();
+
+        //move(hostPlayer,players, dx,dy); //TODO: perhaps reimplement this
+
+        // Change coords of robot
+        player.getRobot().set(playerX+dx,playerY+dy);
+
+        // Move player robot texture
+        this.playerLayer.setCell(playerX + dx, playerY + dy, robotTextures.get(player.getId()));
+        this.playerLayer.setCell(playerX, playerY, null);
+    }
+
+
     public ConveyorColor getConveyorColor(int x, int y){
         int id = conveyor.getCell(x,y).getTile().getId();
         if (id == 33 || id == 36 || id == 49 || id == 50 || id == 51 || id == 52)
@@ -441,15 +557,6 @@ public class Board {
         int dx = push.getNextX(push.getX())-push.getX();
         int dy = push.getNextY(push.getY())-push.getY();
         move(hostPlayer,players, dx,dy);
-    }
-
-
-    public void runBelt(Player player,ArrayList<Player> players, ConveyorBelt belt){
-        if (canMove(belt)){
-            move(player,players, belt.getNextX(belt.getX())-belt.getX(),belt.getNextY(belt.getY())-belt.getY());
-        }else{
-            System.out.println("Can't move because of robot on track");
-        }
     }
 
     public void beltRotate(){

@@ -5,6 +5,8 @@ import inf112.balmerspeak.app.cards.ProgramCard;
 import inf112.balmerspeak.app.menu.GameScreen;
 import inf112.balmerspeak.app.network.GameClient;
 import inf112.balmerspeak.app.network.GameServer;
+import inf112.balmerspeak.app.network.messages.AllPlayersMsg;
+import inf112.balmerspeak.app.network.messages.RoundOverMsg;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -44,6 +46,10 @@ public class Game {
         return this.roundInProgress;
     }
 
+    public void setRoundInProgress(boolean value) {
+        this.roundInProgress = value;
+    }
+
 
     // The game loop which executes all stages of the game and exits when a winner is determined
     public void gameLoop() {
@@ -55,37 +61,89 @@ public class Game {
 
     // All hands are ready, sort after priority and execute them
     public void startRound() {
+        // Make players clone
+        ArrayList<Player> playersClone = (ArrayList<Player>) this.players.clone();
+        playersClone.add(myPlayer);
         // Set round in progress
         roundInProgress = true;
 
-        // Phase 1: robots move
-        runPhase1();
+        // Loop five times, once for each card
+        for (int i = 0; i <= 1; i++) {
+            // Phase 1: robots move
+            runPhase1(playersClone);
 
-        // Phase 2: board elements move
-        runPhase2();
-        // in order: conveyor belts, pushers, gears
-        // Phase 3: lasers fire
-        // Phase 4: touch checkpoints
-        gameScreen.getBoard().runGear(myPlayer);
 
+            // Phase 2: board elements move
+            // in order: conveyor belts, pushers (missing), gears (missing)
+            runPhase2(playersClone);
+
+            // Phase 4: touch checkpoints
+        }
+
+        handleRoundOver();
+    }
+
+    public void handleRoundOver() {
+        // Set round in progress to false
+        roundInProgress = false;
+        // Deal new cards and set own hand to not ready
+        myPlayer.setHandReady(false);
+        myPlayer.dealHand(9);
+        // Tell all players to deal hands
+//        for (Player player : players) {
+//            server.sendMessageToClient(player.getId(), new RoundOverMsg());
+//            player.setHandReady(false);
+//        }
     }
 
     // Robots move
-    private void runPhase1() {
+    private void runPhase1(ArrayList<Player> playersClone) {
         // Get sorted cards for the round
         ArrayList<ProgramCard> sortedCards = getCardOrder();
 
         // Phase 1: robots move
         for (ProgramCard card : sortedCards) {
             // Send to all clients
-            server.sendCardExecuted(card);
+            //server.sendCardExecuted(card);
             // Execute the movement and send to all clients
-            gameScreen.executeCard(card, card.getPlayer(), players);
+            gameScreen.executeCard(card, card.getPlayer());
+
         }
+        sendUpdatedPlayers(playersClone);
     }
 
-    private void runPhase2() {
+    // Execute board elements
+    private void runPhase2(ArrayList<Player> playersClone) {
+        // Run conveyor belts
+        gameScreen.getBoard().runBelt(playersClone);
+        // Send updated coords to all players
+        sendUpdatedPlayers(playersClone);
 
+
+        // Run gears
+        gameScreen.getBoard().runGear(myPlayer);
+        // Send updated coords/rotation
+        sendUpdatedPlayers(playersClone);
+
+
+        // Run board lasers
+        gameScreen.getBoard().fireBoardLasers(myPlayer, players, gameScreen);
+        // Send updated players for damage update
+        sendUpdatedPlayers(playersClone);
+
+
+        // Fire robot lasers
+        gameScreen.getBoard().fireRobotLasers(playersClone, gameScreen);
+        // Send updated players for damage update
+        sendUpdatedPlayers(playersClone);
+    }
+
+    public void sendUpdatedPlayers(ArrayList<Player> playerList) {
+        // Send all player objects to all clients to update coords
+        AllPlayersMsg msg = new AllPlayersMsg(playerList);
+        for (Player player : playerList) {
+            server.sendMessageToClient(player.getId(), msg);
+        }
     }
 
     // Places all players robots at their starting position
@@ -123,8 +181,30 @@ public class Game {
         return this.players;
     }
 
+    public void updatePlayer(Player player) {
+        if (player.getId() == myPlayer.getId()) {
+            this.players.remove(myPlayer);
+            this.players.add(player);
+            setMyPlayer(player);
+            return;
+        }
+        int counter = 0;
+        for (Player oldPlayer : players) {
+            if (oldPlayer.getId() == player.getId()) {
+                this.players.remove(counter);
+                this.players.add(player);
+                break;
+            }
+            counter += 1;
+        }
+    }
+
     public void setMyPlayer(Player myPlayer) {
         this.myPlayer = myPlayer;
+    }
+
+    public Player getMyPlayer() {
+        return this.myPlayer;
     }
 
     public boolean getAllPlayersReady() {
