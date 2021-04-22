@@ -154,13 +154,14 @@ public class Board {
 
         // TODO: REMOVE EVERYTHING INSIDE IF, only for testing
         if (player.getId() == 0) {
-            player.getRobot().set(6, 7);
-            player.getRobot().setDirection(Direction.NORTH);
-            playerLayer.setCell(6, 7, robotTextures.get(player.getId()).setRotation(1)); //rotate to face the correct way
+            player.getRobot().set(2, 3);
+            player.getRobot().setDirection(Direction.EAST);
+            playerLayer.setCell(2, 3, robotTextures.get(player.getId()).setRotation(1)); //rotate to face the correct way
 
         } else {
             player.getRobot().set(x,y);
-            playerLayer.setCell(x,y,robotTextures.get(player.getId()).setRotation(1));
+            player.getRobot().setDirection(Direction.WEST); //TODO: remove this
+            playerLayer.setCell(x,y,robotTextures.get(player.getId()).setRotation(3)); //TODO: set rotation to 1
         }
     }
 
@@ -187,27 +188,35 @@ public class Board {
         }
     }
 
-    public void fireRobotLasers(Player hostPlayer, ArrayList<Player> players) {
-        // Get path of the robot laser first
-        ArrayList<Pair<Integer,Integer>> path = getLaserPath(hostPlayer);
+    public void fireRobotLasers(ArrayList<Player> players, GameScreen screen) {
+
         for (Player player : players) {
-            for (Pair<Integer, Integer> coords : path) {
-                // Check if any players are in laser path
-                if (coords.getValue0() == player.getRobot().getX() && coords.getValue1() == player.getRobot().getY()) {
-                    // This player takes damage
-                    player.getRobot().takeDamage();
-                    break;
+            // Get path of the robot laser first
+            ArrayList<Pair<Integer,Integer>> path = getLaserPath(player);
+
+            for (Player targetPlayer : players) {
+                if (player != targetPlayer) {
+                    // Check if the target player is in path
+                    if (isTargetInRobotLaserPath(path, targetPlayer)) {
+                        // Robot takes damage
+                        targetPlayer.getRobot().takeDamage();
+                        // if host player, update GUI
+                        if (targetPlayer.getId() == 0) {
+                            screen.show();
+                        }
+                    }
                 }
             }
         }
     }
 
-    public void placeRobot(int x, int y){
-        robots[y][x] = new Robot(x,y,Direction.NORTH);
-    }
-
-    public boolean isRobotOnBelt(int x, int y) {
-        return conveyor.getCell(x,y) != null;
+    public boolean isTargetInRobotLaserPath(ArrayList<Pair<Integer,Integer>> path, Player targetPlayer) {
+        for (Pair<Integer,Integer> coords : path) {
+            if (coords.getValue0() == targetPlayer.getRobot().getX() && coords.getValue1() == targetPlayer.getRobot().getY()) {
+                return true;
+            }
+        }
+        return false;
     }
 
     public ArrayList<Pair<Integer,Integer>> getLaserPath(Player player) {
@@ -220,19 +229,19 @@ public class Board {
 
         ArrayList<Pair<Integer,Integer>> path = new ArrayList<>();
         if (dir == Direction.SOUTH) {
-            for (int y = playerY; y < board.getHeight(); y++) {
+            for (int y = playerY-1; y >= 0; y--) {
                 path.add(new Pair(playerX,y));
             }
         } else if (dir == Direction.NORTH) {
-            for (int y = playerY; y >= 0; y--) {
+            for (int y = playerY+1; y < board.getHeight(); y++) {
                 path.add(new Pair(playerX, y));
             }
         } else if (dir == Direction.EAST) {
-            for (int x = playerX; x < board.getWidth(); x++) {
+            for (int x = playerX+1; x < board.getWidth(); x++) {
                 path.add(new Pair(x, playerY));
             }
         } else if (dir == Direction.WEST) {
-            for (int x = playerX; x >= 0; x--) {
+            for (int x = playerX-1; x >= 0; x--) {
                 path.add(new Pair(x, playerY));
             }
         }
@@ -381,9 +390,8 @@ public class Board {
             return null;
     }
 
-    public void runBelt(Player hostPlayer, ArrayList<Player> players) {
-        // Add host player to list
-        players.add(hostPlayer);
+    public void runBelt(ArrayList<Player> players) {
+
 
         for (Player player : players) {
 

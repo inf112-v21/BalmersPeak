@@ -88,10 +88,15 @@ public class Game {
 
     // Execute board elements
     private void runPhase2() {
+        // These apply to all players, make copy of players including host player
+        ArrayList<Player> players1 = (ArrayList<Player>) this.players.clone();
+        players1.add(myPlayer);
+
+
         // Run conveyor belts
-        //gameScreen.getBoard().runBelt(myPlayer, players);
+        gameScreen.getBoard().runBelt(players1);
         // Send updated coords to all players
-        sendUpdatedPlayers();
+        sendUpdatedPlayers(players1);
 
 
         // Run gears
@@ -101,21 +106,19 @@ public class Game {
         // Run board lasers
         gameScreen.getBoard().fireBoardLasers(myPlayer, players, gameScreen);
         // Send updated players for damage update
-        sendUpdatedPlayers();
+        sendUpdatedPlayers(players1);
 
 
-
-
-
-
+        // Fire robot lasers
+        gameScreen.getBoard().fireRobotLasers(players1, gameScreen);
+        // Send updated players for damage update
+        sendUpdatedPlayers(players1);
     }
 
-    public void sendUpdatedPlayers() {
+    public void sendUpdatedPlayers(ArrayList<Player> playerList) {
         // Send all player objects to all clients to update coords
-        ArrayList<Player> allPlayers = this.players;
-        allPlayers.add(myPlayer);
-        AllPlayersMsg msg = new AllPlayersMsg(allPlayers);
-        for (Player player : this.players) {
+        AllPlayersMsg msg = new AllPlayersMsg(playerList);
+        for (Player player : playerList) {
             server.sendMessageToClient(player.getId(), msg);
         }
     }

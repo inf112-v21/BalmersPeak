@@ -112,7 +112,7 @@ public class GameServer extends Server {
         // Construct player object for every client and add to game
         for (Connection client : clients.keySet()) {
             // TODO: REMOVE new Pair(5,6): only for testing: resolver.getCoordsPair()
-            Player clientPlayer = new Player(new Pair(8,10), clients.get(client).getUsername(), clients.get(client).getIP(), client.getID());
+            Player clientPlayer = new Player(new Pair(7,2), clients.get(client).getUsername(), clients.get(client).getIP(), client.getID());
             // Add to game
             game.addPlayer(clientPlayer);
         }

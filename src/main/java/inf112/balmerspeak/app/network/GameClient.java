@@ -134,8 +134,6 @@ public class GameClient extends Client {
                 game.updatePlayer(player);
             }
         }
-
-
     }
 
 
