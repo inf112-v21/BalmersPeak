@@ -89,9 +89,20 @@ public class Game {
     // Execute board elements
     private void runPhase2() {
         // Run conveyor belts
-        gameScreen.getBoard().runBelt(myPlayer, players);
+        //gameScreen.getBoard().runBelt(myPlayer, players);
         // Send updated coords to all players
-        sendUpdatedCoords();
+        sendUpdatedPlayers();
+
+
+        // Run gears
+        // Send updated coords/rotation
+
+
+        // Run board lasers
+        gameScreen.getBoard().fireBoardLasers(myPlayer, players, gameScreen);
+        // Send updated players for damage update
+        sendUpdatedPlayers();
+
 
 
 
@@ -99,7 +110,7 @@ public class Game {
 
     }
 
-    public void sendUpdatedCoords() {
+    public void sendUpdatedPlayers() {
         // Send all player objects to all clients to update coords
         ArrayList<Player> allPlayers = this.players;
         allPlayers.add(myPlayer);

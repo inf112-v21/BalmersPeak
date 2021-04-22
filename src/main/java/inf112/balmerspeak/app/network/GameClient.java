@@ -101,7 +101,7 @@ public class GameClient extends Client {
             game.gameLoop();
     }
 
-    // Given updated players, resolve moves
+    // Given updated players, move relevant robots and update GUI in case of damage taken
     private void handleReceivedAllPlayersMsg(AllPlayersMsg msg) {
         for (Player player : msg.get()) {
             int dx;
@@ -113,6 +113,14 @@ public class GameClient extends Client {
                 oldPlayer = game.getMyPlayer();
                 dx = player.getRobot().getX() - oldPlayer.getRobot().getX();
                 dy = player.getRobot().getY() - oldPlayer.getRobot().getY();
+
+                // Also check if the robot was damaged
+                if (oldPlayer.getRobot().getHealth() != player.getRobot().getHealth()) {
+                    // Update my player
+                    game.getMyPlayer().getRobot().takeDamage();
+                    // Update GUI
+                    Gdx.app.postRunnable(() -> game.getGameScreen().show());
+                }
             } else {
                 oldPlayer = game.getPlayerById(player.getId());
                 dx = player.getRobot().getX() - oldPlayer.getRobot().getX();
@@ -123,9 +131,11 @@ public class GameClient extends Client {
             if (dx != 0 || dy != 0) {
                 Gdx.app.postRunnable(() -> game.getGameScreen().getBoard().moveRobot(oldPlayer, dx, dy));
                 // Update this player object
-                this.game.updatePlayer(player);
+                game.updatePlayer(player);
             }
         }
+
+
     }
 
 

@@ -8,6 +8,7 @@ import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.maps.tiled.tiles.StaticTiledMapTile;
 import inf112.balmerspeak.app.Player;
 import inf112.balmerspeak.app.flag.Flag;
+import inf112.balmerspeak.app.menu.GameScreen;
 import inf112.balmerspeak.app.robot.Direction;
 import inf112.balmerspeak.app.robot.Robot;
 import org.javatuples.Pair;
@@ -50,7 +51,6 @@ public class Board {
 
 
     private TiledMapTileLayer hole;
-
 
     public Board(String filename) {
 
@@ -154,9 +154,9 @@ public class Board {
 
         // TODO: REMOVE EVERYTHING INSIDE IF, only for testing
         if (player.getId() == 0) {
-            player.getRobot().set(5, 4);
+            player.getRobot().set(6, 7);
             player.getRobot().setDirection(Direction.NORTH);
-            playerLayer.setCell(5, 4, robotTextures.get(player.getId()).setRotation(1)); //rotate to face the correct way
+            playerLayer.setCell(6, 7, robotTextures.get(player.getId()).setRotation(1)); //rotate to face the correct way
 
         } else {
             player.getRobot().set(x,y);
@@ -169,28 +169,15 @@ public class Board {
         playerLayer.setCell(player.getRobot().getX(), player.getRobot().getY(),robot);
     }
 
-    public void runBoardElements(Player hostPlayer, ArrayList<Player> players) {
-        int playerX = hostPlayer.getRobot().getX();
-        int playerY = hostPlayer.getRobot().getY();
-
-
-        // Run belts
-        //runBelt(hostPlayer, players, getConveyor(playerX, playerY));
-
-        // Run gears
-
-        // Fire board lasers
-        fireLasers(hostPlayer, players);
-//
-//        // Fire robot lasers
-//        fireRobotLasers(hostPlayer, players);
-    }
 
     // Fires board lasers
-    public void fireLasers(Player hostPlayer, ArrayList<Player> players) {
+    public void fireBoardLasers(Player hostPlayer, ArrayList<Player> players, GameScreen screen) {
         // Check host player first
         if (laserPath.getCell(hostPlayer.getRobot().getX(), hostPlayer.getRobot().getY()) != null) {
             hostPlayer.getRobot().takeDamage();
+            // Update GUI
+            screen.show();
+
         }
         // Check if the robot is on a laser path
         for (Player player : players) {
