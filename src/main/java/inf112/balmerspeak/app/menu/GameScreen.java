@@ -269,7 +269,7 @@ public class GameScreen implements Screen {
             System.out.println("Player" + player + " won");
 
         if (board.getGear(playerX + dx, playerY + dy) != null) {
-            board.runGear(player);
+            //board.runGear(player);
             System.out.println(player.getRobot().getDirection());
             show();
             

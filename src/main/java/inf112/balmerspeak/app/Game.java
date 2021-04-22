@@ -67,6 +67,7 @@ public class Game {
         // in order: conveyor belts, pushers, gears
         // Phase 3: lasers fire
         // Phase 4: touch checkpoints
+        System.out.println(myPlayer.getRobot().getDirection());
         gameScreen.getBoard().runGear(myPlayer);
 
     }
