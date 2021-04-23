@@ -68,7 +68,7 @@ public class Game {
         roundInProgress = true;
 
         // Loop five times, once for each card
-        for (int i = 0; i <= 1; i++) {
+        for (int i = 0; i <= 2; i++) {
             // Phase 1: robots move
             runPhase1();
 
@@ -126,6 +126,10 @@ public class Game {
         // Run gears
         gameScreen.getBoard().runGear(myPlayer);
         // Send updated coords/rotation
+        sendUpdatedPlayers();
+
+        // Run pushers
+        gameScreen.getBoard().pusherMove(playersClone);
         sendUpdatedPlayers();
 
 

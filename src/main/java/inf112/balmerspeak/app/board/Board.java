@@ -514,8 +514,6 @@ public class Board {
         int dx = belt.getNextX(belt.getX())-belt.getX();
         int dy = belt.getNextY(belt.getY())-belt.getY();
 
-        //move(hostPlayer,players, dx,dy); //TODO: perhaps reimplement this
-
         // Change coords of robot
         player.getRobot().set(playerX+dx,playerY+dy);
 
@@ -535,10 +533,15 @@ public class Board {
             return null;
     }
 
-    public void pusherMove(Player hostPlayer,ArrayList<Player> players, Pusher push) {
-        int dx = push.getNextX(push.getX())-push.getX();
-        int dy = push.getNextY(push.getY())-push.getY();
-        move(hostPlayer,players, dx,dy);
+    public void pusherMove(ArrayList<Player> players) {
+        for (Player player : players) {
+            Pusher pusher = pushers[player.getRobot().getX()][player.getRobot().getY()];
+            if (pusher != null) {
+                int dx = pusher.getNextX(pusher.getX()) - pusher.getX();
+                int dy = pusher.getNextY(pusher.getY()) - pusher.getY();
+                moveRobot(player, dx, dy);
+            }
+        }
     }
 
 
