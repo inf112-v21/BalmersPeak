@@ -143,6 +143,12 @@ public class Game {
         gameScreen.getBoard().fireRobotLasers(playersClone, gameScreen);
         // Send updated players for damage update
         sendUpdatedPlayers();
+
+        gameScreen.getBoard().runHoles(myPlayer);
+        sendUpdatedPlayers();
+
+        gameScreen.getBoard().runWrench(myPlayer);
+        sendUpdatedPlayers();
     }
 
     public void sendUpdatedPlayers() {
