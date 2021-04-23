@@ -237,9 +237,9 @@ public class Board {
     public Rotation getGearRotation(int x, int y) {
         int id = gear.getCell(x, y).getTile().getId();
         switch (id) {
-            case 54:
-                return Rotation.right;
             case 53:
+                return Rotation.right;
+            case 54:
                 return Rotation.left;
         }
         return null;
@@ -286,6 +286,27 @@ public class Board {
 
     public boolean hasRobot(int x, int y){
         return playerLayer.getCell(x,y) != null;
+    }
+
+    public void runHoles(Player player){
+        int x = player.getRobot().getX();
+        int y = player.getRobot().getY();
+
+        if (holes[y][x] != null){
+            if(player.getRobot().getLives() != 0) {
+                player.getRobot().takeLife();
+            }
+        }
+    }
+
+    public void runWrench(Player player){
+        int x = player.getRobot().getX();
+        int y = player.getRobot().getY();
+
+        if (wrenches[y][x] != null){
+            if(player.getRobot().getHealth() < 9)
+                player.getRobot().setHealth(player.getRobot().getHealth()+1);
+        }
     }
 
     public void runGear(Player player){

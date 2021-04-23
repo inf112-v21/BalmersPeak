@@ -99,6 +99,10 @@ public class Robot implements IRobot, Serializable {
         this.hp -= 1;
     }
 
+    public void takeLife(){
+        this.ll -= 1;
+    }
+
     public void setDirection(Direction dir){
         this.direction = dir;
     }
