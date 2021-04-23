@@ -57,13 +57,6 @@ public class GameScreenTest {
     }
 
     @Test
-    public void playerCanNotMoveOutOfBounds(){
-        setup();
-        assertFalse(g.shouldMove(g.getMyPlayer(), 0,-1));
-    }
-
-
-    @Test
     public void playerMovesFromCard(){
         setup();
         MovementCard card = new MovementCard(1,1,"Movement 1");
