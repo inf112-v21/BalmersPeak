@@ -46,14 +46,6 @@ public class Player implements Serializable {
         return this.robot;
     }
 
-    public String getUsername() {
-        return this.username;
-    }
-
-    public String getIpAddress() {
-        return this.ipAddress;
-    }
-
     public boolean isHandReady() {
         return this.handReady;
     }
@@ -66,7 +58,6 @@ public class Player implements Serializable {
         this.handReady = ready;
     }
 
-    // Will only work when the robot are at starting positions, which is the only time it will be used
     @Override
     public boolean equals(Object obj) {
         if (!(obj instanceof Player))

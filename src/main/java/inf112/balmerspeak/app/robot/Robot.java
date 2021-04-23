@@ -9,7 +9,7 @@ import java.util.ArrayList;
 
 
 import inf112.balmerspeak.app.flag.Flag;
-
+import org.javatuples.Pair;
 
 
 public class Robot implements IRobot, Serializable {
@@ -75,6 +75,10 @@ public class Robot implements IRobot, Serializable {
         return this.direction;
     }
 
+    public Direction uTurn() {
+        return uTurnDirection(direction);
+    }
+
     @Override
     public void set(int x, int y) {
         this.x = x;
@@ -91,12 +95,9 @@ public class Robot implements IRobot, Serializable {
         this.ll = x;
     }
 
-
-    @Override
-    public boolean isAlive() {
-        return (getHealth() == 0 || getLives() == 0);
+    public void takeDamage() {
+        this.hp -= 1;
     }
-
 
     public void setDirection(Direction dir){
         this.direction = dir;
@@ -125,14 +126,20 @@ public class Robot implements IRobot, Serializable {
                 return null;
         }
     }
-  
-    public int getSpawnX(){return spawnX;}
 
-    public int getSpawnY(){return spawnY;}
+    public Direction uTurnDirection(Direction direction) {
+        switch (direction) {
+            case NORTH:
+                return Direction.SOUTH;
+            case WEST:
+                return Direction.EAST;
+            case SOUTH:
+                return Direction.NORTH;
+            case EAST:
+                return Direction.WEST;
+            default:
+                return null;
 
-    public void setSpawnCoordinates(int spawnX, int spawnY){
-        this.spawnX = spawnX;
-        this.spawnY = spawnY;
-
+        }
     }
 }

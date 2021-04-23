@@ -18,10 +18,7 @@ import inf112.balmerspeak.app.Player;
 import inf112.balmerspeak.app.board.Board;
 import inf112.balmerspeak.app.cards.*;
 import inf112.balmerspeak.app.robot.Direction;
-
-
 import java.util.ArrayList;
-
 
 
 public class GameScreen implements Screen {
@@ -70,6 +67,10 @@ public class GameScreen implements Screen {
         rend.setView(cam);
     }
 
+    public void clearQueuelist(){
+        queueList.clear();
+    }
+
     public Board getBoard() {
         return this.board;
     }
@@ -97,6 +98,20 @@ public class GameScreen implements Screen {
         if (dx == 0 && dy == 0)
             return false;
 
+        if ((board.getWalls(player.getRobot().getX(), player.getRobot().getY()) != null) && (player.getRobot().getDirection() == board.getWalls(player.getRobot().getX(),player.getRobot().getY()).getDirection())) {
+            return false;
+        }
+        if ((board.getWalls(player.getRobot().getX()+dx, player.getRobot().getY()+dy) != null) && (player.getRobot().uTurn() == board.getWalls(player.getRobot().getX()+dx,player.getRobot().getY()+dy).getDirection())) {
+            return false;
+        }
+
+        if ((board.getLaser(player.getRobot().getX(), player.getRobot().getY()) != null) && (player.getRobot().getDirection() == board.getLaser(player.getRobot().getX(),player.getRobot().getY()).getDirection())) {
+            return false;
+        }
+        if ((board.getLaser(player.getRobot().getX()+dx, player.getRobot().getY()+dy) != null) && (player.getRobot().uTurn() == board.getLaser(player.getRobot().getX()+dx,player.getRobot().getY()+dy).getDirection())) {
+            return false;
+        }
+
         int x = player.getRobot().getX();
         int y = player.getRobot().getY();
 
@@ -105,7 +120,9 @@ public class GameScreen implements Screen {
         boolean outsideX = x + dx > board.getBoard().getWidth()-1 || x + dx < 0;
         boolean outsideY = y + dy > board.getBoard().getHeight()-1 || y + dy < 0;
 
+
         return !(outsideX || outsideY);
+
     }
 
 
@@ -115,56 +132,6 @@ public class GameScreen implements Screen {
             handleMoveCard((MovementCard) card, player);
         else
             handleRotation((RotationCard) card, player);
-    }
-
-    public void handleMove() {
-        // Changes in the x coordinate
-        int dx = 0;
-        // Changes in the y coordinate
-        int dy = 0;
-
-        if (input.wPressed)
-            dy += 1;
-        else if (input.aPressed)
-            dx -= 1;
-        else if(input.sPressed)
-            dy -=1;
-        else if (input.dPressed)
-            dx += 1;
-
-        // Player x and y coordinates
-        int playerX = myPlayer.getRobot().getX();
-        int playerY = myPlayer.getRobot().getY();
-
-        // Only update if the player is allowed to move
-        if (shouldMove(myPlayer, dx, dy)){
-            board.move(myPlayer, dx,dy);
-            myPlayer.getRobot().set(playerX + dx, playerY + dy);
-
-            if (board.getHole(playerX + dx, playerY + dy) != null) {
-                myPlayer.getRobot().setLives(myPlayer.getRobot().getLives() - 1);
-                show();
-            }
-            if (board.getLaser(playerX + dx, playerY + dy) != null) {
-                myPlayer.getRobot().setHealth(myPlayer.getRobot().getHealth() - 1);
-                show();
-            }
-            if (board.getFlag(playerX + dx, playerY + dy) != null){
-                myPlayer.getRobot().addFlag(board.getFlag(playerX +dx, playerY+dy));
-            }
-            if (board.getWrench(playerX + dx, playerY + dy) != null) {
-                if (myPlayer.getRobot().getHealth() < 9) {
-                    myPlayer.getRobot().setHealth(myPlayer.getRobot().getHealth() + 1);
-                    System.out.println("Gained health");
-                }
-                myPlayer.getRobot().setSpawnCoordinates(playerX + dx,playerY + dy);
-                show();
-            }
-        }
-
-
-        // Update player coordinates
-        input.clear();
     }
 
 
@@ -193,67 +160,19 @@ public class GameScreen implements Screen {
 
         // Only update if the player is allowed to move
 
-        if (shouldMove(player, dx, dy)){
-            board.move(player, dx,dy);
+
+        if (shouldMove(player, dx, dy)) {
+            board.moveRobot(player, dx, dy);
             player.getRobot().set(playerX + dx, playerY + dy);
 
-            //check for hole
-            if (board.getHole(playerX + dx, playerY + dy) != null) {
-                player.getRobot().setLives(player.getRobot().getLives() - 1);
-                show();
-            }
-            //check for laser
-            if (board.getLaser(playerX + dx, playerY + dy) != null) {
-                player.getRobot().setHealth(player.getRobot().getHealth() - 1);
-                show();
-            }
-
-            if (board.getWrench(playerX + dx, playerY + dy) != null) {
-                if (player.getRobot().getHealth() < 9) {
-                    player.getRobot().setHealth(player.getRobot().getHealth() + 1);
-                    System.out.println("Gained health");
-                }
-                player.getRobot().setSpawnCoordinates(playerX + dx,playerY + dy);
-                show();
-            }
-//
-//            if (board.getConveyor(playerX + dx, playerY + dy) != null){
-//                board.runBelt(player, board.getConveyor(playerX + dx, playerY + dy));
-//            }
-          
-            //check for flag
-            if (board.getFlag(playerX + dx, playerY + dy) != null){
-                player.getRobot().addFlag(board.getFlag(playerX +dx, playerY+dy));
-            }
-            if (player.getRobot().checkWinCondition())
-                System.out.println("Player" + player.getId() + " won");
-
         }
-        if (board.getLaser(playerX + dx, playerY + dy) != null) {
-            player.getRobot().setHealth(player.getRobot().getHealth() - 1);
-            showHealthLives();
-        }
-        if (board.getFlag(playerX + dx, playerY + dy) != null){
-            player.getRobot().addFlag(board.getFlag(playerX +dx, playerY+dy));
-        }
-        if (player.getRobot().checkWinCondition())
-            System.out.println("Player" + player + " won");
-
     }
 
 
     //Handles rotation cards
     public void handleRotation(RotationCard card, Player player){
-        if (card.getRotation().equals(Rotation.left)) {
-            player.getRobot().setDirection(player.getRobot().turn(Rotation.left, player.getRobot().getDirection()));
-            board.rotateRobot(player, 90);
-        } else if (card.getRotation().equals(Rotation.right)) {
-            player.getRobot().setDirection(player.getRobot().turn(Rotation.right, player.getRobot().getDirection()));
-            board.rotateRobot(player, -90);
-        } else if (card.getRotation().equals(Rotation.uturn)) {
-            player.getRobot().setDirection(player.getRobot().turn(Rotation.uturn, player.getRobot().getDirection()));
-            board.rotateRobot(player, 180);
-        }
+        player.getRobot().setDirection(player.getRobot().turn(card.getRotation(), player.getRobot().getDirection()));
+        board.rotateRobot(player, player.getRobot().getDirection());
     }
 
     public Direction turn(Rotation rotation, Direction direction) {
@@ -321,9 +240,9 @@ public class GameScreen implements Screen {
             public void changed(ChangeEvent changeEvent, Actor actor) {
                 // block action if round is in progress
                 System.out.println("Is round in progress: " + game.isRoundInProgress());
+                System.out.println(queueList);
                 if (!game.isRoundInProgress())
                     game.handIsReady(queueList);
-                show();
             }
         });
 
@@ -352,33 +271,7 @@ public class GameScreen implements Screen {
             stage.addActor(b);
 
         }
-
-
-        //Adds the life tokens to the GUI
-        int xlife = 1300;
-        for (int i = 0; i < myPlayer.getRobot().getLives(); i++) {
-            life = new Texture("images/lifetoken.png");
-            Button.ButtonStyle tbs = new Button.ButtonStyle();
-            tbs.up = new TextureRegionDrawable(new TextureRegion(life));
-            Button b = new Button(tbs);
-            b.setPosition(xlife+=100, 150);
-            b.setSize(50,50);
-            stage.addActor(b);
-        }
-
-        //Adds the health tokes to the GUI
-        int xhealth = 1250;
-        for (int i = 0; i < myPlayer.getRobot().getHealth(); i++) {
-            health = new Texture("images/health_token.png");
-            Button.ButtonStyle tbs = new Button.ButtonStyle();
-            tbs.up = new TextureRegionDrawable(new TextureRegion(health));
-            Button b = new Button(tbs);
-            b.setPosition(xhealth+=50, 50);
-            b.setSize(50,50);
-            stage.addActor(b);
-        }
         showHealthLives();
-
 
         //Adds text field for lives
         TextField life = new TextField("Lives", skin1);
@@ -417,7 +310,6 @@ public class GameScreen implements Screen {
         stage.getBatch().draw(backgroundImage, 0, 0, stage.getWidth(), 270);
         stage.getBatch().end();
         stage.draw();
-        //handleMove();
     }
 
     @Override

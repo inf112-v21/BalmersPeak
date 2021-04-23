@@ -1,31 +1,33 @@
 package inf112.balmerspeak.app.board;
 
 
-import inf112.balmerspeak.app.MapHandler;
-import inf112.balmerspeak.app.Rotate;
-import inf112.balmerspeak.app.robot.Robot;
 
-import java.util.List;
+import inf112.balmerspeak.app.cards.Rotation;
+
 
 
 public class Gear {
 
-    private List<Robot> robots;
+
     private int x;
     private int y;
-    private Rotate rotate;
+    private Rotation rotation;
 
 
-    public Gear(int x, int y, Rotate rotate){
+    public Gear(int x, int y, Rotation rotation) {
         this.x = x;
         this.y = y;
-        this.rotate = rotate;
+        this.rotation = rotation;
     }
 
 
-    public int getX(){ return x; }
+    public int getX() {
+        return x;
+    }
 
-    public int getY(){ return y; }
+    public int getY() {
+        return y;
+    }
 
     public void setX(int x) {
         this.x = x;
@@ -35,29 +37,8 @@ public class Gear {
         this.y = y;
     }
 
-    public void rotateGears() {
-        for (Robot robot : robots) {
-            if ((boolean) MapHandler.checkGears(robot)) {
-                Rotate rotate = getRotate();
-                if(rotate == Rotate.RIGHT) {
-                    rotateRight();
-                }
-                else { rotateLeft();
-
-                }
-
-            }
-
-
-        }
-    }
-    public Object rotateRight(){
-        return null;
+    public Rotation getRotation() {
+        return rotation;
     }
 
-    public Object rotateLeft(){
-        return null;
-    }
-
-    public Rotate getRotate(){ return rotate; }
 }

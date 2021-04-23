@@ -4,7 +4,6 @@ public class RotationCard extends ProgramCard {
 
     private Rotation rotation;
     public int rotate;
-    public boolean uturn;
     private int priority;
 
     public RotationCard(int priority, Rotation rotation, String name) {

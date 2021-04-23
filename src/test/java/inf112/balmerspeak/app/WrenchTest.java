@@ -1,8 +1,7 @@
 package inf112.balmerspeak.app;
 
-import inf112.balmerspeak.app.board.Board;
+
 import inf112.balmerspeak.app.board.Wrench;
-import inf112.balmerspeak.app.menu.MainScreen;
 import org.junit.Test;
 
 import static org.junit.Assert.assertTrue;
