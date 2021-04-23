@@ -80,7 +80,11 @@ public class GameClient extends Client {
                 else if (object instanceof RoundOverMsg) {
                     // Set round in progress to false
                     game.setRoundInProgress(false);
+                    game.getMyPlayer().setHandReady(false);
+                    game.getMyPlayer().getHand().clear();
                     game.getMyPlayer().dealHand(9);
+                    Gdx.app.postRunnable(() -> game.getGameScreen().show());
+                    Gdx.app.postRunnable(() ->game.getGameScreen().clearQueuelist());
                 }
             }
         });

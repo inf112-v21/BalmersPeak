@@ -171,9 +171,6 @@ public class GameScreen implements Screen {
 
     //Handles rotation cards
     public void handleRotation(RotationCard card, Player player){
-        System.out.println("Rotation: " + card.getRotation());
-        System.out.println("Player facing: " + player.getRobot().getDirection());
-        System.out.println("Direction to turn: " + turn(card.getRotation(), player.getRobot().getDirection()));
         player.getRobot().setDirection(player.getRobot().turn(card.getRotation(), player.getRobot().getDirection()));
         board.rotateRobot(player, player.getRobot().getDirection());
     }
