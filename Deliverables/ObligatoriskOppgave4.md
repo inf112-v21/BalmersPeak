@@ -66,6 +66,10 @@ Det vi ville gjort annerledes om vi begynte på nytt er å legge en tydeligere p
 
 Gruppedynamikken har bare forbedret seg over tid ettersom vi er blitt mer kjent med hverandre og lært å jobbe i team. Kommunikasjonen er god og blitt mindre rotete
 
+Project Board:
+
+<img src="assets/images/projectboard.jpg"  width="500">
+
 ## Deloppgave 2: Krav
 
 
@@ -128,6 +132,10 @@ Bugs:
 
 - Spillere som ikke er host tar ikke damage, selv om robots blir registrert og truffet
 - Testene i GameScreenTest fungerer ikke når alle blir kjørt samtidig, men de fungerer når de blir kjørt inviduelt
+- Hvis man blir dyttet ut av brettet av conveyors så crasher spillet
+- De som joiner spillet tar ikke damage, bare host
+- Når man tar damage eller blir fikset får/mister man 3 liv
+
 
 
 Ujevn fordeling av commits:
