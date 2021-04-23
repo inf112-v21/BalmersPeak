@@ -95,12 +95,6 @@ public class Robot implements IRobot, Serializable {
         this.ll = x;
     }
 
-
-    @Override
-    public boolean isAlive() {
-        return (getHealth() == 0 || getLives() == 0);
-    }
-
     public void takeDamage() {
         this.hp -= 1;
     }
@@ -147,15 +141,5 @@ public class Robot implements IRobot, Serializable {
                 return null;
 
         }
-    }
-  
-    public int getSpawnX(){return spawnX;}
-
-    public int getSpawnY(){return spawnY;}
-
-    public void setSpawnCoordinates(int spawnX, int spawnY){
-        this.spawnX = spawnX;
-        this.spawnY = spawnY;
-
     }
 }

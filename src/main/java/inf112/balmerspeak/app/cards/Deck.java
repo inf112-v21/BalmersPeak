@@ -5,10 +5,6 @@ import java.util.*;
 
 public class Deck implements Serializable {
 
-    public static final int hand_size = 9;
-
-    public int deck_size = 84;
-
     private int priorityMove1 = 490;
     private int priorityRotateRight = 80;
     private int priorityRotateLeft = 70;
@@ -54,9 +50,6 @@ public class Deck implements Serializable {
         Collections.shuffle(deckInUse);
     }
 
-    public void clearDeck() {
-        deckInUse.clear();
-    }
 
     public ArrayList<ProgramCard> getCards(int amount) {
         ArrayList<ProgramCard> cards = new ArrayList<>();

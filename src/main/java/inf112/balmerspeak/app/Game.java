@@ -88,12 +88,16 @@ public class Game {
         roundInProgress = false;
         // Deal new cards and set own hand to not ready
         myPlayer.setHandReady(false);
+        myPlayer.getHand().clear();
         myPlayer.dealHand(9);
+        System.out.println(myPlayer.getRobot().getLives());
+        gameScreen.show();
+        gameScreen.clearQueuelist();
         // Tell all players to deal hands
-//        for (Player player : players) {
-//            server.sendMessageToClient(player.getId(), new RoundOverMsg());
-//            player.setHandReady(false);
-//        }
+        for (Player player : players) {
+            server.sendMessageToClient(player.getId(), new RoundOverMsg());
+            player.setHandReady(false);
+        }
     }
 
     // Robots move
@@ -104,7 +108,7 @@ public class Game {
         // Phase 1: robots move
         for (ProgramCard card : sortedCards) {
             // Send to all clients
-            //server.sendCardExecuted(card);
+            server.sendCardExecuted(card);
             // Execute the movement and send to all clients
             gameScreen.executeCard(card, card.getPlayer());
 
@@ -235,15 +239,20 @@ public class Game {
         // Collect each first card and connect them to the player
         ArrayList<ProgramCard> cards = new ArrayList<>();
         for (Player player : players) {
-            ProgramCard card = player.getHand().remove(0);
-            // Set owner of this card
-            card.setPlayer(player);
-            cards.add(card);
+            if (!player.getHand().isEmpty()){
+                ProgramCard card = player.getHand().remove(0);
+                // Set owner of this card
+                card.setPlayer(player);
+                cards.add(card);
+            }
         }
         // Set host card
-        ProgramCard myCard = myPlayer.getHand().remove(0);
-        myCard.setPlayer(myPlayer);
-        cards.add(myCard);
+        if(!myPlayer.getHand().isEmpty()) {
+            ProgramCard myCard = myPlayer.getHand().remove(0);
+            myCard.setPlayer(myPlayer);
+            cards.add(myCard);
+        }
+
 
         Collections.sort(cards);
 

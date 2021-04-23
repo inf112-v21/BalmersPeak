@@ -1,7 +1,5 @@
 package inf112.balmerspeak.app.board;
 
-import inf112.balmerspeak.app.robot.Robot;
-
 public class Wrench {
     public int x;
     public int y;
@@ -17,6 +15,5 @@ public class Wrench {
 
     public int getY() {return y;}
 
-    public int getNumberOfWrenches(){return numberOfWrenches;}
 
 }

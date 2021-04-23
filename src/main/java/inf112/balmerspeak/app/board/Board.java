@@ -181,10 +181,6 @@ public class Board {
         playerLayer.setCell(x,y,robotTextures.get(player.getId()).setRotation(1));
     }
 
-    public int getDegrees(Player player){
-        return robotTextures.get(player.getId()).getRotation();
-    }
-
 
     public void rotateRobot(Player player, int degrees) {
         TiledMapTileLayer.Cell robot = robotTextures.get(player.getId()).setRotation(degrees);
@@ -249,11 +245,6 @@ public class Board {
         return null;
     }
 
-    public void placeRobot(int x, int y){
-        robots[y][x] = new Robot(x,y,Direction.NORTH);
-
-    }
-
     public boolean isTargetInRobotLaserPath(ArrayList<Pair<Integer,Integer>> path, Player targetPlayer) {
         for (Pair<Integer,Integer> coords : path) {
             if (coords.getValue0() == targetPlayer.getRobot().getX() && coords.getValue1() == targetPlayer.getRobot().getY()) {
@@ -290,13 +281,6 @@ public class Board {
             }
         }
         return path;
-    }
-
-
-    public Gear getGear(int x, int y) { return gears[y][x]; }
-
-    public void setFlag(int x, int y) {
-        flags[y][x] = new Flag(1);
     }
 
 
@@ -358,28 +342,27 @@ public class Board {
 
     public void move(Player hostPlayer, ArrayList<Player> players,  int dx, int dy) {
 
-//        int x = hostPlayer.getRobot().getX();
-//        int y = hostPlayer.getRobot().getY();
-//
-//        int pdx = dx;
-//        int pdy = dy;
-//
-//        for (Player p : players){
-//            if (p.getRobot().getX() == x+dx && p.getRobot().getY() == y+dy){
-//                if (dx < 0) pdx-=1;
-//                if (dx > 0) pdx+=1;
-//                if (dy < 0) pdy-=1;
-//                if (dy > 0) pdy+=1;
-//                p.getRobot().set(x+pdx,y+pdy);
-//                this.playerLayer.setCell(x+pdx,y+pdy, robotTextures.get(p.getId()));
-//                this.playerLayer.setCell(x+dx,y+dy, null);
-//            }
-//        }
-//
-//        hostPlayer.getRobot().set(x+dx,y+dy);
-//        this.playerLayer.setCell(x + dx, y + dy, robotTextures.get(hostPlayer.getId()));
-//        //robots[y][x] = null;
-//        this.playerLayer.setCell(x, y, null);
+        int x = hostPlayer.getRobot().getX();
+        int y = hostPlayer.getRobot().getY();
+
+        int pdx = dx;
+        int pdy = dy;
+
+        for (Player p : players){
+            if (p.getRobot().getX() == x+dx && p.getRobot().getY() == y+dy){
+                if (dx < 0) pdx-=1;
+                if (dx > 0) pdx+=1;
+                if (dy < 0) pdy-=1;
+                if (dy > 0) pdy+=1;
+                p.getRobot().set(x+pdx,y+pdy);
+                this.playerLayer.setCell(x+pdx,y+pdy, robotTextures.get(p.getId()));
+                this.playerLayer.setCell(x+dx,y+dy, null);
+            }
+        }
+
+        hostPlayer.getRobot().set(x+dx,y+dy);
+        this.playerLayer.setCell(x + dx, y + dy, robotTextures.get(hostPlayer.getId()));
+        this.playerLayer.setCell(x, y, null);
     }
 
     public void moveRobot(Player player, int dx, int dy) {
@@ -412,7 +395,6 @@ public class Board {
 
     public Wrench getWrench(int x, int y) {return wrenches[y][x];}
 
-    public Pusher getPusher(int x, int y) {return pushers[y][x];}
 
     public ConveyorBelt getConveyor(int x, int y) {
         return conveyors[y][x];
@@ -559,9 +541,6 @@ public class Board {
         move(hostPlayer,players, dx,dy);
     }
 
-    public void beltRotate(){
-        //Kan låne rotate frå gear
-    }
 
     public boolean canMove(ConveyorBelt belt){
         if(nextIsBelt(belt))
