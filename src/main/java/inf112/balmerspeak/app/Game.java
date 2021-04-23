@@ -70,7 +70,7 @@ public class Game {
         // Loop five times, once for each card
         for (int i = 0; i <= 1; i++) {
             // Phase 1: robots move
-            runPhase1(playersClone);
+            runPhase1();
 
 
             // Phase 2: board elements move
@@ -90,7 +90,6 @@ public class Game {
         myPlayer.setHandReady(false);
         myPlayer.getHand().clear();
         myPlayer.dealHand(9);
-        System.out.println(myPlayer.getRobot().getLives());
         gameScreen.show();
         gameScreen.clearQueuelist();
         // Tell all players to deal hands
@@ -101,7 +100,7 @@ public class Game {
     }
 
     // Robots move
-    private void runPhase1(ArrayList<Player> playersClone) {
+    private void runPhase1() {
         // Get sorted cards for the round
         ArrayList<ProgramCard> sortedCards = getCardOrder();
 
@@ -113,7 +112,7 @@ public class Game {
             gameScreen.executeCard(card, card.getPlayer());
 
         }
-        sendUpdatedPlayers(playersClone);
+        sendUpdatedPlayers();
     }
 
     // Execute board elements
@@ -121,29 +120,32 @@ public class Game {
         // Run conveyor belts
         gameScreen.getBoard().runBelt(playersClone);
         // Send updated coords to all players
-        sendUpdatedPlayers(playersClone);
+        sendUpdatedPlayers();
 
 
         // Run gears
         gameScreen.getBoard().runGear(myPlayer);
         // Send updated coords/rotation
-        sendUpdatedPlayers(playersClone);
+        sendUpdatedPlayers();
 
 
         // Run board lasers
         gameScreen.getBoard().fireBoardLasers(myPlayer, players, gameScreen);
         // Send updated players for damage update
-        sendUpdatedPlayers(playersClone);
+        sendUpdatedPlayers();
 
 
         // Fire robot lasers
         gameScreen.getBoard().fireRobotLasers(playersClone, gameScreen);
         // Send updated players for damage update
-        sendUpdatedPlayers(playersClone);
+        sendUpdatedPlayers();
     }
 
-    public void sendUpdatedPlayers(ArrayList<Player> playerList) {
+    public void sendUpdatedPlayers() {
         // Send all player objects to all clients to update coords
+        ArrayList<Player> playerList = (ArrayList<Player>) this.players.clone();
+        playerList.add(myPlayer);
+
         AllPlayersMsg msg = new AllPlayersMsg(playerList);
         for (Player player : playerList) {
             server.sendMessageToClient(player.getId(), msg);
