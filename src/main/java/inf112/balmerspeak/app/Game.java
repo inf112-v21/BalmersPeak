@@ -129,7 +129,7 @@ public class Game {
         sendUpdatedPlayers();
 
         // Run pushers
-        gameScreen.getBoard().pusherMove(playersClone);
+        gameScreen.getBoard().runPusher(playersClone);
         sendUpdatedPlayers();
 
 

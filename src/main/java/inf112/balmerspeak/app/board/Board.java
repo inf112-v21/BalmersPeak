@@ -395,6 +395,7 @@ public class Board {
 
     public Wrench getWrench(int x, int y) {return wrenches[y][x];}
 
+    public Pusher getPusher(int x, int y) {return pushers[y][x];}
 
     public ConveyorBelt getConveyor(int x, int y) {
         return conveyors[y][x];
@@ -504,6 +505,17 @@ public class Board {
         }
     }
 
+    public void runPusher(ArrayList<Player> players) {
+        for (Player player : players) {
+            // Get pusher for current player
+            Pusher pusher = getPusher(player.getRobot().getX(), player.getRobot().getY());
+            // Check pushers for current player
+            if (pusher != null) {
+                pusherMove(player, pusher);
+            }
+        }
+    }
+
 
     public void beltMove(Player player, ConveyorBelt belt) {
         // Get player coords
@@ -522,6 +534,22 @@ public class Board {
         this.playerLayer.setCell(playerX, playerY, null);
     }
 
+    public void pusherMove(Player player, Pusher push) {
+        // Get player coords
+        int playerX = player.getRobot().getX();
+        int playerY = player.getRobot().getY();
+
+        // Get change of coords from belts
+        int dx = push.getNextX(push.getX())-push.getX();
+        int dy = push.getNextY(push.getY())-push.getY();
+
+        // Change coords of robot
+        player.getRobot().set(playerX+dx,playerY+dy);
+
+        // Move player robot texture
+        this.playerLayer.setCell(playerX + dx, playerY + dy, robotTextures.get(player.getId()));
+        this.playerLayer.setCell(playerX, playerY, null);
+    }
 
     public ConveyorColor getConveyorColor(int x, int y){
         int id = conveyor.getCell(x,y).getTile().getId();
@@ -531,17 +559,6 @@ public class Board {
             return ConveyorColor.BLUE;
         else
             return null;
-    }
-
-    public void pusherMove(ArrayList<Player> players) {
-        for (Player player : players) {
-            Pusher pusher = pushers[player.getRobot().getX()][player.getRobot().getY()];
-            if (pusher != null) {
-                int dx = pusher.getNextX(pusher.getX()) - pusher.getX();
-                int dy = pusher.getNextY(pusher.getY()) - pusher.getY();
-                moveRobot(player, dx, dy);
-            }
-        }
     }
 
 
