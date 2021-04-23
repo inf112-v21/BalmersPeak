@@ -158,3 +158,6 @@ Start et spill
 
 Sjekke at multiplayer fungerer
 - For at de andre spillerne skal kunne connecte til host må enten hosten ha port-forwardet eller at de er på samme nettverk
+
+For singleplayer
+- Klikk på "play" så "host" så trykk på "start game" uten at noen andre har koblet seg til
