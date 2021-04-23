@@ -37,5 +37,4 @@ This repository is a Java implementation of the board game "RoboRally", built wi
 2.  Open the project as a Maven project in your favourite IDE.
 3.  Once imported, run Maven package. (JDK 9 or higher).
 4.  Run the project or execute the jar produced in step 3.
-5.  Click "Go to Game" to check out the game board and move around
-6.  Click "Play" to host or join a game
+5.  Click "Play" to host or join a game
